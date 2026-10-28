@@ -32,12 +32,14 @@ public class Bloco : Destrutivel
         desenho.sprite = EscolherSprite(rachado);
         desenho.size = tamanho;
 
+        // useAutoMass antes da densidade: o Unity só aceita densidade com massa automática.
+        GetComponent<Rigidbody2D>().useAutoMass = true;
+
         var caixa = GetComponent<BoxCollider2D>();
         caixa.size = tamanho;
         caixa.density = material.densidade;
         caixa.sharedMaterial = material.fisica;
 
-        GetComponent<Rigidbody2D>().useAutoMass = true;
         vidaMaxima = material.vida;
         pontos = material.pontos;
     }
