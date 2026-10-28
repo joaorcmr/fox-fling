@@ -117,11 +117,9 @@ public class Raposa : MonoBehaviour
     {
         float desdeLancamento = Time.time - tempoLancamento;
 
-        if (!HabilidadeUsada && PodeUsarHabilidade && desdeLancamento > 0.05f
-            && Input.GetMouseButtonDown(0) && !PonteiroNaInterface())
+        if (desdeLancamento > 0.05f && Input.GetMouseButtonDown(0) && !PonteiroNaInterface())
         {
-            HabilidadeUsada = true;
-            UsarHabilidade();
+            AtivarHabilidade();
             if (Estado != EstadoRaposa.Voando) return; // a habilidade pode ter encerrado a raposa
         }
 
@@ -155,6 +153,14 @@ public class Raposa : MonoBehaviour
             if (rastro != null) rastro.emitting = false;
         }
         AoBater(colisao);
+    }
+
+    // Chamado pelo clique no ar (e por testes). Cada raposa só usa a habilidade uma vez.
+    public void AtivarHabilidade()
+    {
+        if (Estado != EstadoRaposa.Voando || HabilidadeUsada || !PodeUsarHabilidade) return;
+        HabilidadeUsada = true;
+        UsarHabilidade();
     }
 
     // Normal: sem habilidade. Ninja e Bomba sobrescrevem estes métodos.

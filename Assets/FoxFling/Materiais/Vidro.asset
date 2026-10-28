@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 258b84e57cb684e3eb75c9e8155cbb6a, type: 3}
+  m_Name: Vidro
+  m_EditorClassIdentifier: FoxFling::MaterialBloco
+  nome: Vidro
+  densidade: 0.6
+  vida: 15
+  pontos: 300
+  fisica: {fileID: 6200000, guid: 08db832ae727f4fee85a753a71456131, type: 2}
+  sprite: {fileID: 21300000, guid: 9fc91dab343c64a82b47167a03056441, type: 3}
+  spriteRachado: {fileID: 21300000, guid: b76d24251b0f24cf59f80a60f4194c73, type: 3}
+  spriteVertical: {fileID: 0}
+  spriteVerticalRachado: {fileID: 0}
+  corDetritos: {r: 0.75, g: 0.93, b: 1, a: 0.9}
+  somImpacto: {fileID: 8300000, guid: 04061c390b9ac420c894991e7e6e896b, type: 3}
+  somQuebra: {fileID: 8300000, guid: 8f0cb02fd9c4d4a698b15bf07b5fe2c7, type: 3}

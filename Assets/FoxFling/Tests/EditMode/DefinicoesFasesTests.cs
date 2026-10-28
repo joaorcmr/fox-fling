@@ -7,13 +7,35 @@ public class DefinicoesFasesTests
 {
     const float Tol = 0.01f;
 
-    static readonly TipoRaposa N = TipoRaposa.Normal;
+    static readonly TipoRaposa N = TipoRaposa.Normal, Ni = TipoRaposa.Ninja, B = TipoRaposa.Bomba;
 
     [Test]
     public void RaposasBatemComOQuadro()
     {
+        // Quadro do Estágio 2: 1 fácil, 2 médios, 1 difícil e 1 desafio.
         var fases = DefinicoesFases.Todas();
+        Assert.AreEqual(5, fases.Length);
         CollectionAssert.AreEqual(new[] { N, N }, fases[0].raposas, "Fase 1");
+        CollectionAssert.AreEqual(new[] { N, N, Ni }, fases[1].raposas, "Fase 2");
+        CollectionAssert.AreEqual(new[] { N, N, Ni }, fases[2].raposas, "Fase 3");
+        CollectionAssert.AreEqual(new[] { N, N, Ni, B }, fases[3].raposas, "Fase 4");
+        CollectionAssert.AreEqual(new[] { N, Ni, B }, fases[4].raposas, "Fase 5");
+    }
+
+    [Test]
+    public void DificuldadesBatemComOQuadro()
+    {
+        var dificuldades = DefinicoesFases.Todas().Select(f => f.dificuldade).ToArray();
+        CollectionAssert.AreEqual(new[] { "Fácil", "Médio", "Médio", "Difícil", "Desafio" }, dificuldades);
+    }
+
+    [Test]
+    public void FasesDificeisUsamTodosOsMateriais()
+    {
+        var fases = DefinicoesFases.Todas();
+        foreach (var f in new[] { fases[3], fases[4] })
+            foreach (TipoMaterial m in System.Enum.GetValues(typeof(TipoMaterial)))
+                Assert.IsTrue(f.pecas.Any(p => p.tipo == TipoPeca.Bloco && p.material == m), $"{f.nome} sem {m}");
     }
 
     [Test]

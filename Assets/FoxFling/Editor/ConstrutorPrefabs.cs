@@ -26,6 +26,10 @@ public static class ConstrutorPrefabs
 
         RaposaNormal = CriarRaposa("Raposa_Normal", typeof(Raposa), TipoRaposa.Normal, "raposa_normal", 1f,
             "Arraste a raposa para trás e solte!", new Color(1f, 1f, 1f, 0.6f));
+        RaposaNinja = CriarRaposa("Raposa_Ninja", typeof(RaposaNinja), TipoRaposa.Ninja, "raposa_ninja", 0.9f,
+            "Raposa ninja: clique no ar para dar uma arrancada!", new Color(0.55f, 0.65f, 1f, 0.7f));
+        RaposaBomba = CriarRaposa("Raposa_Bomba", typeof(RaposaBomba), TipoRaposa.Bomba, "raposa_bomba", 1.4f,
+            "Raposa bomba: clique para explodir (ou espere o pavio)!", new Color(1f, 0.6f, 0.3f, 0.7f));
         Bloco = CriarBloco();
         Inimigo = CriarInimigo("Inimigo", 1f, 20f);
         InimigoGrande = CriarInimigo("Inimigo_Grande", DefinicoesFases.EscalaGrande, 45f);
