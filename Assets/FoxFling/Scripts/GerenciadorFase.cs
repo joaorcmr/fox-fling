@@ -21,8 +21,8 @@ public class GerenciadorFase : MonoBehaviour
     public Hud hud;
 
     [Tooltip("Lugar da primeira raposa da fila; as outras ficam à esquerda.")]
-    public Vector2 inicioFila = new Vector2(-6.45f, -4.17f);
-    public float espacoFila = 0.62f;
+    public Vector2 inicioFila = new Vector2(-6.2f, -4.17f);
+    public float espacoFila = 0.55f;
 
     public int Pontos { get; private set; }
     public EstadoFase Estado { get; private set; } = EstadoFase.Jogando;
