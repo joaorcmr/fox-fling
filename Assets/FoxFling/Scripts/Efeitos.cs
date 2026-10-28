@@ -43,7 +43,7 @@ public class Efeitos : MonoBehaviour
     public static void Fumaca(Vector3 onde, float escala)
     {
         if (I == null) return;
-        Emitir(I.fumaca, onde, Mathf.RoundToInt(8 * escala) + 2, new Color(1f, 1f, 1f, 0.9f), 0.6f * escala);
+        Emitir(I.fumaca, onde, Mathf.RoundToInt(8 * escala) + 2, new Color(0.9f, 0.9f, 0.94f, 0.95f), 0.6f * escala);
     }
 
     public static void Explosao(Vector3 onde, float raio)
