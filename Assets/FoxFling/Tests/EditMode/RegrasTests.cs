@@ -124,4 +124,13 @@ public class RegrasTests
         Assert.AreEqual(EstadoFase.Jogando, Regras.EstadoAposRaposa(1, 0, false));
         Assert.AreEqual(EstadoFase.Derrota, Regras.EstadoAposRaposa(1, 0, true));
     }
+
+    [Test]
+    public void FormatarPontos_UsaPontoComoSeparadorDeMilhar()
+    {
+        Assert.AreEqual("0", Regras.FormatarPontos(0));
+        Assert.AreEqual("500", Regras.FormatarPontos(500));
+        Assert.AreEqual("12.500", Regras.FormatarPontos(12500));
+        Assert.AreEqual("1.234.567", Regras.FormatarPontos(1234567));
+    }
 }

@@ -32,6 +32,7 @@ public class GerenciadorFase : MonoBehaviour
     readonly List<Inimigo> inimigos = new List<Inimigo>();
     readonly List<Raposa> fila = new List<Raposa>();
     int pontuacaoMaxima;
+    int lancamentos;
     bool resultadoMostrado;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
@@ -95,11 +96,31 @@ public class GerenciadorFase : MonoBehaviour
 
         r.IrParaEstilingue(estilingue.Ancora, 0.45f);
         estilingue.Carregar(r);
-        if (hud != null) hud.MostrarDica(r.dica);
+
+        // A dica da raposa normal só aparece antes do primeiro tiro; a das especiais sempre.
+        if (hud != null) hud.MostrarDica(lancamentos == 0 || r.tipo != TipoRaposa.Normal ? r.dica : "");
+    }
+
+    void OnEnable()
+    {
+        if (estilingue != null) estilingue.Lancou += AoLancar;
+    }
+
+    void OnDisable()
+    {
+        if (estilingue != null) estilingue.Lancou -= AoLancar;
+    }
+
+    void AoLancar(Raposa r)
+    {
+        lancamentos++;
+        // Especiais mantêm a dica no ar ("clique para..."); a normal limpa a tela.
+        if (hud != null && r.tipo == TipoRaposa.Normal) hud.MostrarDica("");
     }
 
     void AoRaposaTerminar(Raposa r)
     {
+        if (hud != null && Estado == EstadoFase.Jogando) hud.MostrarDica("");
         if (Estado != EstadoFase.Jogando) return;
         StartCoroutine(DepoisDaRaposa());
     }

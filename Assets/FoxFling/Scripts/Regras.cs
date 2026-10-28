@@ -80,6 +80,12 @@ public static class Regras
         return p.x < -9f || p.x > 9f || p.y < -7f;
     }
 
+    // "12.500" — separador de milhar brasileiro, sem depender da língua do computador.
+    public static string FormatarPontos(int pontos)
+    {
+        return pontos.ToString("#,0", System.Globalization.CultureInfo.InvariantCulture).Replace(',', '.');
+    }
+
     public static EstadoFase EstadoAposRaposa(int inimigosVivos, int raposasRestantes, bool mundoParado)
     {
         if (inimigosVivos <= 0) return EstadoFase.Vitoria;

@@ -29,7 +29,7 @@ public static class ConstrutorFoxFling
         ConstrutorCenas.Tudo();
         AssetDatabase.SaveAssets();
 
-        EditorSceneManager.OpenScene(ConstrutorCenas.CaminhoFase(1));
+        EditorSceneManager.OpenScene(ConstrutorCenas.CenaMenu);
         ConfigurarGameView();
         return "Fox Fling reconstruído: " + DefinicoesFases.Todas().Length + " fases";
     }

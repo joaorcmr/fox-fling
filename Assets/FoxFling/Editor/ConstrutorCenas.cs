@@ -16,9 +16,37 @@ public static class ConstrutorCenas
     public static void Tudo()
     {
         GarantirPasta(Pasta);
+        CriarMenu();
         foreach (var def in DefinicoesFases.Todas())
             CriarFase(def);
         ConfigurarBuild();
+    }
+
+    static void CriarMenu()
+    {
+        var cena = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+        var raiz = new GameObject("Cenario").transform;
+        ConstrutorPrefabs.CriarCenario(raiz);
+        ConstrutorPrefabs.CriarSons(raiz);
+
+        // Decoração viva: raposas pulando na "fila" e triângulos esperando.
+        var decoracao = new GameObject("Decoracao").transform;
+        Raposa[] raposas = { ConstrutorPrefabs.RaposaNormal, ConstrutorPrefabs.RaposaNinja, ConstrutorPrefabs.RaposaBomba };
+        for (int i = 0; i < raposas.Length; i++)
+        {
+            if (raposas[i] == null) continue;
+            var r = (Raposa)PrefabUtility.InstantiatePrefab(raposas[i], decoracao);
+            r.transform.position = new Vector3(-6.3f + i * 0.75f, DefinicoesFases.Chao + 0.33f, 0f);
+        }
+        for (int i = 0; i < 2; i++)
+        {
+            var inimigo = (GameObject)PrefabUtility.InstantiatePrefab(i == 0 ? ConstrutorPrefabs.InimigoGrande : ConstrutorPrefabs.Inimigo, decoracao);
+            float altura = DefinicoesFases.TamanhoInimigo.y * (i == 0 ? DefinicoesFases.EscalaGrande : 1f);
+            inimigo.transform.position = new Vector3(5.2f + i * 1.1f, DefinicoesFases.Chao + altura / 2f, 0f);
+        }
+
+        ConstrutorUI.CriarMenu(raiz, DefinicoesFases.Todas());
+        EditorSceneManager.SaveScene(cena, CenaMenu);
     }
 
     static void CriarFase(DefinicaoFase def)

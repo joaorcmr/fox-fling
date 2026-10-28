@@ -167,9 +167,19 @@ public static class ConstrutorPrefabs
     static GameObject CriarSistemas(TextoFlutuante prefabTexto)
     {
         var raiz = new GameObject("Sistemas");
+        CriarCenario(raiz.transform);
+        CriarEstilingue(raiz.transform);
+        CriarSons(raiz.transform);
+        CriarEfeitos(raiz.transform, prefabTexto);
+        ConstrutorUI.CriarHud(raiz.transform);
+        return Salvar(raiz, "Sistemas");
+    }
 
+    // Câmera, fundo e chão: usados nas fases (dentro de Sistemas) e no menu.
+    public static void CriarCenario(Transform pai)
+    {
         // Câmera ortográfica: tamanho 6 = metade da altura visível (12 unidades).
-        var camGo = Filho(raiz.transform, "Main Camera", new Vector3(0f, 0f, -10f));
+        var camGo = Filho(pai, "Main Camera", new Vector3(0f, 0f, -10f));
         camGo.tag = "MainCamera";
         var cam = camGo.AddComponent<Camera>();
         cam.orthographic = true;
@@ -179,21 +189,22 @@ public static class ConstrutorPrefabs
         camGo.AddComponent<AudioListener>();
         camGo.AddComponent<TremorCamera>();
 
-        var fundo = Filho(raiz.transform, "Fundo", Vector3.zero);
+        var fundo = Filho(pai, "Fundo", Vector3.zero);
         Desenho(fundo, "fundo", OrdemFundo);
         fundo.transform.localScale = Vector3.one * 1.04f; // sobra para o tremor de câmera
 
         // Chão: um BoxCollider2D sem Rigidbody2D é estático (nunca se move).
-        var chao = Filho(raiz.transform, "Chao", new Vector3(0f, DefinicoesFases.Chao, 0f));
+        var chao = Filho(pai, "Chao", new Vector3(0f, DefinicoesFases.Chao, 0f));
         Desenho(chao, "chao", OrdemChao);
         var colChao = chao.AddComponent<BoxCollider2D>();
         colChao.size = new Vector2(15f, 1.5f);
         colChao.offset = new Vector2(0f, -0.75f);
         colChao.sharedMaterial = fisicaChao;
+    }
 
-        CriarEstilingue(raiz.transform);
-
-        var sons = Filho(raiz.transform, "Sons", Vector3.zero).AddComponent<Sons>();
+    public static void CriarSons(Transform pai)
+    {
+        var sons = Filho(pai, "Sons", Vector3.zero).AddComponent<Sons>();
         sons.lancar = Som("lancar");
         sons.esticar = Som("esticar");
         sons.pulo = Som("pulo");
@@ -204,9 +215,6 @@ public static class ConstrutorPrefabs
         sons.derrota = Som("derrota");
         sons.clique = Som("clique");
         sons.estrela = Som("estrela");
-
-        CriarEfeitos(raiz.transform, prefabTexto);
-        return Salvar(raiz, "Sistemas");
     }
 
     static void CriarEstilingue(Transform pai)
