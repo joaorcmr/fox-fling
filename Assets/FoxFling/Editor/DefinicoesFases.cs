@@ -53,7 +53,7 @@ public static class DefinicoesFases
         };
     }
 
-    // Fácil: a torre do desenho, toda de madeira, um triângulo em cada andar.
+    // Fácil: a torre do desenho, toda de madeira, um tubarão em cada andar.
     static DefinicaoFase Fase1()
     {
         var p = new Planta();
@@ -96,7 +96,7 @@ public static class DefinicoesFases
     }
 
     // Médio: mesa de rocha (difícil de quebrar) com uma torre de madeira em cima
-    // e um triângulo lá no alto.
+    // e um tubarão lá no alto.
     static DefinicaoFase Fase3()
     {
         var p = new Planta();
@@ -117,7 +117,7 @@ public static class DefinicoesFases
     }
 
     // Difícil: fortaleza com paredes de rocha, dois quartos no térreo (um com o
-    // triângulo grande) e um andar de vidro em cima. Uma pedra no topo esmaga tudo se cair.
+    // tubarão grande) e um andar de vidro em cima. Uma pedra no topo esmaga tudo se cair.
     static DefinicaoFase Fase4()
     {
         var p = new Planta();
@@ -145,7 +145,7 @@ public static class DefinicoesFases
         };
     }
 
-    // Desafio: só 3 raposas contra 5 triângulos em duas fortalezas mistas.
+    // Desafio: só 3 raposas contra 5 tubarões em duas fortalezas mistas.
     static DefinicaoFase Fase5()
     {
         var p = new Planta();

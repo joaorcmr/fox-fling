@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// Triângulos (inimigos). Mesma regra de dano dos blocos, mas valem bem mais pontos
+// Tubarões (inimigos). Mesma regra de dano dos blocos, mas valem bem mais pontos
 // e a fase só termina quando todos morrem.
 [RequireComponent(typeof(SpriteRenderer))]
 public class Inimigo : Destrutivel

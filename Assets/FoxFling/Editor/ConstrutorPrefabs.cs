@@ -17,6 +17,20 @@ public static class ConstrutorPrefabs
 
     static PhysicsMaterial2D fisicaRaposa, fisicaChao, fisicaInimigo;
 
+    // Silhueta do tubarão (inimigo.png, 72×64 px, PPU 80, pivô no centro). Fica dentro
+    // da caixa de 0.8 × 0.7 do antigo triângulo (DefinicoesFases.TamanhoInimigo), que é
+    // o espaço que as fases reservam para cada inimigo; os pés ficam em y = -0.35.
+    static readonly Vector2[] ContornoTubarao =
+    {
+        new Vector2(0.05f, 0.35f), new Vector2(0.125f, 0.35f), new Vector2(0.15f, 0.225f),       // barbatana
+        new Vector2(0.2125f, 0.125f), new Vector2(0.25f, 0.025f),                               // costas
+        new Vector2(0.375f, 0.1375f), new Vector2(0.4f, 0.1f), new Vector2(0.3625f, -0.0625f),   // rabo
+        new Vector2(0.4f, -0.225f), new Vector2(0.275f, -0.2125f), new Vector2(0.175f, -0.2625f),
+        new Vector2(0.175f, -0.35f), new Vector2(-0.2125f, -0.35f),                             // pés
+        new Vector2(-0.3f, -0.2f), new Vector2(-0.4f, -0.1875f), new Vector2(-0.4f, -0.125f),   // nadadeira
+        new Vector2(-0.375f, 0f), new Vector2(-0.3125f, 0.1375f), new Vector2(-0.2f, 0.225f),   // cabeça
+    };
+
     public static void Tudo()
     {
         GarantirPasta(Pasta);
@@ -125,11 +139,13 @@ public static class ConstrutorPrefabs
         rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         rb.sleepMode = RigidbodySleepMode2D.StartAsleep;
 
-        // Triângulo exato do desenho (0.8 de base × 0.7 de altura).
+        // Contorno do tubarão (com barbatanas e rabo). Côncavo: o Unity divide em partes convexas.
         var col = go.AddComponent<PolygonCollider2D>();
         col.pathCount = 1;
-        col.SetPath(0, new[] { new Vector2(-0.4f, -0.35f), new Vector2(0.4f, -0.35f), new Vector2(0f, 0.35f) });
-        col.density = 1f;
+        col.SetPath(0, ContornoTubarao);
+        // Área do contorno ≈ 0.38; com densidade 0.74 a massa fica 0.28, a mesma do
+        // antigo triângulo (pesa igual nas batidas e nas explosões).
+        col.density = 0.74f;
         col.sharedMaterial = fisicaInimigo;
 
         var inimigo = go.AddComponent<Inimigo>();

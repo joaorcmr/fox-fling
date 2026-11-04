@@ -29,7 +29,7 @@ public static class ConstrutorCenas
         ConstrutorPrefabs.CriarCenario(raiz);
         ConstrutorPrefabs.CriarSons(raiz);
 
-        // Decoração viva: raposas pulando na "fila" e triângulos esperando.
+        // Decoração viva: raposas pulando na "fila" e tubarões esperando.
         var decoracao = new GameObject("Decoracao").transform;
         Raposa[] raposas = { ConstrutorPrefabs.RaposaNormal, ConstrutorPrefabs.RaposaNinja, ConstrutorPrefabs.RaposaBomba };
         for (int i = 0; i < raposas.Length; i++)

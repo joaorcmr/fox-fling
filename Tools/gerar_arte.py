@@ -6,7 +6,8 @@ Uso:  python3 Tools/gerar_arte.py [pasta_contato]
 Escala: 80 pixels = 1 unidade do Unity (PPU 80). A câmera mostra 15×12 unidades,
 então o fundo tem 1200×960. Personagens são desenhados 4× maiores e reduzidos
 (antialias); blocos são desenhados pixel a pixel porque precisam repetir sem
-emenda no modo "Tiled" do SpriteRenderer.
+emenda no modo "Tiled" do SpriteRenderer. A raposa normal e o inimigo (tubarão)
+vêm da arte em Art/Fox e Art/Enemy, reduzida para esse mesmo tamanho.
 """
 import math
 import os
@@ -168,46 +169,64 @@ def raposa(tipo):
 
 
 # --------------------------------------------------------------------------
-# Inimigo triângulo (72×64, triângulo 64×56 centrado → 0.8 × 0.7 unidades)
+# Arte desenhada à parte (Art/Fox e Art/Enemy), reduzida para o tamanho do jogo
 # --------------------------------------------------------------------------
-def inimigo(ferido):
-    W, H = 72, 64
-    A, B, C = (4, 60), (68, 60), (36, 4)
-    img, d = tela(W, H)
-    tri = mascara_vazia(W, H)
-    ImageDraw.Draw(tri).polygon([tuple(sc(*p)) for p in (A, B, C)], fill=255)
-    tri = tri.filter(ImageFilter.GaussianBlur(5)).point(lambda v: 255 if v > 150 else 0)
-    pintar(img, dilatar(tri, 2.3), CONTORNO)
-    corpo = gradiente_vertical(W * S, H * S, hexc("b98af0"), hexc("6d3ca8"))
-    colar_com_mascara(img, corpo, tri)
-    brilho = mascara_vazia(W, H)
-    ImageDraw.Draw(brilho).polygon([tuple(sc(*p)) for p in ((33, 12), (20, 38), (24, 38), (35, 16))], fill=150)
-    pintar(img, ImageChops.multiply(brilho, tri), (255, 255, 255, 140))
+ARTE_RAPOSA = os.path.join(SAIDA, "Fox", "raposinha_principal.png")
+ARTE_TUBARAO = os.path.join(SAIDA, "Enemy", "Tubarãozinho pixelado fofo e destemido.png")
 
-    olhos = (28, 40), (44, 40)
-    if not ferido:
-        for ox, oy in olhos:
-            elipse(d, ox, oy, 6.6, 6.6, CONTORNO)
-            elipse(d, ox, oy, 5.2, 5.2, BRANCO)
-            elipse(d, ox - 2, oy + 0.6, 2.6, 2.6, CONTORNO)
-        d.line(sc(20, 29, 32, 34), fill=CONTORNO, width=int(2.8 * S))
-        d.line(sc(40, 34, 52, 29), fill=CONTORNO, width=int(2.8 * S))
-        d.line(sc(29, 52, 43, 50), fill=CONTORNO, width=int(2.2 * S))
-        d.rectangle(sc(38, 50.2, 41, 53), fill=BRANCO, outline=CONTORNO, width=int(0.8 * S))
-    else:
-        ox, oy = olhos[0]
-        d.line(sc(ox - 4, oy - 3, ox + 4, oy), fill=CONTORNO, width=int(2.2 * S))
-        d.line(sc(ox - 4, oy + 3, ox + 4, oy), fill=CONTORNO, width=int(2.2 * S))
-        ox, oy = olhos[1]
-        elipse(d, ox, oy, 6.6, 6.6, CONTORNO)
-        elipse(d, ox, oy, 5.2, 5.2, BRANCO)
-        elipse(d, ox, oy, 1.6, 1.6, CONTORNO)
-        d.line(sc(21, 31, 32, 29), fill=CONTORNO, width=int(2.4 * S))
-        d.line(sc(40, 28, 51, 31), fill=CONTORNO, width=int(2.4 * S))
-        pts = [(29, 52), (32, 50), (35, 52), (38, 50), (41, 52), (44, 50)]
-        d.line([tuple(sc(*p)) for p in pts], fill=CONTORNO, width=int(1.8 * S), joint="curve")
-        elipse(d, 50, 45, 3.5, 2.5, hexc("4a2370", 170))   # roxo do galo
-        d.line([tuple(sc(*p)) for p in [(36, 7), (34, 14), (38, 19), (35, 24)]], fill=CONTORNO, width=int(1.4 * S))
+
+def abrir_arte(caminho):
+    """Abre a arte, limpa o alfa (o tubarão vem quase opaco, 250–254, e com ruído
+    em volta) e recorta as bordas vazias."""
+    img = Image.open(caminho).convert("RGBA")
+    alfa = img.getchannel("A").point(lambda v: 0 if v < 32 else 255 if v > 200 else v)
+    img.putalpha(alfa)
+    return img.crop(alfa.getbbox())
+
+
+def encaixar(arte, W, H, largura, cx, base):
+    """Tela 4× com a arte reduzida para `largura` px, centrada em cx e com o pé em y = base."""
+    img, d = tela(W, H)
+    w = round(largura * S)
+    h = round(arte.height * w / arte.width)
+    img.alpha_composite(arte.resize((w, h), Image.LANCZOS), (round(cx * S - w / 2), round(base * S - h)))
+    return img, d
+
+
+def raposa_principal():
+    # 60 px de largura com o pé em y = 62 (fundo da bola): o corpo cai dentro do
+    # colisor (raio 26, centro (32, 36)), igual à raposa desenhada antes.
+    img, _ = encaixar(abrir_arte(ARTE_RAPOSA), 64, 64, 60, 32, 62)
+    return reduzir(img)
+
+
+# --------------------------------------------------------------------------
+# Inimigo tubarão (72×64; 64 px de largura com o pé em y = 60 → cabe na mesma
+# caixa de 0.8 × 0.7 unidades do antigo triângulo, que é o espaço das fases)
+# --------------------------------------------------------------------------
+def faixa(d, cx, cy, comp, larg, angulo, cor):
+    c, s = math.cos(math.radians(angulo)), math.sin(math.radians(angulo))
+    cantos = [(-comp / 2, -larg / 2), (comp / 2, -larg / 2), (comp / 2, larg / 2), (-comp / 2, larg / 2)]
+    pts = [(cx + x * c - y * s, cy + x * s + y * c) for x, y in cantos]
+    d.polygon([tuple(sc(*p)) for p in pts], fill=cor, outline=CONTORNO, width=int(1.1 * S))
+
+
+def tubarao(ferido):
+    W, H = 72, 64
+    img, d = encaixar(abrir_arte(ARTE_TUBARAO), W, H, 64, 36, 60)
+    if ferido:
+        # Pálpebras caídas: a metade de cima de cada olho vira pele azul.
+        for ex, ey, rx, ry in ((16.3, 27.6, 5.0, 5.0), (33.6, 28.0, 5.0, 5.4)):
+            olho = mascara_vazia(W, H)
+            ImageDraw.Draw(olho).ellipse(sc(ex - rx, ey - ry, ex + rx, ey + ry), fill=255)
+            metade = mascara_vazia(W, H)
+            ImageDraw.Draw(metade).rectangle(sc(0, 0, W, ey + 0.3), fill=255)
+            pintar(img, ImageChops.multiply(olho, metade), hexc("5b8cc3"))
+            d.line(sc(ex - rx - 0.6, ey + 0.6, ex + rx + 0.6, ey - 0.2), fill=CONTORNO, width=int(1.8 * S))
+        # Curativo em X no alto da cabeça.
+        for angulo in (35, -35):
+            faixa(d, 25, 17.5, 10, 3.4, angulo, hexc("f3c99a"))
+        elipse(d, 25, 17.5, 1.4, 1.4, hexc("d99a6c"))
     return reduzir(img)
 
 
@@ -465,7 +484,7 @@ def icone(tipo):
     return reduzir(img)
 
 
-def logo(raposa_img):
+def logo(raposa_arte):
     W, H = 540, 130
     fonte_caminho = "/System/Library/Fonts/Supplemental/Arial Rounded Bold.ttf"
     try:
@@ -484,18 +503,21 @@ def logo(raposa_img):
     pintar(img, m_borda, CONTORNO)
     colar_com_mascara(img, gradiente_vertical(W * S, H * S, hexc("ffd166"), hexc("f06d1f")), m_texto)
     img = reduzir(img)
-    rap = raposa_img.resize((104, 104), Image.LANCZOS)
-    img.alpha_composite(rap, (8, 14))
+    # A arte grande (não o sprite de 64 px), num quadrado de 104 px, com o pé em y = 115.
+    rap = raposa_arte.copy()
+    rap.thumbnail((104, 104), Image.LANCZOS)
+    img.alpha_composite(rap, (8 + (104 - rap.width) // 2, 115 - rap.height))
     return img
 
 
 def main():
     os.makedirs(SAIDA, exist_ok=True)
     feitos = {}
-    for t in ("normal", "ninja", "bomba"):
+    feitos["raposa_normal"] = salvar(raposa_principal(), "raposa_normal")
+    for t in ("ninja", "bomba"):
         feitos["raposa_" + t] = salvar(raposa(t), "raposa_" + t)
-    feitos["inimigo"] = salvar(inimigo(False), "inimigo")
-    feitos["inimigo_ferido"] = salvar(inimigo(True), "inimigo_ferido")
+    feitos["inimigo"] = salvar(tubarao(False), "inimigo")
+    feitos["inimigo_ferido"] = salvar(tubarao(True), "inimigo_ferido")
     for m in ("madeira", "vidro", "rocha"):
         nome_r = {"madeira": "madeira_rachada", "vidro": "vidro_rachado", "rocha": "rocha_rachada"}[m]
         feitos[m] = salvar(bloco(m), m)
@@ -516,7 +538,7 @@ def main():
     feitos["painel"] = salvar(caixa(64, 18, hexc("fff4df"), hexc("e9d3ad"), CONTORNO, 3), "painel")
     for t in ("menu", "reiniciar", "proxima"):
         feitos["icone_" + t] = salvar(icone(t), "icone_" + t)
-    feitos["logo"] = salvar(logo(feitos["raposa_normal"]), "logo")
+    feitos["logo"] = salvar(logo(abrir_arte(ARTE_RAPOSA)), "logo")
 
     if len(sys.argv) > 1:
         contato(feitos, sys.argv[1])

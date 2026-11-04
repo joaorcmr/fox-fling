@@ -1,7 +1,7 @@
 # Fox Fling
 
 Jogo 2D de estilingue com física, feito em Unity 6 para explorar **física 2D e objetos**.
-Lance raposas contra torres de madeira, vidro e rocha e derrube todos os triângulos.
+Lance raposas contra torres de madeira, vidro e rocha e derrube todos os tubarões.
 
 - **Autor:** Joao Ricardo Ribeiro ([@joaorcmr](https://github.com/joaorcmr))
 - **Resolução:** 600×480
@@ -17,7 +17,7 @@ Lance raposas contra torres de madeira, vidro e rocha e derrube todos os triâng
 | Reiniciar a fase | Botão ↻ ou tecla **R** |
 | Voltar ao menu | Botão ☰ ou tecla **Esc** |
 
-**Objetivo:** eliminar todos os triângulos antes de acabarem as raposas. Cada raposa que
+**Objetivo:** eliminar todos os tubarões antes de acabarem as raposas. Cada raposa que
 sobra vale 10.000 pontos de bônus. As estrelas dependem da pontuação: 1 por vencer, 2 a
 partir de 45% e 3 a partir de 75% da pontuação máxima da fase. Vencer uma fase libera a próxima.
 
@@ -28,8 +28,8 @@ partir de 45% e 3 a partir de 75% da pontuação máxima da fase. Vencer uma fas
 | 1 | Fácil | 2 normais | Torre de madeira de dois andares (o desenho do quadro) |
 | 2 | Médio | 2 normais + ninja | Casinha de vidro e torre com andar de vidro |
 | 3 | Médio | 2 normais + ninja | Mesa de rocha com torre de madeira em cima |
-| 4 | Difícil | 2 normais + ninja + bomba | Fortaleza de rocha com triângulo grande |
-| 5 | Desafio | normal + ninja + bomba | Duas fortalezas mistas, 5 triângulos |
+| 4 | Difícil | 2 normais + ninja + bomba | Fortaleza de rocha com tubarão grande |
+| 5 | Desafio | normal + ninja + bomba | Duas fortalezas mistas, 5 tubarões |
 
 ## A física, script por script
 
@@ -42,7 +42,7 @@ Tudo em `Assets/FoxFling/Scripts`:
 | `Raposa.cs` | `Kinematic` enquanto espera (o código manda), `Dynamic` ao ser lançada (a física manda); detecção de colisão `Continuous` para não atravessar blocos finos |
 | `Destrutivel.cs` | Dano pelo **impulso** da colisão (`ContactPoint2D.normalImpulse`): batida rápida ou de coisa pesada causa mais dano |
 | `Bloco.cs` + `MaterialBloco.cs` | Massa = densidade × área (`useAutoMass`), atrito e quique por `PhysicsMaterial2D`; madeira, vidro e rocha são assets que você ajusta no Inspector |
-| `Inimigo.cs` | Mesmo dano dos blocos; collider em forma de triângulo (`PolygonCollider2D`) |
+| `Inimigo.cs` | Mesmo dano dos blocos; collider com o contorno do tubarão (`PolygonCollider2D`) |
 | `RaposaNinja.cs` | Impulso instantâneo: troca a velocidade direto, na mesma direção |
 | `RaposaBomba.cs` + `Explosao.cs` | Explosão feita na mão: `OverlapCircleAll` + `AddForce(..., Impulse)`, mais forte quanto mais perto |
 | `GerenciadorFase.cs` | Regras da fase: fila de raposas, pontos, vitória, e derrota só depois que o mundo para |
@@ -62,7 +62,7 @@ Detalhes que deixam a física estável:
 | Vidro | 0,6 | 15 | 300 |
 | Rocha | 3 | 160 | 1.000 |
 
-Ficam em `Assets/FoxFling/Materiais` (Madeira/Vidro/Rocha.asset). Triângulo: vida 20 (grande: 45),
+Ficam em `Assets/FoxFling/Materiais` (Madeira/Vidro/Rocha.asset). Tubarão: vida 20 (grande: 45),
 5.000 pontos. Raposas: massa 1 (ninja 0,9, bomba 1,4). Estilingue: puxada máxima 1,5 e força 8,5.
 
 ## Abrindo o projeto
