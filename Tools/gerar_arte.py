@@ -6,8 +6,8 @@ Uso:  python3 Tools/gerar_arte.py [pasta_contato]
 Escala: 80 pixels = 1 unidade do Unity (PPU 80). A câmera mostra 15×12 unidades,
 então o fundo tem 1200×960. Personagens são desenhados 4× maiores e reduzidos
 (antialias); blocos são desenhados pixel a pixel porque precisam repetir sem
-emenda no modo "Tiled" do SpriteRenderer. A raposa normal e o inimigo (tubarão)
-vêm da arte em Art/Fox e Art/Enemy, reduzida para esse mesmo tamanho.
+emenda no modo "Tiled" do SpriteRenderer. As raposas e o inimigo (tubarão) vêm
+da arte em Art/Fox e Art/Enemy, reduzida para esse mesmo tamanho.
 """
 import math
 import os
@@ -56,11 +56,6 @@ def mascara_vazia(w, h):
     return Image.new("L", (w * S, h * S), 0)
 
 
-def dilatar(mascara, raio_1x):
-    tamanho = int(raio_1x * S) * 2 + 1
-    return mascara.filter(ImageFilter.MaxFilter(tamanho))
-
-
 def pintar(base, mascara, cor):
     camada = Image.new("RGBA", base.size, cor)
     base.alpha_composite(Image.composite(camada, Image.new("RGBA", base.size, (0, 0, 0, 0)), mascara))
@@ -83,95 +78,11 @@ def gradiente_vertical(w, h, topo, baixo):
 
 
 # --------------------------------------------------------------------------
-# Raposas (64×64, bola com raio 26 e centro em (32, 36) → pivô (0.5, 0.4375))
-# --------------------------------------------------------------------------
-def raposa(tipo):
-    W = H = 64
-    cx, cy, r = 32, 36, 26
-    if tipo == "bomba":
-        pelo, sombra, luz, barriga, orelha_in = hexc("4d5160"), hexc("373a46"), hexc("6e7385"), hexc("d5d9e2"), hexc("8a8fa0")
-    else:
-        pelo, sombra, luz, barriga, orelha_in = hexc("f08a24"), hexc("c8620f"), hexc("ffb35c"), hexc("fff3e0"), hexc("ffd0a0")
-
-    img, d = tela(W, H)
-
-    # Silhueta (cauda + orelhas + bola) → contorno por dilatação.
-    sil = mascara_vazia(W, H)
-    ds = ImageDraw.Draw(sil)
-    ds.ellipse(sc(cx - r, cy - r, cx + r, cy + r), fill=255)
-    orelhas = [
-        [(cx - 5, cy - 21), (cx - 23, cy - 13), (cx - 17, cy - 32)],
-        [(cx + 5, cy - 21), (cx + 23, cy - 13), (cx + 17, cy - 32)],
-    ]
-    for o in orelhas:
-        ds.polygon([tuple(sc(*p)) for p in o], fill=255)
-    cauda = (cx - 29, cy + 4, cx - 9, cy + 22)
-    ds.ellipse(sc(*cauda), fill=255)
-    pintar(img, dilatar(sil, 2.2), CONTORNO)
-    pintar(img, sil, pelo)
-
-    # Orelhas por dentro e ponta da cauda.
-    for o in orelhas:
-        cx_o = sum(p[0] for p in o) / 3
-        cy_o = sum(p[1] for p in o) / 3
-        menor = [(cx_o + (p[0] - cx_o) * 0.55, cy_o + (p[1] - cy_o) * 0.55 + 1) for p in o]
-        d.polygon([tuple(sc(*p)) for p in menor], fill=orelha_in)
-    ponta = mascara_vazia(W, H)
-    ImageDraw.Draw(ponta).ellipse(sc(cx - 29, cy + 6, cx - 21, cy + 20), fill=255)
-    pintar(img, ImageChops.multiply(ponta, sil), barriga)
-
-    # Detalhes recortados pela bola.
-    bola = mascara_vazia(W, H)
-    ImageDraw.Draw(bola).ellipse(sc(cx - r, cy - r, cx + r, cy + r), fill=255)
-    det, dd = tela(W, H)
-    dd.ellipse(sc(cx - r, cy - r, cx + r, cy + r), fill=sombra)
-    dd.ellipse(sc(cx - r - 3, cy - r - 3, cx + r - 4, cy + r - 5), fill=pelo)
-    elipse(dd, cx + 2, cy + 20, 17, 10, barriga)          # peito
-    elipse(dd, cx + 16, cy + 5, 12, 8, barriga)           # focinho
-    elipse(dd, cx - 13, cy - 13, 7, 4, luz)               # brilho
-    if tipo == "ninja":
-        dd.rectangle(sc(cx - r, cy - 14, cx + r, cy - 2), fill=hexc("262a40"))
-        dd.rectangle(sc(cx - r, cy - 14, cx + r, cy - 12.5), fill=hexc("3d4466"))
-    colar_com_mascara(img, det, bola)
-
-    # Rosto olhando para a direita (para onde ela voa).
-    if tipo == "ninja":
-        # Faixa amarrada atrás da cabeça.
-        for (a, b) in [((cx - 22, cy - 10), (cx - 28, cy - 18)), ((cx - 22, cy - 6), (cx - 28, cy + 1))]:
-            d.line(sc(*a, *b), fill=CONTORNO, width=int(6 * S))
-            d.line(sc(*a, *b), fill=hexc("262a40"), width=int(3.4 * S))
-        for ex in (cx + 6, cx + 17):
-            elipse(d, ex, cy - 8, 5.2, 3.2, CONTORNO)
-            elipse(d, ex, cy - 8, 4.2, 2.3, BRANCO)
-            elipse(d, ex + 1.6, cy - 8, 1.8, 1.8, CONTORNO)
-    else:
-        for ex in (cx + 6, cx + 17):
-            elipse(d, ex, cy - 7, 5.6, 5.6, CONTORNO)
-            elipse(d, ex, cy - 7, 4.4, 4.4, BRANCO)
-            elipse(d, ex + 1.7, cy - 6.5, 2.2, 2.2, CONTORNO)
-            elipse(d, ex + 0.9, cy - 7.8, 0.8, 0.8, BRANCO)
-        sobr = (cx + 1, cy - 15, cx + 10, cy - 12.5), (cx + 13, cy - 12.5, cx + 22, cy - 15)
-        for x1, y1, x2, y2 in sobr:
-            d.line(sc(x1, y1, x2, y2), fill=CONTORNO, width=int(2.4 * S))
-    elipse(d, cx + 24, cy + 1.5, 3.2, 2.6, CONTORNO)        # nariz
-    d.arc(sc(cx + 11, cy + 2, cx + 21, cy + 10), 20, 160, fill=CONTORNO, width=int(1.6 * S))
-
-    if tipo == "bomba":
-        # Pavio aceso entre as orelhas.
-        d.line(sc(cx + 1, cy - 25, cx + 4, cy - 30), fill=CONTORNO, width=int(3.6 * S))
-        d.line(sc(cx + 1, cy - 25, cx + 4, cy - 30), fill=hexc("c9a46a"), width=int(2 * S))
-        for raio_f, cor in ((4.2, hexc("ff7a1a")), (2.6, hexc("ffd84a")), (1.2, BRANCO)):
-            elipse(d, cx + 5, cy - 31.5, raio_f, raio_f, cor)
-        # Bochechas vermelhas de raiva.
-        elipse(d, cx + 4, cy + 3, 3, 2, hexc("e0524a", 200))
-
-    return reduzir(img)
-
-
-# --------------------------------------------------------------------------
 # Arte desenhada à parte (Art/Fox e Art/Enemy), reduzida para o tamanho do jogo
 # --------------------------------------------------------------------------
 ARTE_RAPOSA = os.path.join(SAIDA, "Fox", "raposinha_principal.png")
+ARTE_RAPOSA_NINJA = os.path.join(SAIDA, "Fox", "raposinha_ninja.png")
+ARTE_RAPOSA_BOMBA = os.path.join(SAIDA, "Fox", "raposinha_bomba.png")
 ARTE_TUBARAO = os.path.join(SAIDA, "Enemy", "Tubarãozinho pixelado fofo e destemido.png")
 
 
@@ -193,10 +104,24 @@ def encaixar(arte, W, H, largura, cx, base):
     return img, d
 
 
-def raposa_principal():
-    # 60 px de largura com o pé em y = 62 (fundo da bola): o corpo cai dentro do
-    # colisor (raio 26, centro (32, 36)), igual à raposa desenhada antes.
-    img, _ = encaixar(abrir_arte(ARTE_RAPOSA), 64, 64, 60, 32, 62)
+# Raposas: o centro da bola (pivô do sprite, ver ConstrutorAssets) fica no meio da
+# largura e 28 px acima do pé da imagem; o colisor é um círculo de raio 26 px.
+def raposa_da_arte(caminho):
+    # Tela 64×64 (bola em (32, 36)): 60 px de largura com o pé em y = 62 (fundo da bola).
+    img, _ = encaixar(abrir_arte(caminho), 64, 64, 60, 32, 62)
+    return reduzir(img)
+
+
+def raposa_bomba():
+    # A chama do pavio deixa a arte mais alta e o rabo a deixa mais larga, então a
+    # tela é 80×72 (bola em (40, 44)). Na arte recortada, a bola do corpo tem centro
+    # (487, 551) e raio 346 px; reduzida para raio 25, cabe no colisor.
+    W, H = 80, 72
+    arte = abrir_arte(ARTE_RAPOSA_BOMBA)
+    escala = 25 * S / 346
+    img, _ = tela(W, H)
+    reduzida = arte.resize((round(arte.width * escala), round(arte.height * escala)), Image.LANCZOS)
+    img.alpha_composite(reduzida, (round(W / 2 * S - 487 * escala), round((H - 28) * S - 551 * escala)))
     return reduzir(img)
 
 
@@ -513,9 +438,9 @@ def logo(raposa_arte):
 def main():
     os.makedirs(SAIDA, exist_ok=True)
     feitos = {}
-    feitos["raposa_normal"] = salvar(raposa_principal(), "raposa_normal")
-    for t in ("ninja", "bomba"):
-        feitos["raposa_" + t] = salvar(raposa(t), "raposa_" + t)
+    feitos["raposa_normal"] = salvar(raposa_da_arte(ARTE_RAPOSA), "raposa_normal")
+    feitos["raposa_ninja"] = salvar(raposa_da_arte(ARTE_RAPOSA_NINJA), "raposa_ninja")
+    feitos["raposa_bomba"] = salvar(raposa_bomba(), "raposa_bomba")
     feitos["inimigo"] = salvar(tubarao(False), "inimigo")
     feitos["inimigo_ferido"] = salvar(tubarao(True), "inimigo_ferido")
     for m in ("madeira", "vidro", "rocha"):

@@ -44,9 +44,11 @@ public static class ConstrutorAssets
             s.spritePivot = new Vector2(0.5f, 0.5f);
             if (nome.StartsWith("raposa_"))
             {
-                // Pivô no centro da bola (36 px do topo numa imagem de 64), não no centro da imagem.
+                // Pivô no centro da bola (no meio da largura, 28 px acima do pé da imagem),
+                // não no centro da imagem. A bomba é mais alta (72 px) por causa do pavio.
+                imp.GetSourceTextureWidthAndHeight(out _, out int altura);
                 s.spriteAlignment = (int)SpriteAlignment.Custom;
-                s.spritePivot = new Vector2(0.5f, 28f / 64f);
+                s.spritePivot = new Vector2(0.5f, 28f / altura);
             }
             else if (nome == "estilingue") s.spriteAlignment = (int)SpriteAlignment.BottomCenter;
             else if (nome == "chao") s.spriteAlignment = (int)SpriteAlignment.TopCenter;
