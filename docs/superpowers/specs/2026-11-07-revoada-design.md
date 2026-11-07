@@ -347,16 +347,40 @@ Logo "Revoada", com porco e pássaros · **Jogar** · **Como jogar** (um quadro 
 - **Progresso:** prints da tela do Unity mandados ao João conforme o jogo avança
   **(João)**.
 
+## Feito em Unity (João)
+
+O João precisa poder dizer ao professor que o jogo foi feito em Unity **(João)**.
+A simulação em C# puro (ver Arquitetura) não muda isso: C# é a linguagem de
+scripts do Unity, e as regras são classes chamadas pelos componentes do Unity a
+cada passo. Para que isso fique evidente para quem abrir o projeto:
+
+- O jogo é um projeto Unity 6, montado e testado no Editor, com cenas, prefabs e
+  ScriptableObjects. O build WebGL sai do próprio Unity.
+- A simulação avança dentro do `FixedUpdate` de um componente (`Jogo`), no passo
+  fixo do Unity (`Time.fixedDeltaTime` = 1/60 s). A pausa e as velocidades 2× e
+  3× usam `Time.timeScale`.
+- Todo pássaro, porco, projétil e efeito é um GameObject criado a partir de um
+  prefab, com SpriteRenderer e um componente que mostra o estado ao vivo no
+  Inspector (vida, nível, alvo).
+- A trilha, os obstáculos e os alcances aparecem como Gizmos na Scene view, e os
+  números ficam em ScriptableObjects editáveis no Inspector.
+- Penas e estouros usam ParticleSystem, os sons usam AudioSource, a interface usa
+  uGUI (Canvas) e os testes usam o Unity Test Framework.
+- O README ganha uma seção **"Onde está o Unity"** que lista cada recurso do Unity
+  usado e o arquivo onde ele está, para o João usar na apresentação.
+
 ## Arquitetura (minha escolha)
 
-- **Simulação em C# puro, sem física e sem MonoBehaviour:** trilha, pássaros,
+- **Simulação em C# puro, sem física e sem MonoBehaviour** (roda dentro do
+  Unity; ver "Feito em Unity"): trilha, pássaros,
   porcos, projéteis, colisão por círculos, ondas, economia e colocação. Ela avança
   em passos fixos de 1/60 s e é determinística: mesmos comandos, mesmo resultado.
   Por isso o jogo inteiro roda dentro dos testes EditMode, sem dar Play. Isso
   permite os robôs de balanceamento e permite testar mesmo com a tela do Mac
   bloqueada (o Play Mode para de rodar quando a tela trava).
-- **A Unity só desenha e ouve o jogador:** um controlador avança a simulação
-  (mais passos por quadro em 2× e 3×), traduz cliques em comandos ("comprar porco
+- **A Unity desenha e ouve o jogador:** o componente `Jogo` avança a simulação no
+  `FixedUpdate` (em 2× e 3× o `Time.timeScale` faz o Unity rodar mais passos
+  fixos por quadro), traduz cliques em comandos ("comprar porco
   X em P", "upgrade", "vender", "soltar onda") e recebe eventos (pássaro nasceu,
   levou dano, estourou, tiro disparado, Torre atingida, onda começou/acabou) para
   mover sprites, tocar sons e atualizar a UI. Usa pool de objetos para pássaros,
