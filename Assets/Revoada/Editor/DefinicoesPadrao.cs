@@ -23,8 +23,96 @@ public static class DefinicoesPadrao
         };
     }
 
-    // Os porcos entram na Task 5 (com o combate).
-    public static DadosPorco[] Porcos() => new DadosPorco[0];
+    // Tabelas "Porcos" e "Upgrades" do design. Cada melhoria guarda o bloco
+    // COMPLETO: o do nível anterior com o efeito dela por cima (Mais(...)).
+    public static DadosPorco[] Porcos()
+    {
+        var estilingue1 = new Atributos
+        {
+            tiro = TipoTiro.Pedrinha, dano = 1f, alcance = 3f, recarga = 0.8f,
+            velocidadeProjetil = 12f, raioProjetil = 0.15f, perfura = 1, alcanceVoo = 1.3f,
+        };
+        var estilingue2 = Mais(estilingue1, a => a.recarga = 0.55f);
+        var estilingue3 = Mais(estilingue2, a => { a.dano = 2f; a.alcance = 3.5f; });
+
+        var arpao1 = new Atributos
+        {
+            tiro = TipoTiro.Arpao, dano = 2f, alcance = 5f, recarga = 1.6f,
+            velocidadeProjetil = 14f, raioProjetil = 0.18f, perfura = 4, alcanceVoo = 1.6f,
+        };
+        var arpao2 = Mais(arpao1, a => { a.perfura = 7; a.alcanceVoo = 2f; });
+        var arpao3 = Mais(arpao2, a => { a.dano = 3f; a.ignoraCouraca = true; });
+
+        var bomba1 = new Atributos
+        {
+            tiro = TipoTiro.Bomba, dano = 2f, alcance = 3.5f, recarga = 1.5f,
+            velocidadeProjetil = 8f, raioProjetil = 0.2f, perfura = 1, alcanceVoo = 1f, raioArea = 1f,
+        };
+        var bomba2 = Mais(bomba1, a => a.raioArea = 1.4f);
+        var bomba3 = Mais(bomba2, a => { a.lentidao = 0.4f; a.duracaoLentidao = 1.5f; });
+
+        // O Tamboreiro não atira: o "alcance" dele é o raio da aura (é o que o círculo mostra).
+        var tambor1 = new Atributos { tiro = TipoTiro.Nenhum, alcance = 2.5f, raioAura = 2.5f, bonusCadencia = 0.2f };
+        var tambor2 = Mais(tambor1, a => { a.bonusCadencia = 0.35f; a.raioAura = 3f; a.alcance = 3f; });
+        var tambor3 = Mais(tambor2, a => a.bonusAlcance = 0.2f);
+
+        return new[]
+        {
+            new DadosPorco
+            {
+                especie = EspeciePorco.Estilingueiro, nome = "Estilingueiro", papel = "Barato e rápido: segura o começo.", custo = 120,
+                nivel1 = estilingue1,
+                nivel2 = M("Elástico Reforçado", "Atira mais rápido (recarga 0,55 s).", 100, estilingue2),
+                nivel3 = M("Pedra Afiada", "Dano 2 e alcance 3,5.", 180, estilingue3),
+                especializacaoA = M("Rajada", "Solta 3 pedrinhas em leque.", 500, Mais(estilingue3, a => { a.tiros = 3; a.abertura = 15f; })),
+                especializacaoB = M("Mira Certeira", "Alcance 5,5, dano 4, atravessa 2.", 550,
+                    Mais(estilingue3, a => { a.alcance = 5.5f; a.dano = 4f; a.perfura = 2; })),
+            },
+            new DadosPorco
+            {
+                especie = EspeciePorco.Arpoador, nome = "Arpoador", papel = "O arpão atravessa a fila: rende nas retas longas.", custo = 220,
+                nivel1 = arpao1,
+                nivel2 = M("Arpão Comprido", "Atravessa 7 e voa até 2× o alcance.", 160, arpao2),
+                nivel3 = M("Ponta de Ferro", "Dano 3 e ignora a couraça.", 260, arpao3),
+                especializacaoA = M("Arpão Gigante", "Atravessa 20, dano 6, arpão mais largo.", 750,
+                    Mais(arpao3, a => { a.perfura = 20; a.dano = 6f; a.raioProjetil = 0.35f; })),
+                especializacaoB = M("Arpão Ligeiro", "Atira muito mais rápido (recarga 0,6 s).", 650, Mais(arpao3, a => a.recarga = 0.6f)),
+            },
+            new DadosPorco
+            {
+                especie = EspeciePorco.Bombardeiro, nome = "Bombardeiro", papel = "Bomba de lama em área: bandos, curvas e couraça.", custo = 350,
+                nivel1 = bomba1,
+                nivel2 = M("Barril Maior", "Explosão maior (raio 1,4).", 220, bomba2),
+                nivel3 = M("Lama Grudenta", "Atingidos ficam 40% mais lentos por 1,5 s.", 300, bomba3),
+                especializacaoA = M("Chuva de Lama", "Atira o dobro (recarga 0,7 s).", 850, Mais(bomba3, a => a.recarga = 0.7f)),
+                especializacaoB = M("Barril de Estrume", "Dano 7, raio 1,8 e empurra os pássaros para trás.", 800,
+                    Mais(bomba3, a => { a.dano = 7f; a.raioArea = 1.8f; a.empurrao = 1f; })),
+            },
+            new DadosPorco
+            {
+                especie = EspeciePorco.Tamboreiro, nome = "Tamboreiro", papel = "Não ataca: os porcos no círculo atiram mais rápido.", custo = 300,
+                nivel1 = tambor1,
+                nivel2 = M("Batuque", "Aura +35% e raio 3,0.", 220, tambor2),
+                nivel3 = M("Grito de Guerra", "Vizinhos com +20% de alcance.", 320, tambor3),
+                especializacaoA = M("Fanfarra", "Aura +60% e raio 3,5.", 650,
+                    Mais(tambor3, a => { a.bonusCadencia = 0.6f; a.raioAura = 3.5f; a.alcance = 3.5f; })),
+                especializacaoB = M("Tambor das Penas", "Pássaros estourados na aura rendem +50% de penas.", 550,
+                    Mais(tambor3, a => a.bonusPenas = 0.5f)),
+            },
+        };
+    }
+
+    static Atributos Mais(Atributos anterior, System.Action<Atributos> efeito)
+    {
+        var a = anterior.Copia();
+        efeito(a);
+        return a;
+    }
+
+    static Melhoria M(string nome, string descricao, int custo, Atributos atributos)
+    {
+        return new Melhoria { nome = nome, descricao = descricao, custo = custo, atributos = atributos };
+    }
 
     public static List<DadosOnda> Ondas()
     {

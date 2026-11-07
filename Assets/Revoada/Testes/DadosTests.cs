@@ -71,6 +71,41 @@ public class DadosTests
     }
 
     [Test]
+    public void PorcosTemNumerosValidos()
+    {
+        var d = Carregar();
+
+        Assert.AreEqual(4, d.porcos.Count);
+        foreach (var p in d.porcos.Values)
+        {
+            Assert.Greater(p.custo, 0, p.nome);
+            Assert.IsNotNull(p.nivel1, p.nome);
+            foreach (var m in new[] { p.nivel2, p.nivel3, p.especializacaoA, p.especializacaoB })
+            {
+                Assert.IsNotNull(m?.atributos, $"{p.nome}: melhoria sem números");
+                Assert.Greater(m.custo, 0, $"{p.nome}: {m.nome}");
+                Assert.IsFalse(string.IsNullOrEmpty(m.nome), p.nome);
+            }
+        }
+    }
+
+    [Test]
+    public void HaLugarParaPorcos()
+    {
+        var d = Carregar();
+        var trilha = new Trilha(d.mapa.pontos, d.mapa.raioCanto);
+        float raio = d.porcos[EspeciePorco.Estilingueiro].raio;
+        var nenhum = new System.Collections.Generic.List<Porco>();
+
+        int validos = 0;
+        for (float x = 0f; x <= d.mapa.tamanho.x; x += 0.5f)
+            for (float y = 0f; y <= d.mapa.tamanho.y; y += 0.5f)
+                if (Colocacao.Valida(new Vector2(x, y), raio, d.mapa, trilha, nenhum)) validos++;
+
+        Assert.GreaterOrEqual(validos, 40);
+    }
+
+    [Test]
     public void NumerosPositivos()
     {
         var d = Carregar();

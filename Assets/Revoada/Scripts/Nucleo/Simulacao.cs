@@ -80,12 +80,15 @@ public partial class Simulacao
     // Conta a partir da próxima onda que ainda vai começar.
     public int? OndasParaPagarNinho() => Economia.OndasParaPagar(penasBasePorOnda, Onda + 1);
 
-    // Causa dano direto num pássaro. É por aqui que todo tiro machuca.
+    // Causa dano direto num pássaro. É por aqui que todo tiro machuca. A
+    // couraça (urubu) corta pela metade, a não ser que o golpe a ignore (bomba,
+    // arpão com Ponta de Ferro).
     public void Atingir(Passaro p, float dano, bool ignoraCouraca)
     {
         if (p == null || !p.Vivo || Acabou) return;
-        p.Vida -= dano;
-        PassaroAtingido?.Invoke(p, dano);
+        float efetivo = p.Dados.couraca && !ignoraCouraca ? dano * 0.5f : dano;
+        p.Vida -= efetivo;
+        PassaroAtingido?.Invoke(p, efetivo);
         if (p.Vida <= 0f) Estourar(p);
     }
 

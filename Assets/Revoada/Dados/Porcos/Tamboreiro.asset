@@ -1,0 +1,141 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a613fb7d3d6304e989d4f8f15c73312c, type: 3}
+  m_Name: Tamboreiro
+  m_EditorClassIdentifier: Revoada::TipoPorco
+  dados:
+    especie: 3
+    nome: Tamboreiro
+    papel: "N\xE3o ataca: os porcos no c\xEDrculo atiram mais r\xE1pido."
+    custo: 300
+    raio: 0.45
+    nivel1:
+      tiro: 0
+      dano: 1
+      alcance: 2.5
+      recarga: 0.8
+      velocidadeProjetil: 12
+      raioProjetil: 0.15
+      perfura: 1
+      alcanceVoo: 1.3
+      tiros: 1
+      abertura: 0
+      raioArea: 0
+      lentidao: 0
+      duracaoLentidao: 0
+      empurrao: 0
+      ignoraCouraca: 0
+      raioAura: 2.5
+      bonusCadencia: 0.2
+      bonusAlcance: 0
+      bonusPenas: 0
+    nivel2:
+      nome: Batuque
+      descricao: Aura +35% e raio 3,0.
+      custo: 220
+      atributos:
+        tiro: 0
+        dano: 1
+        alcance: 3
+        recarga: 0.8
+        velocidadeProjetil: 12
+        raioProjetil: 0.15
+        perfura: 1
+        alcanceVoo: 1.3
+        tiros: 1
+        abertura: 0
+        raioArea: 0
+        lentidao: 0
+        duracaoLentidao: 0
+        empurrao: 0
+        ignoraCouraca: 0
+        raioAura: 3
+        bonusCadencia: 0.35
+        bonusAlcance: 0
+        bonusPenas: 0
+    nivel3:
+      nome: Grito de Guerra
+      descricao: Vizinhos com +20% de alcance.
+      custo: 320
+      atributos:
+        tiro: 0
+        dano: 1
+        alcance: 3
+        recarga: 0.8
+        velocidadeProjetil: 12
+        raioProjetil: 0.15
+        perfura: 1
+        alcanceVoo: 1.3
+        tiros: 1
+        abertura: 0
+        raioArea: 0
+        lentidao: 0
+        duracaoLentidao: 0
+        empurrao: 0
+        ignoraCouraca: 0
+        raioAura: 3
+        bonusCadencia: 0.35
+        bonusAlcance: 0.2
+        bonusPenas: 0
+    especializacaoA:
+      nome: Fanfarra
+      descricao: Aura +60% e raio 3,5.
+      custo: 650
+      atributos:
+        tiro: 0
+        dano: 1
+        alcance: 3.5
+        recarga: 0.8
+        velocidadeProjetil: 12
+        raioProjetil: 0.15
+        perfura: 1
+        alcanceVoo: 1.3
+        tiros: 1
+        abertura: 0
+        raioArea: 0
+        lentidao: 0
+        duracaoLentidao: 0
+        empurrao: 0
+        ignoraCouraca: 0
+        raioAura: 3.5
+        bonusCadencia: 0.6
+        bonusAlcance: 0.2
+        bonusPenas: 0
+    especializacaoB:
+      nome: Tambor das Penas
+      descricao: "P\xE1ssaros estourados na aura rendem +50% de penas."
+      custo: 550
+      atributos:
+        tiro: 0
+        dano: 1
+        alcance: 3
+        recarga: 0.8
+        velocidadeProjetil: 12
+        raioProjetil: 0.15
+        perfura: 1
+        alcanceVoo: 1.3
+        tiros: 1
+        abertura: 0
+        raioArea: 0
+        lentidao: 0
+        duracaoLentidao: 0
+        empurrao: 0
+        ignoraCouraca: 0
+        raioAura: 3
+        bonusCadencia: 0.35
+        bonusAlcance: 0.2
+        bonusPenas: 0.5
+  corpo: {fileID: 21300000, guid: 48d98c810e83141f9a9655b7a33f94e6, type: 3}
+  arma: {fileID: 21300000, guid: e572867324e62447095b733a4501acf5, type: 3}
+  projetil: {fileID: 0}
+  acessorioA: {fileID: 21300000, guid: 86decf48f496a41bf814a8d37db6182c, type: 3}
+  acessorioB: {fileID: 21300000, guid: c3eb482694c20484598f5a863e6651ce, type: 3}

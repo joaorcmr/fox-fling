@@ -56,6 +56,47 @@ public static class CenarioTeste
         return new GrupoOnda { especie = e, quantidade = quantidade, intervalo = intervalo, atraso = atraso };
     }
 
+    // Porco de teste: as melhorias repetem o nível 1 (cada teste muda o que precisa).
+    public static DadosPorco Porco(EspeciePorco e, int custo, Atributos nivel1)
+    {
+        return new DadosPorco
+        {
+            especie = e,
+            nome = e.ToString(),
+            custo = custo,
+            raio = 0.45f,
+            nivel1 = nivel1,
+            nivel2 = new Melhoria { nome = "N2", custo = 100, atributos = nivel1.Copia() },
+            nivel3 = new Melhoria { nome = "N3", custo = 180, atributos = nivel1.Copia() },
+            especializacaoA = new Melhoria { nome = "A", custo = 500, atributos = nivel1.Copia() },
+            especializacaoB = new Melhoria { nome = "B", custo = 550, atributos = nivel1.Copia() },
+        };
+    }
+
+    public static Atributos Tiro(TipoTiro tiro, float dano = 1f, float alcance = 10f, float recarga = 10f, float velocidade = 12f, int perfura = 1)
+    {
+        return new Atributos { tiro = tiro, dano = dano, alcance = alcance, recarga = recarga, velocidadeProjetil = velocidade, perfura = perfura };
+    }
+
+    // Uma simulação com pássaros PARADOS (velocidade 0) nas distâncias dadas da
+    // trilha, já em onda. Uma segunda onda existe para a primeira não virar vitória.
+    public static Simulacao ComPassarosParados(DadosJogo d, EspeciePassaro e, params float[] distancias)
+    {
+        d.passaros[e].velocidade = 0f;
+        d.ondas.Add(Onda(Grupo(e, distancias.Length, 0.0001f)));
+        d.ondas.Add(Onda(Grupo(e, 1)));
+        var s = new Simulacao(d);
+        s.SoltarOnda();
+        s.Passo();
+        for (int i = 0; i < distancias.Length; i++)
+        {
+            var p = s.Passaros[i];
+            p.Distancia = distancias[i];
+            p.Posicao = p.PosicaoAnterior = s.Trilha.Posicao(distancias[i]);
+        }
+        return s;
+    }
+
     // Avança a simulação por "segundos" de jogo (em passos fixos de 1/60 s).
     public static void Avancar(Simulacao s, float segundos)
     {
