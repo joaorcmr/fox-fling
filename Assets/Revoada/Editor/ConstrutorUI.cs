@@ -96,6 +96,7 @@ public static class ConstrutorUI
     {
         var fundo = Imagem(pai, nome, Sprite("botao"), ancora, posicao, tamanho, true);
         var botao = fundo.gameObject.AddComponent<Button>();
+        fundo.gameObject.AddComponent<BotaoComSom>();
         botao.targetGraphic = fundo;
         var cores = botao.colors;
         cores.highlightedColor = new Color(1f, 1f, 0.85f);
@@ -115,7 +116,7 @@ public static class ConstrutorUI
     // ------------------------------------------------------------------
     const float CentroMapa = 224f; // o mapa ocupa os 448 px da esquerda
 
-    public static Hud CriarHud(Transform pai, Jogo jogo, Controles controles, TipoPorco[] porcos)
+    public static Hud CriarHud(Transform pai, Jogo jogo, Controles controles, TipoPorco[] porcos, Efeitos efeitos)
     {
         var canvas = Canvas(pai, "HUD", 10);
         var t = canvas.transform;
@@ -128,7 +129,8 @@ public static class ConstrutorUI
             new Vector2(LarguraBarra, ConstrutorRevoada.Altura), true).transform;
 
         // Topo: vida, penas e onda à esquerda; pausa, velocidade e menu à direita.
-        Imagem(barra, "IconeVida", Sprite("icone_vida"), TopoEsq, new Vector2(10f, -8f), new Vector2(26f, 26f)).raycastTarget = false;
+        hud.iconeVida = Imagem(barra, "IconeVida", Sprite("icone_vida"), TopoEsq, new Vector2(10f, -8f), new Vector2(26f, 26f));
+        hud.iconeVida.raycastTarget = false;
         hud.textoVida = Texto(barra, "Vida", "100", 22, TextAnchor.MiddleLeft, TopoEsq, new Vector2(40f, -8f), new Vector2(72f, 26f), Marrom);
         Imagem(barra, "IconePena", Sprite("icone_pena"), TopoEsq, new Vector2(10f, -38f), new Vector2(26f, 26f)).raycastTarget = false;
         hud.textoPenas = Texto(barra, "Penas", "300", 22, TextAnchor.MiddleLeft, TopoEsq, new Vector2(40f, -38f), new Vector2(72f, 26f), Marrom);
@@ -172,11 +174,88 @@ public static class ConstrutorUI
         hud.barraChefe = CriarBarraChefe(t);
         hud.textoAviso = Texto(t, "Aviso", "", 15, TextAnchor.MiddleCenter, BaixoEsq, new Vector2(CentroMapa - 200f, 14f),
             new Vector2(400f, 22f), Creme, contorno: true);
+        CriarDicas(t, jogo, controles);
+        CriarTelaFim(t, jogo, efeitos);
         hud.menuPausa = CriarMenuPausa(t, jogo);
         controles.menuPausa = hud.menuPausa;
 
         SistemaDeEventos(pai);
         return hud;
+    }
+
+    static Dicas CriarDicas(Transform pai, Jogo jogo, Controles controles)
+    {
+        var fundo = Imagem(pai, "Dica", Sprite("painel"), BaixoEsq, new Vector2(16f, 42f), new Vector2(330f, 50f), true);
+        fundo.raycastTarget = false;
+        var d = fundo.gameObject.AddComponent<Dicas>();
+        d.jogo = jogo;
+        d.controles = controles;
+        d.grupo = fundo.gameObject.AddComponent<CanvasGroup>();
+        d.grupo.blocksRaycasts = false;
+        Imagem(fundo.transform, "Icone", Sprite("icone_pena"), Esq, new Vector2(8f, 0f), new Vector2(22f, 22f)).raycastTarget = false;
+        d.texto = Texto(fundo.transform, "Texto", "", 12, TextAnchor.MiddleLeft, Esq, new Vector2(36f, 0f), new Vector2(286f, 44f), Marrom, negrito: false);
+        return d;
+    }
+
+    static TelaFim CriarTelaFim(Transform pai, Jogo jogo, Efeitos efeitos)
+    {
+        var escuro = Imagem(pai, "TelaFim", null, Centro, Vector2.zero, Vector2.zero);
+        Esticar(escuro.rectTransform);
+        escuro.color = new Color(0.17f, 0.11f, 0.08f, 0.6f); // o marrom mais escuro da paleta, não preto
+        var f = escuro.gameObject.AddComponent<TelaFim>();
+        f.jogo = jogo;
+        f.efeitos = efeitos;
+        f.grupo = escuro.gameObject.AddComponent<CanvasGroup>();
+        f.clarao = Imagem(escuro.transform, "Clarao", null, Centro, Vector2.zero, Vector2.zero);
+        Esticar(f.clarao.rectTransform);
+        f.clarao.raycastTarget = false;
+
+        var painel = Imagem(escuro.transform, "Painel", Sprite("painel"), Centro, new Vector2(-76f, 0f), new Vector2(320f, 260f), true);
+        f.painel = painel.rectTransform;
+        var p = painel.transform;
+        f.titulo = Texto(p, "Titulo", "A Torre resistiu!", 22, TextAnchor.MiddleCenter, Topo, new Vector2(0f, -16f), new Vector2(300f, 32f), Marrom);
+        f.medalha = Imagem(p, "Medalha", Sprite("medalha_ouro"), Topo, new Vector2(0f, -52f), new Vector2(52f, 65f));
+        f.medalha.preserveAspect = true;
+        f.medalhaBronze = Sprite("medalha_bronze");
+        f.medalhaPrata = Sprite("medalha_prata");
+        f.medalhaOuro = Sprite("medalha_ouro");
+        f.detalhes = Texto(p, "Detalhes", "", 15, TextAnchor.MiddleCenter, Topo, new Vector2(0f, -124f), new Vector2(300f, 22f), Marrom);
+        f.recorde = Texto(p, "Recorde", "", 13, TextAnchor.MiddleCenter, Topo, new Vector2(0f, -150f), new Vector2(300f, 20f), Marrom, negrito: false);
+        f.botaoDeNovo = Botao(p, "DeNovo", null, Baixo, new Vector2(-76f, 18f), new Vector2(140f, 40f));
+        Texto(f.botaoDeNovo.transform, "Texto", "Jogar de novo", 15, TextAnchor.MiddleCenter, Centro, new Vector2(0f, 1f), new Vector2(140f, 40f), Creme, contorno: true);
+        f.botaoMenu = Botao(p, "Menu", null, Baixo, new Vector2(76f, 18f), new Vector2(140f, 40f));
+        Texto(f.botaoMenu.transform, "Texto", "Menu", 15, TextAnchor.MiddleCenter, Centro, new Vector2(0f, 1f), new Vector2(140f, 40f), Creme, contorno: true);
+        return f;
+    }
+
+    // Controle de volume com os sprites do jogo (o DefaultControls do Unity monta
+    // a estrutura do Slider; os sprites e as cores são trocados pelos nossos).
+    public static Slider ControleDeVolume(Transform pai, string rotulo, string canal, Vector2 ancora, Vector2 posicao, Color corTexto)
+    {
+        var raiz = Retangulo(pai, "Volume" + rotulo, ancora, posicao, new Vector2(180f, 22f));
+        Texto(raiz, "Rotulo", rotulo, 13, TextAnchor.MiddleLeft, Esq, Vector2.zero, new Vector2(60f, 22f), corTexto, contorno: corTexto == Creme);
+        var go = DefaultControls.CreateSlider(new DefaultControls.Resources
+        {
+            standard = Sprite("barra"),
+            background = Sprite("barra"),
+            knob = Sprite("ponto_nivel"),
+        });
+        go.transform.SetParent(raiz, false);
+        var rt = (RectTransform)go.transform;
+        rt.anchorMin = rt.anchorMax = rt.pivot = Dir;
+        rt.anchoredPosition = Vector2.zero;
+        rt.sizeDelta = new Vector2(112f, 16f);
+        var slider = go.GetComponent<Slider>();
+        foreach (var img in go.GetComponentsInChildren<Image>())
+        {
+            if (img.gameObject.name == "Background") img.color = new Color(0.42f, 0.29f, 0.18f, 0.85f);
+            else if (img.gameObject.name == "Fill") img.color = new Color(0.55f, 0.8f, 0.37f);
+            else if (img.gameObject.name == "Handle") img.color = Color.white;
+        }
+        var controle = raiz.gameObject.AddComponent<ControleVolume>();
+        controle.slider = slider;
+        controle.canal = canal;
+        return slider;
     }
 
     static CartaoNinho CriarNinho(Transform pai, Jogo jogo, Controles controles, Vector2 posicao)
@@ -336,12 +415,66 @@ public static class ConstrutorUI
         escuro.color = new Color(0f, 0f, 0f, 0.5f); // bloqueia os cliques no jogo
         var m = escuro.gameObject.AddComponent<MenuPausa>();
         m.jogo = jogo;
-        var painel = Imagem(escuro.transform, "Painel", Sprite("painel"), Centro, Vector2.zero, new Vector2(240f, 210f), true).transform;
+        var painel = Imagem(escuro.transform, "Painel", Sprite("painel"), Centro, Vector2.zero, new Vector2(240f, 276f), true).transform;
         Texto(painel, "Titulo", "Pausado", 24, TextAnchor.MiddleCenter, Topo, new Vector2(0f, -14f), new Vector2(220f, 32f), Marrom);
-        m.botaoContinuar = BotaoTexto(painel, "Continuar", "Continuar", new Vector2(0f, 26f));
-        m.botaoReiniciar = BotaoTexto(painel, "Reiniciar", "Reiniciar", new Vector2(0f, -22f));
-        m.botaoMenu = BotaoTexto(painel, "Menu", "Menu", new Vector2(0f, -70f));
+        m.botaoContinuar = BotaoTexto(painel, "Continuar", "Continuar", new Vector2(0f, 58f));
+        m.botaoReiniciar = BotaoTexto(painel, "Reiniciar", "Reiniciar", new Vector2(0f, 12f));
+        m.botaoMenu = BotaoTexto(painel, "Menu", "Menu", new Vector2(0f, -34f));
+        ControleDeVolume(painel, "Música", "musica", Baixo, new Vector2(0f, 44f), Marrom);
+        ControleDeVolume(painel, "Efeitos", "efeitos", Baixo, new Vector2(0f, 16f), Marrom);
         escuro.gameObject.SetActive(false);
+        return m;
+    }
+
+    // ------------------------------------------------------------------
+    // Tela de título (cena Menu): o mapa ao fundo, o logo a ~60% da altura,
+    // Jogar, Como jogar, o recorde e os volumes.
+    // ------------------------------------------------------------------
+    public static MenuPrincipal CriarMenu(Transform pai)
+    {
+        var canvas = Canvas(pai, "Menu", 10);
+        var t = canvas.transform;
+        var m = canvas.gameObject.AddComponent<MenuPrincipal>();
+
+        var veu = Imagem(t, "Veu", null, Centro, Vector2.zero, Vector2.zero);
+        Esticar(veu.rectTransform);
+        veu.color = new Color(0.17f, 0.11f, 0.08f, 0.35f);
+        veu.raycastTarget = false;
+
+        var logo = Imagem(t, "Logo", Sprite("logo"), Topo, new Vector2(0f, -132f), new Vector2(420f, 112f));
+        logo.raycastTarget = false;
+        m.logo = logo.rectTransform;
+        Texto(t, "Subtitulo", "Defenda a Torre dos Porcos", 16, TextAnchor.MiddleCenter, Topo, new Vector2(0f, -238f),
+            new Vector2(400f, 22f), Creme, contorno: true);
+
+        m.botaoJogar = Botao(t, "Jogar", null, Centro, new Vector2(0f, -58f), new Vector2(200f, 54f));
+        Texto(m.botaoJogar.transform, "Texto", "Jogar", 24, TextAnchor.MiddleCenter, Centro, new Vector2(0f, 1f), new Vector2(200f, 54f), Creme, contorno: true);
+        m.botaoComoJogar = Botao(t, "ComoJogar", null, Centro, new Vector2(0f, -104f), new Vector2(160f, 34f));
+        Texto(m.botaoComoJogar.transform, "Texto", "Como jogar", 15, TextAnchor.MiddleCenter, Centro, new Vector2(0f, 1f), new Vector2(160f, 34f), Creme, contorno: true);
+        m.textoRecorde = Texto(t, "Recorde", "", 14, TextAnchor.MiddleCenter, Centro, new Vector2(0f, -142f), new Vector2(440f, 22f), Creme, contorno: true);
+
+        ControleDeVolume(t, "Música", "musica", Baixo, new Vector2(-100f, 40f), Creme);
+        ControleDeVolume(t, "Efeitos", "efeitos", Baixo, new Vector2(100f, 40f), Creme);
+        Texto(t, "Creditos", "Joao Ricardo Ribeiro · Insper", 12, TextAnchor.MiddleLeft, BaixoEsq, new Vector2(10f, 8f), new Vector2(260f, 20f), Creme, contorno: true);
+        m.botaoZerar = Botao(t, "Zerar", null, BaixoDir, new Vector2(-10f, 8f), new Vector2(124f, 24f));
+        Texto(m.botaoZerar.transform, "Texto", "Zerar progresso", 12, TextAnchor.MiddleCenter, Centro, Vector2.zero, new Vector2(124f, 24f), Creme, contorno: true);
+
+        // "Como jogar": um quadro com as regras e os atalhos.
+        var escuro = Imagem(t, "ComoJogar", null, Centro, Vector2.zero, Vector2.zero);
+        Esticar(escuro.rectTransform);
+        escuro.color = new Color(0.17f, 0.11f, 0.08f, 0.55f);
+        m.painelComoJogar = escuro.gameObject;
+        var quadro = Imagem(escuro.transform, "Quadro", Sprite("painel"), Centro, Vector2.zero, new Vector2(460f, 360f), true).transform;
+        Texto(quadro, "Titulo", "Como jogar", 22, TextAnchor.MiddleCenter, Topo, new Vector2(0f, -14f), new Vector2(420f, 30f), Marrom);
+        Texto(quadro, "Regras",
+            "• Clique num porco da loja (ou aperte 1 a 4) e depois no mapa para colocá-lo.\n" +
+            "• Solte a revoada no botão ▶ (ou Espaço). Com Auto ligado, as ondas seguem sozinhas.\n" +
+            "• Pássaros estourados deixam penas. Gaste em porcos, em upgrades ou no Ninho de Penas, que faz cada pássaro render mais.\n" +
+            "• O arpão atravessa a fila: ponha o Arpoador no fim de uma reta. A bomba de lama pega bandos e ignora a couraça do urubu.\n" +
+            "• Porcos dentro do círculo do Tamboreiro atiram mais rápido. Clique num porco para melhorar (U), mudar a mira ou vender (Delete).\n" +
+            "• P pausa, F acelera (1×, 2×, 3×), Esc abre o menu. Os 100 de vida da Torre são a sua margem de erro.",
+            13, TextAnchor.UpperLeft, Topo, new Vector2(0f, -50f), new Vector2(420f, 250f), Marrom, negrito: false);
+        m.botaoFecharComoJogar = BotaoTexto(quadro, "Fechar", "Fechar", new Vector2(0f, -150f));
         return m;
     }
 

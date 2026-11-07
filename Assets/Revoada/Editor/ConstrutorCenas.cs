@@ -2,27 +2,33 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-// Monta as cenas (Assets/Revoada/Cenas) e as Build Settings.
+// Monta as cenas (Assets/Revoada/Cenas) e as Build Settings: Menu (a
+// primeira, onde o jogo abre) e Jogo.
 public static class ConstrutorCenas
 {
     public const string Pasta = ConstrutorAssets.Raiz + "/Cenas";
+    public const string CenaMenu = Pasta + "/Menu.unity";
     public const string CenaJogo = Pasta + "/Jogo.unity";
 
-    // A câmera mostra x de 0 a 18,75 e y de 0 a 15: o mapa (x até 14) e, à
-    // direita, o espaço da barra lateral.
+    // A câmera do jogo mostra x de 0 a 18,75 e y de 0 a 15: o mapa (x até 14) e,
+    // à direita, o espaço da barra lateral. A do menu fica centrada no mapa.
     public static readonly Vector3 PosicaoCamera = new Vector3(9.375f, 7.5f, -10f);
+    static readonly Vector3 PosicaoCameraMenu = new Vector3(7f, 7.5f, -10f);
 
     public static void Tudo()
     {
         ConstrutorAssets.GarantirPasta(Pasta);
         CriarCenaJogo();
+        CriarCenaMenu();
         ConfigurarBuild();
     }
 
     static void CriarCenaJogo()
     {
         var cena = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
-        var camera = CriarCamera();
+        var camera = CriarCamera(PosicaoCamera);
+        camera.gameObject.AddComponent<TremorCamera>();
+        CriarSons();
 
         var jogo = new GameObject("Jogo").AddComponent<Jogo>();
         jogo.passaros = ConstrutorDados.Passaros();
@@ -31,17 +37,7 @@ public static class ConstrutorCenas
         jogo.economia = ConstrutorDados.Economia();
         jogo.mapa = ConstrutorDados.Fazenda();
 
-        var mapa = new GameObject("Mapa").AddComponent<VisualMapa>();
-        mapa.mapa = jogo.mapa;
-        mapa.grama = ConstrutorAssets.Sprite("grama");
-        mapa.arvore = ConstrutorAssets.Sprite("arvore");
-        mapa.pedra = ConstrutorAssets.Sprite("pedra");
-        mapa.lago = ConstrutorAssets.Sprite("lago");
-        mapa.torre = ConstrutorAssets.Sprite("torre");
-        mapa.flores = new[] { ConstrutorAssets.Sprite("flor_1"), ConstrutorAssets.Sprite("flor_2") };
-        mapa.materialTerra = ConstrutorAssets.MaterialSprite("Terra", ConstrutorAssets.Textura("terra"));
-        mapa.materialBorda = ConstrutorAssets.MaterialSprite("TerraBorda", ConstrutorAssets.Textura("terra_borda"));
-        mapa.Desenhar();
+        var mapa = CriarMapa(jogo.mapa);
 
         var efeitos = new GameObject("Efeitos").AddComponent<Efeitos>();
         efeitos.penas = Instanciar<ParticleSystem>(ConstrutorPrefabs.CaminhoParticulas("Penas"), efeitos.transform);
@@ -56,6 +52,7 @@ public static class ConstrutorCenas
         visuais.prefabPorco = AssetDatabase.LoadAssetAtPath<VisualPorco>(ConstrutorPrefabs.CaminhoPorco);
         visuais.prefabProjetil = AssetDatabase.LoadAssetAtPath<VisualProjetil>(ConstrutorPrefabs.CaminhoProjetil);
         visuais.efeitos = efeitos;
+        visuais.torre = mapa.torreDesenhada;
 
         var controles = new GameObject("Controles").AddComponent<Controles>();
         controles.jogo = jogo;
@@ -63,10 +60,72 @@ public static class ConstrutorCenas
         controles.fantasma = ConstrutorPrefabs.Sprite(controles.transform, "Fantasma", null, 40);
         controles.circuloFantasma = ConstrutorPrefabs.Circulo(controles.transform, "CirculoFantasma");
 
-        ConstrutorUI.CriarHud(null, jogo, controles, jogo.porcos);
+        ConstrutorUI.CriarHud(null, jogo, controles, jogo.porcos, efeitos);
         visuais.controles = controles;
 
         EditorSceneManager.SaveScene(cena, CenaJogo);
+    }
+
+    static void CriarCenaMenu()
+    {
+        var cena = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+        CriarCamera(PosicaoCameraMenu);
+        CriarSons();
+        var dadosMapa = ConstrutorDados.Fazenda();
+        CriarMapa(dadosMapa);
+
+        // Pássaros de enfeite voando pela trilha, atrás do véu do título.
+        var enfeite = new GameObject("PassarosDecorativos").AddComponent<PassarosDecorativos>();
+        enfeite.mapa = dadosMapa;
+        enfeite.sombra = ConstrutorAssets.Sprite("sombra");
+        enfeite.sprites = new[]
+        {
+            ConstrutorAssets.Sprite("pardal"), ConstrutorAssets.Sprite("sabia"), ConstrutorAssets.Sprite("arara"),
+            ConstrutorAssets.Sprite("beija_flor"), ConstrutorAssets.Sprite("pata"), ConstrutorAssets.Sprite("urubu"),
+        };
+
+        ConstrutorUI.CriarMenu(null);
+        ConstrutorUI.SistemaDeEventos(null);
+        EditorSceneManager.SaveScene(cena, CenaMenu);
+    }
+
+    static VisualMapa CriarMapa(Mapa dados)
+    {
+        var mapa = new GameObject("Mapa").AddComponent<VisualMapa>();
+        mapa.mapa = dados;
+        mapa.grama = ConstrutorAssets.Sprite("grama");
+        mapa.arvore = ConstrutorAssets.Sprite("arvore");
+        mapa.pedra = ConstrutorAssets.Sprite("pedra");
+        mapa.lago = ConstrutorAssets.Sprite("lago");
+        mapa.torre = ConstrutorAssets.Sprite("torre");
+        mapa.flores = new[] { ConstrutorAssets.Sprite("flor_1"), ConstrutorAssets.Sprite("flor_2") };
+        mapa.materialTerra = ConstrutorAssets.MaterialSprite("Terra", ConstrutorAssets.Textura("terra"));
+        mapa.materialBorda = ConstrutorAssets.MaterialSprite("TerraBorda", ConstrutorAssets.Textura("terra_borda"));
+        mapa.Desenhar();
+        return mapa;
+    }
+
+    static Sons CriarSons()
+    {
+        var s = new GameObject("Sons").AddComponent<Sons>();
+        s.estouros = new[] { ConstrutorAssets.Som("estouro_1"), ConstrutorAssets.Som("estouro_2"), ConstrutorAssets.Som("estouro_3") };
+        s.tiroEstilingue = ConstrutorAssets.Som("tiro_estilingue");
+        s.tiroArpao = ConstrutorAssets.Som("tiro_arpao");
+        s.tiroBomba = ConstrutorAssets.Som("tiro_bomba");
+        s.explosao = ConstrutorAssets.Som("explosao");
+        s.compra = ConstrutorAssets.Som("compra");
+        s.upgrade = ConstrutorAssets.Som("upgrade");
+        s.venda = ConstrutorAssets.Som("venda");
+        s.erro = ConstrutorAssets.Som("erro");
+        s.clique = ConstrutorAssets.Som("clique");
+        s.onda = ConstrutorAssets.Som("onda");
+        s.chefe = ConstrutorAssets.Som("chefe");
+        s.torre = ConstrutorAssets.Som("torre");
+        s.vitoria = ConstrutorAssets.Som("vitoria");
+        s.derrota = ConstrutorAssets.Som("derrota");
+        s.ambiente = ConstrutorAssets.Som("ambiente");
+        s.musica = ConstrutorAssets.Som("musica");
+        return s;
     }
 
     // Põe na cena uma instância do prefab (ligada a ele) e devolve o componente.
@@ -77,11 +136,11 @@ public static class ConstrutorCenas
         return go.GetComponent<T>();
     }
 
-    static Camera CriarCamera()
+    static Camera CriarCamera(Vector3 posicao)
     {
         var go = new GameObject("Main Camera", typeof(Camera), typeof(AudioListener));
         go.tag = "MainCamera";
-        go.transform.position = PosicaoCamera;
+        go.transform.position = posicao;
         var cam = go.GetComponent<Camera>();
         cam.orthographic = true;
         cam.orthographicSize = 7.5f;
@@ -96,6 +155,10 @@ public static class ConstrutorCenas
 
     public static void ConfigurarBuild()
     {
-        EditorBuildSettings.scenes = new[] { new EditorBuildSettingsScene(CenaJogo, true) };
+        EditorBuildSettings.scenes = new[]
+        {
+            new EditorBuildSettingsScene(CenaMenu, true), // o jogo abre no menu
+            new EditorBuildSettingsScene(CenaJogo, true),
+        };
     }
 }

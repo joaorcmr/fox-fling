@@ -185,11 +185,80 @@ def sons():
     return s
 
 
+def emendar(faixa, cruzamento):
+    """Deixa a faixa pronta para loop: o fim se funde ao começo (sem estalo)."""
+    n = amostras(cruzamento)
+    corpo = faixa[:-n]
+    for i in range(n):
+        t = i / n
+        corpo[i] = corpo[i] * t + faixa[len(faixa) - n + i] * (1 - t)
+    return corpo
+
+
+def ambiente():
+    """Fazenda ao fundo: vento (ruído marrom bem filtrado) e piados distantes."""
+    dur = 8.0
+    rnd = random.Random(77)
+    vento = []
+    y = 0.0
+    for i in range(amostras(dur + 1.0)):
+        y += 0.02 * (rnd.uniform(-1, 1) - y)  # ruído marrom: integra o branco
+        onda = 0.75 + 0.25 * math.sin(2 * math.pi * i / TAXA / 4.5)  # rajadas lentas
+        vento.append(y * 6.0 * onda)
+    piados = []
+    for _ in range(7):
+        f = rnd.uniform(2400, 3600)
+        piado = envelope(seno(f, 0.09, f * rnd.uniform(1.1, 1.3), vol=0.05), ataque=0.01, queda=0.05)
+        piados.append(atrasar(piado, rnd.uniform(0.2, dur - 0.3)))
+    return emendar(misturar(vento, *piados), 1.0)
+
+
+def musica():
+    """Um loop alegre e calmo de 16 s (120 bpm, 8 compassos) em dó pentatônico."""
+    batida = 0.5
+    def freq(midi):
+        return 440.0 * 2 ** ((midi - 69) / 12)
+    # Melodia em colcheias (0 = pausa), 8 por compasso.
+    melodia = [72, 76, 79, 76, 81, 79, 76, 74,  76, 74, 72, 74, 76, 0, 69, 0,
+               72, 74, 77, 74, 72, 74, 76, 79,  79, 0, 76, 0, 74, 0, 72, 0,
+               72, 76, 79, 76, 81, 84, 81, 79,  76, 74, 72, 74, 76, 0, 69, 0,
+               72, 74, 77, 79, 81, 79, 76, 74,  72, 0, 0, 0, 72, 0, 0, 0]
+    baixo = [48, 45, 41, 43, 48, 45, 41, 48]  # dó, lá, fá, sol...
+    total = amostras(32 * batida)  # 8 compassos de 4 tempos
+    faixas = [silencio(total / TAXA)]
+    for k, nota in enumerate(melodia):
+        if nota:
+            n = envelope(seno(freq(nota), 0.3, vol=0.22, harmonicos=(1, 0, 0.3, 0, 0.12)), ataque=0.008, queda=0.22)
+            faixas.append(atrasar(n, k * batida / 2))
+    for compasso, nota in enumerate(baixo):
+        for tempo in (0, 2):
+            n = envelope(seno(freq(nota), 0.45, vol=0.3, harmonicos=(1, 0.5, 0.25)), ataque=0.01, queda=0.35)
+            faixas.append(atrasar(n, (compasso * 4 + tempo) * batida))
+    for b in range(32):  # bumbo nos tempos 1 e 3, chimbal nos contratempos
+        if b % 2 == 0:
+            faixas.append(atrasar(envelope(seno(110, 0.12, 45, vol=0.35), queda=0.07), b * batida))
+        faixas.append(atrasar(envelope(ruido(0.04, vol=0.06, corte=0.9, semente=200 + b), queda=0.015), b * batida + batida / 2))
+    faixa = misturar(*faixas)
+    # O som que passa do fim (as últimas notas ainda tocando) volta para o
+    # começo: é assim que um loop emenda sem corte.
+    circular = faixa[:total]
+    for i, v in enumerate(faixa[total:]):
+        circular[i % total] += v
+    return circular
+
+
+def loops():
+    return {"ambiente": (ambiente(), 0.5), "musica": (musica(), 0.6)}
+
+
 def main():
     os.makedirs(SAIDA, exist_ok=True)
     for nome, faixa in sons().items():
         dur, pico = salvar(nome, faixa)
         print("%-16s %.2fs  pico %.2f" % (nome, dur, pico))
+    for nome, (faixa, pico) in loops().items():
+        dur, pico = salvar(nome, faixa, pico)
+        print("%-16s %.2fs  pico %.2f  (loop)" % (nome, dur, pico))
 
 
 if __name__ == "__main__":

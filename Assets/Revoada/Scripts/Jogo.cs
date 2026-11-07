@@ -65,15 +65,14 @@ public class Jogo : MonoBehaviour
     public void Reiniciar()
     {
         Time.timeScale = 1f; // a próxima cena não pode nascer pausada nem acelerada
-        UnityEngine.SceneManagement.SceneManager.LoadScene(gameObject.scene.name);
+        Transicao.Carregar(gameObject.scene.name);
     }
 
     public void IrParaMenu()
     {
         Time.timeScale = 1f;
-        // O Menu entra nas Build Settings na Task 10; até lá, volta para o jogo.
         string cena = Application.CanStreamedLevelBeLoaded("Menu") ? "Menu" : gameObject.scene.name;
-        UnityEngine.SceneManagement.SceneManager.LoadScene(cena);
+        Transicao.Carregar(cena);
     }
 
     public TipoPassaro TipoDe(EspeciePassaro especie)

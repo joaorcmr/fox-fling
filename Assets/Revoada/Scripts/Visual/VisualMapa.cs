@@ -21,6 +21,9 @@ public class VisualMapa : MonoBehaviour
     public Material materialBorda;
     public int quantidadeFlores = 45;
 
+    [Tooltip("Preenchido pelo Desenhar: o sprite da Torre dos Porcos.")]
+    public SpriteRenderer torreDesenhada;
+
     [ContextMenu("Redesenhar")]
     public void Desenhar()
     {
@@ -48,7 +51,7 @@ public class VisualMapa : MonoBehaviour
             else Filho("Arvore", arvore, o.centro + Vector2.down * o.raio * 0.9f, 0); // pivô no pé do tronco
         }
 
-        Filho("Torre", torre, d.torre + Vector2.down * d.raioTorre * 0.9f, 0);
+        torreDesenhada = Filho("Torre", torre, d.torre + Vector2.down * d.raioTorre * 0.9f, 0);
 
         // Flores espalhadas com semente fixa: o mapa sai sempre igual.
         if (flores == null || flores.Length == 0) return;

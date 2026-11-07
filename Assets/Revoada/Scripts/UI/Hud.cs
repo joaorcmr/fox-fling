@@ -13,6 +13,7 @@ public class Hud : MonoBehaviour
     public Controles controles;
 
     [Header("Topo")]
+    public Image iconeVida;
     public Text textoVida;
     public Text textoPenas;
     public Text textoOnda;
@@ -44,6 +45,9 @@ public class Hud : MonoBehaviour
     public MenuPausa menuPausa;
 
     float fimAviso;
+    float penasNaTela;   // conta até o valor de verdade em vez de pular (número que anima)
+    float pulsoVida;     // 1 logo depois de a Torre apanhar, cai até 0
+    Color corTexto;
 
     void Start()
     {
@@ -65,7 +69,11 @@ public class Hud : MonoBehaviour
         {
             if (r == Resultado.SemPenas) Avisar("Faltam penas");
             else if (r == Resultado.LugarInvalido) Avisar("Não dá para colocar aqui");
+            if (Sons.Instancia != null) Sons.Tocar(Sons.Instancia.erro, 0.6f, 0f);
         };
+        s.TorreAtingida += dano => pulsoVida = 1f;
+        penasNaTela = s.Penas;
+        corTexto = textoVida.color;
 
         s.OndaComecou += n => faixa.Mostrar("Onda " + n, CorOnda, 1.6f);
         s.OndaTerminou += (n, bonus) => Avisar($"Onda {n} vencida! +{bonus} penas de bônus");
@@ -89,8 +97,19 @@ public class Hud : MonoBehaviour
     void Update()
     {
         var s = jogo.Sim;
+        float dt = Time.unscaledDeltaTime;
+
+        // Vida: pulsa vermelha quando a Torre apanha; abaixo de 25, o coração pisca.
         textoVida.text = s.Vida.ToString();
-        textoPenas.text = s.Penas.ToString();
+        pulsoVida = Mathf.MoveTowards(pulsoVida, 0f, dt * 3f);
+        textoVida.transform.localScale = Vector3.one * (1f + 0.35f * pulsoVida);
+        bool perigo = s.Vida < 25 && s.Vida > 0;
+        textoVida.color = Color.Lerp(corTexto, new Color(0.8f, 0.15f, 0.1f), Mathf.Max(pulsoVida, perigo ? 1f : 0f));
+        iconeVida.transform.localScale = Vector3.one * (perigo ? 1f + 0.15f * Mathf.Abs(Mathf.Sin(Time.unscaledTime * 6f)) : 1f);
+
+        // Penas: o contador corre até o valor novo.
+        penasNaTela = Mathf.Abs(s.Penas - penasNaTela) < 0.5f ? s.Penas : Mathf.Lerp(penasNaTela, s.Penas, 1f - Mathf.Exp(-12f * dt));
+        textoPenas.text = Mathf.RoundToInt(penasNaTela).ToString();
         int numero = s.Estado == EstadoJogo.EmOnda ? s.Onda : Mathf.Min(s.Onda + 1, s.TotalOndas);
         textoOnda.text = $"Onda {numero}/{s.TotalOndas}";
 

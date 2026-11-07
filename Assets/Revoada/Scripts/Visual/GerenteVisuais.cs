@@ -17,8 +17,12 @@ public class GerenteVisuais : MonoBehaviour
     public VisualProjetil prefabProjetil;
     public Efeitos efeitos;
     public Controles controles;
+    [Tooltip("A Torre desenhada no mapa: treme e fica vermelha quando apanha.")]
+    public SpriteRenderer torre;
 
     VisualPorco selecionado;
+    Vector3 posicaoTorre;
+    float fimGolpeTorre;
 
     readonly Dictionary<Passaro, VisualPassaro> passaros = new Dictionary<Passaro, VisualPassaro>();
     readonly Dictionary<Porco, VisualPorco> porcos = new Dictionary<Porco, VisualPorco>();
@@ -35,8 +39,14 @@ public class GerenteVisuais : MonoBehaviour
         poolPorcos = new Pool<VisualPorco>(prefabPorco, transform);
         poolTiros = new Pool<VisualProjetil>(prefabProjetil, transform);
 
+        if (torre != null) posicaoTorre = torre.transform.position;
         var sim = jogo.Sim;
-        sim.PassaroNasceu += CriarPassaro;
+        var sons = Sons.Instancia;
+        sim.PassaroNasceu += p =>
+        {
+            CriarPassaro(p);
+            if (p.Dados.chefe && sons != null) Sons.Tocar(sons.chefe, 1f, 0f);
+        };
         sim.PassaroAtingido += (p, dano) =>
         {
             if (passaros.TryGetValue(p, out var v)) v.Piscar();
@@ -46,18 +56,32 @@ public class GerenteVisuais : MonoBehaviour
         {
             efeitos.Penas(p.Posicao, CorDe(p), p.Dados.chefe ? 40 : 10);
             if (penas > 0) efeitos.Texto(p.Posicao, "+" + penas, CorTextoPenas);
+            Sons.TocarEstouro(p.Dados.chefe ? 1f : 0.55f);
+            if (p.Dados.chefe) TremorCamera.Tremer(0.2f, 0.4f);
             RemoverPassaro(p);
         };
         sim.PassaroChegou += RemoverPassaro;
+        sim.TorreAtingida += dano =>
+        {
+            fimGolpeTorre = Time.unscaledTime + 0.3f;
+            TremorCamera.Tremer(Mathf.Min(0.25f, 0.06f + dano * 0.01f), 0.25f);
+            if (sons != null) Sons.Tocar(sons.torre, 0.9f);
+        };
+        sim.OndaComecou += n =>
+        {
+            if (sons != null) Sons.Tocar(sons.onda, 0.8f, 0f);
+        };
 
         sim.PorcoCriado += p =>
         {
             CriarPorco(p);
             efeitos.Poeira(p.Posicao);
+            if (sons != null) Sons.Tocar(sons.compra, 0.8f);
         };
         sim.PorcoVendido += p =>
         {
             efeitos.Poeira(p.Posicao);
+            if (sons != null) Sons.Tocar(sons.venda, 0.8f);
             RemoverPorco(p);
         };
 
@@ -65,12 +89,21 @@ public class GerenteVisuais : MonoBehaviour
         {
             CriarTiro(tiro);
             if (porcos.TryGetValue(porco, out var v)) v.Atirou();
+            if (sons == null) return;
+            var clip = tiro.Tipo == TipoTiro.Arpao ? sons.tiroArpao : tiro.Tipo == TipoTiro.Bomba ? sons.tiroBomba : sons.tiroEstilingue;
+            Sons.Tocar(clip, 0.3f);
         };
         sim.ProjetilSumiu += RemoverTiro;
-        sim.BombaExplodiu += (centro, raio) => efeitos.Lama(centro, raio);
+        sim.BombaExplodiu += (centro, raio) =>
+        {
+            efeitos.Lama(centro, raio);
+            TremorCamera.Tremer(0.05f, 0.12f);
+            if (sons != null) Sons.Tocar(sons.explosao, 0.55f);
+        };
         sim.PorcoMelhorado += p =>
         {
             efeitos.Brilho(p.Posicao);
+            if (sons != null) Sons.Tocar(sons.upgrade, 0.9f, 0f);
             if (selecionado != null && selecionado.Porco == p) selecionado.MostrarAlcance(true); // o alcance pode ter crescido
         };
 
@@ -139,5 +172,11 @@ public class GerenteVisuais : MonoBehaviour
         foreach (var v in passaros.Values) v.Atualizar(alfa);
         foreach (var v in porcos.Values) v.Atualizar();
         foreach (var v in tiros.Values) v.Atualizar(alfa);
+
+        // A Torre apanhando: treme para os lados e fica avermelhada por 0,3 s.
+        if (torre == null) return;
+        float k = Mathf.Clamp01((fimGolpeTorre - Time.unscaledTime) / 0.3f);
+        torre.transform.position = posicaoTorre + Vector3.right * Mathf.Sin(Time.unscaledTime * 70f) * 0.07f * k;
+        torre.color = Color.Lerp(Color.white, new Color(1f, 0.5f, 0.45f), k);
     }
 }
