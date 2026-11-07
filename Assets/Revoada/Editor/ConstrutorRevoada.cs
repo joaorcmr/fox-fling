@@ -47,6 +47,41 @@ public static class ConstrutorRevoada
         Robos.AvancarAteOnda(Jogo.Atual.Sim, 18);
     }
 
+    // O jogo para navegador, em Builds/WebGL (precisa do módulo Web Build
+    // Support). Pelo terminal: unity build --target WebGL --execute-method ConstrutorRevoada.BuildWebGL
+    [MenuItem("Revoada/Build WebGL (itch.io)")]
+    public static void BuildWebGL()
+    {
+        ConstrutorCenas.ConfigurarBuild();
+        ConfigurarProjeto();
+        // O itch.io não envia o header Content-Encoding para arquivos .gz; o
+        // fallback embute um descompactador em JS e o jogo abre em qualquer servidor.
+        PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Gzip;
+        PlayerSettings.WebGL.decompressionFallback = true;
+
+        if (EditorUserBuildSettings.activeBuildTarget != BuildTarget.WebGL)
+            EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.WebGL, BuildTarget.WebGL);
+
+        const string pasta = "Builds/WebGL";
+        var cenas = new System.Collections.Generic.List<string>();
+        foreach (var c in EditorBuildSettings.scenes)
+            if (c.enabled) cenas.Add(c.path);
+
+        var relatorio = BuildPipeline.BuildPlayer(new BuildPlayerOptions
+        {
+            scenes = cenas.ToArray(),
+            locationPathName = pasta,
+            target = BuildTarget.WebGL,
+            targetGroup = BuildTargetGroup.WebGL,
+            options = BuildOptions.None,
+        });
+
+        var s = relatorio.summary;
+        Debug.Log($"[Revoada] Build WebGL: {s.result} | {s.totalSize / (1024f * 1024f):F1} MB | " +
+                  $"{s.totalTime:mm\\:ss} | erros={s.totalErrors} | pasta={pasta}");
+        if (Application.isBatchMode && s.result != UnityEditor.Build.Reporting.BuildResult.Succeeded) EditorApplication.Exit(1);
+    }
+
     [MenuItem("Revoada/Restaurar números padrão")]
     static void RestaurarNumerosPadrao()
     {

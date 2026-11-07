@@ -1,104 +1,145 @@
-# Fox Fling
+# Revoada
 
-Jogo 2D de estilingue com física, feito em Unity 6 para explorar **física 2D e objetos**.
-Lance raposas contra torres de madeira, vidro e rocha e derrube todos os tubarões.
+Tower defense 2D com visão de cima, feito em **Unity 6**. Bandos de pássaros voam por uma trilha até a
+**Torre dos Porcos**. Você compra **porcos verdes** com **penas**, que caem dos pássaros estourados, e
+decide a toda hora: gastar em mais defesa agora ou no **Ninho de Penas**, que faz cada pássaro render mais
+depois?
 
-- **Autor:** Joao Ricardo Ribeiro ([@joaorcmr](https://github.com/joaorcmr))
+- **Autor:** Joao Ricardo Ribeiro ([@joaorcmr](https://github.com/joaorcmr)), Insper, Jogos Digitais
 - **Resolução:** 600×480
-- Desenhado a partir dos quadros "Estágio 1" e "Estágio 2" (design em
-  `docs/superpowers/specs/2026-10-27-fox-fling-design.md`)
+- **Arte do urubu e da arara-azul:** Iran. O resto da arte e todos os sons são gerados por código (`Tools/`).
+- Design e plano: `docs/superpowers/specs/2026-11-07-revoada-design.md` e `docs/superpowers/plans/2026-11-07-revoada.md`
 
 ## Como jogar
 
 | Ação | Como |
 |---|---|
-| Mirar e lançar | Clique na raposa, arraste para trás (a linha pontilhada mostra o caminho) e solte |
-| Habilidade | Clique com a raposa no ar (ninja: arrancada · bomba: explode) |
-| Reiniciar a fase | Botão ↻ ou tecla **R** |
-| Voltar ao menu | Botão ☰ ou tecla **Esc** |
+| Comprar e colocar um porco | Clique no porco da loja (ou aperte **1** a **4**) e depois no mapa. Verde = pode, vermelho = não pode |
+| Soltar a onda | Botão **▶ Soltar a revoada** ou **Espaço**. Com **Auto** ligado, as ondas seguem sozinhas |
+| Ver e melhorar um porco | Clique nele: o painel mostra os números, o próximo upgrade (**U**), a mira e **Vender** (**Delete**) |
+| Pausar / acelerar | **P** ou ⏸ · **F** ou o botão 1×/2×/3× |
+| Menu | **Esc** (sem nada selecionado) ou ☰ |
 
-**Objetivo:** eliminar todos os tubarões antes de acabarem as raposas. Cada raposa que
-sobra vale 10.000 pontos de bônus. As estrelas dependem da pontuação: 1 por vencer, 2 a
-partir de 45% e 3 a partir de 75% da pontuação máxima da fase. Vencer uma fase libera a próxima.
+**Objetivo:** sobreviver às 30 ondas. A Torre começa com 100 de vida, e cada pássaro que chega nela tira um
+pouco. Há chefes (gavião-real) nas ondas 10, 20 e 30.
 
-## Fases
+### Os porcos
 
-| Fase | Dificuldade | Raposas | Estrutura |
+| Porco | Custo | O que faz | Especializações (no nível 4) |
 |---|---|---|---|
-| 1 | Fácil | 2 normais | Torre de madeira de dois andares (o desenho do quadro) |
-| 2 | Médio | 2 normais + ninja | Casinha de vidro e torre com andar de vidro |
-| 3 | Médio | 2 normais + ninja | Mesa de rocha com torre de madeira em cima |
-| 4 | Difícil | 2 normais + ninja + bomba | Fortaleza de rocha com tubarão grande |
-| 5 | Desafio | normal + ninja + bomba | Duas fortalezas mistas, 5 tubarões |
+| **Estilingueiro** | 120 | Pedrinha rápida, barato: segura o começo | Rajada (3 pedrinhas em leque) · Mira Certeira (longe e forte) |
+| **Arpoador** | 220 | O arpão **atravessa** a fila: rende no fim das retas longas | Arpão Gigante (atravessa 20) · Arpão Ligeiro (muito rápido) |
+| **Bombardeiro** | 350 | Bomba de lama em **área**; dano cheio na couraça | Chuva de Lama (o dobro de bombas) · Barril de Estrume (empurra para trás) |
+| **Tamboreiro** | 300 | Não ataca: porcos no círculo dele atiram mais rápido (**agrupar**) | Fanfarra (aura maior) · Tambor das Penas (+50% de penas na aura) |
 
-## A física, script por script
+Cada porco tem 2 upgrades em sequência e, no nível 3, a escolha de uma especialização. Vender devolve 70%
+do que foi gasto nele. As auras de Tamboreiros diferentes **não se somam**: vale a maior.
 
-Tudo em `Assets/FoxFling/Scripts`:
+### Os pássaros
 
-| Script | O que mostra |
+| Pássaro | Vida | Velocidade | Dano na Torre | Penas | Especial |
+|---|---|---|---|---|---|
+| Pardal | 1 | 2,5 | 1 | 2 | vem em bando |
+| Sabiá | 3 | 2,8 | 2 | 4 | |
+| Beija-flor | 2 | 5,0 | 2 | 6 | muito rápido |
+| Arara-azul | 10 | 2,0 | 4 | 12 | |
+| Pata | 8 | 1,8 | 3 | 8 | ao estourar, solta 4 patinhos |
+| Urubu | 28 | 1,4 | 6 | 24 | **couraça**: pedrinha e arpão tiram só metade |
+| Gavião-real (chefe) | 90 · 356 · 1.404 | 0,9 | 30 | 200 | ondas 10, 20 e 30; no máximo 30% mais lento |
+
+A partir da onda 11, os pássaros ganham **8% de vida por onda** (onda 20 = ×1,8; onda 30 = ×2,6).
+
+### Penas e o Ninho
+
+Você começa com 300 penas. Cada pássaro estourado rende as penas dele × o multiplicador do Ninho, e cada onda
+vencida dá um bônus pequeno (25 + 5 × a onda). O **Ninho de Penas** sobe o multiplicador: ×1,25 (120) →
+×1,5 (250) → ×1,75 (450) → ×2 (750) → ×2,5 (1.200). O cartão dele mostra **em quantas ondas o investimento se
+paga**: income comprado cedo rende muito, e comprado tarde não rende nada.
+
+## Onde está o Unity
+
+O jogo inteiro é um projeto Unity 6. As regras ficam em classes C# (`Scripts/Nucleo`) chamadas pelos
+componentes do Unity a cada passo. Recurso por recurso:
+
+| Recurso do Unity | Onde |
 |---|---|
-| `Estilingue.cs` | Lê o mouse e converte a puxada em velocidade (como uma mola: mais esticado = mais rápido) |
-| `Trajetoria.cs` | Linha pontilhada calculada com `p = p0 + v·t + ½·g·t²`, sem simular a física |
-| `Raposa.cs` | `Kinematic` enquanto espera (o código manda), `Dynamic` ao ser lançada (a física manda); detecção de colisão `Continuous` para não atravessar blocos finos |
-| `Destrutivel.cs` | Dano pelo **impulso** da colisão (`ContactPoint2D.normalImpulse`): batida rápida ou de coisa pesada causa mais dano |
-| `Bloco.cs` + `MaterialBloco.cs` | Massa = densidade × área (`useAutoMass`), atrito e quique por `PhysicsMaterial2D`; madeira, vidro e rocha são assets que você ajusta no Inspector |
-| `Inimigo.cs` | Mesmo dano dos blocos; collider com o contorno do tubarão (`PolygonCollider2D`) |
-| `RaposaNinja.cs` | Impulso instantâneo: troca a velocidade direto, na mesma direção |
-| `RaposaBomba.cs` + `Explosao.cs` | Explosão feita na mão: `OverlapCircleAll` + `AddForce(..., Impulse)`, mais forte quanto mais perto |
-| `GerenciadorFase.cs` | Regras da fase: fila de raposas, pontos, vitória, e derrota só depois que o mundo para |
-| `Regras.cs` | As contas puras (dano, estrelas, trajetória), com testes |
+| **Ciclo do jogo**: `FixedUpdate` avança a simulação no passo fixo (`Time.fixedDeltaTime` = 1/60 s, gravado no TimeManager); pausa e 1×/2×/3× são o `Time.timeScale` | `Scripts/Jogo.cs` |
+| **Cenas** (Menu e Jogo), Build Settings, `SceneManager` e o escurecer entre telas (`DontDestroyOnLoad`) | `Cenas/`, `Scripts/Transicao.cs` |
+| **Prefabs** (pássaro, porco, tiro, texto, efeitos) e **pool** de objetos | `Prefabs/`, `Scripts/Visual/Pool.cs` |
+| **ScriptableObjects** com os números do jogo, editáveis no Inspector (`[CreateAssetMenu]`) | `Dados/`, `Scripts/Dados/` |
+| **SpriteRenderer**, **Sorting Group** e o eixo de ordenação da câmera (Y) para a visão de cima | `Editor/ConstrutorPrefabs.cs`, `Editor/ConstrutorCenas.cs` |
+| **LineRenderer**: a trilha de terra, com textura repetida | `Scripts/Visual/VisualMapa.cs` |
+| **Gizmos** na Scene view (trilha, obstáculos, alcance do porco selecionado) | `VisualMapa.OnDrawGizmos`, `VisualPorco.OnDrawGizmosSelected` |
+| **ParticleSystem** (penas na cor de cada pássaro, poeira, brilho) com `Emit` | `Scripts/Visual/Efeitos.cs` |
+| **AudioSource** (vozes de efeito, música e ambiente em loop, volume) | `Scripts/Sons.cs` |
+| **uGUI**: Canvas e CanvasScaler 600×480, Button, Slider, CanvasGroup, Image Filled, eventos de ponteiro | `Scripts/UI/`, `Editor/ConstrutorUI.cs` |
+| **Input Manager** e `EventSystem.IsPointerOverGameObject` (clique na loja não vaza para o mapa) | `Scripts/Entrada/Controles.cs` |
+| **PlayerPrefs** (recorde, vitórias, dicas vistas, volumes) | `Scripts/Progresso.cs` |
+| **Editor scripting**: menu Revoada (`MenuItem`), `AssetDatabase`, `PrefabUtility`, `EditorSceneManager`, `TextureImporter`, `SerializedObject` | `Editor/` |
+| **Unity Test Framework**: 91 testes EditMode, incluindo os robôs de balanceamento | `Testes/` |
+| **Build WebGL** (`BuildPipeline`) | `ConstrutorRevoada.BuildWebGL` |
 
-Detalhes que deixam a física estável:
+Durante o Play, selecione um pássaro ou um porco na Hierarchy: o Inspector mostra o estado dele ao vivo
+(vida, distância na trilha, nível, alcance).
 
-- Blocos e inimigos começam **dormindo** (`RigidbodySleepMode2D.StartAsleep`), então a torre não se mexe até alguém encostar nela.
-- No primeiro 1 s da fase, impactos não causam dano, enquanto as peças se acomodam.
-- O solver 2D usa 10 iterações de velocidade e 6 de posição (Project Settings > Physics 2D), o que deixa as pilhas mais firmes.
+## Balanceamento: robôs que jogam o jogo
 
-### Números para brincar
+"Difícil na medida certa" é medido. Robôs jogam partidas inteiras com os números de verdade, sem desenhar
+nada (menu **Revoada > Balanceamento (robôs)**, ou os testes de `BalanceamentoTests`). Três deles seguem a
+mesma ordem de construção e só mudam o que fazem com o Ninho:
 
-| Material | Densidade | Vida | Pontos |
-|---|---|---|---|
-| Madeira | 1 | 50 | 500 |
-| Vidro | 0,6 | 15 | 300 |
-| Rocha | 3 | 160 | 1.000 |
+| Robô | O que faz | Resultado |
+|---|---|---|
+| Parado | não compra nada | perde na onda 5 |
+| Só Estilingue | só Estilingueiros e os upgrades deles | perde na onda 19 |
+| Defesa pura | porcos e upgrades, **nunca** o Ninho | perde na onda 22 |
+| Ganancioso | guarda tudo para o Ninho | perde na onda 8 |
+| **Equilibrado** | mistura defesa e Ninho (compra quando ele se paga em até 6 ondas) | **vence** a onda 30 com 46 de vida |
 
-Ficam em `Assets/FoxFling/Materiais` (Madeira/Vidro/Rocha.asset). Tubarão: vida 20 (grande: 45),
-5.000 pontos. Raposas: massa 1 (ninja 0,9, bomba 1,4). Estilingue: puxada máxima 1,5 e força 8,5.
+A virada do jogo são as ondas 16 e 19, com urubus de couraça: quem só tem pedrinha, ou não investiu em penas,
+cai ali ou logo depois. Se alguém mexer num número e quebrar esse equilíbrio, os testes avisam.
+
+## Mexendo nos números
+
+- **No Inspector:** `Assets/Revoada/Dados/` tem um asset para cada pássaro e cada porco (com os upgrades), as
+  ondas (`Ondas.asset`), a economia (`Economia.asset`) e o mapa (`Fazenda.asset`). Mude e dê Play.
+- **Menu Revoada:**
+  - *Reconstruir tudo*: gera de novo prefabs e cenas a partir do código. Os números dos assets são mantidos.
+  - *Restaurar números padrão*: volta os assets para os números de `Editor/DefinicoesPadrao.cs`.
+  - *Balanceamento (robôs)*: escreve no Console a tabela acima com os números atuais.
+  - *Pular para a onda 18 (robô)*: no Play, o robô Equilibrado joga sozinho até a revoada densa.
+  - *Build WebGL (itch.io)*: gera o jogo para navegador em `Builds/WebGL`.
+- **O mapa:** os pontos da trilha e os obstáculos estão no `Fazenda.asset`. Os Gizmos mostram a trilha nova na
+  Scene view na hora; clique com o botão direito no componente `VisualMapa` → *Redesenhar* para atualizar os
+  sprites.
+
+## Guia de estilo
+
+Bichos redondos e emburrados, de frente, com contorno marrom-escuro (`#2B1D14`) e sombreado em dois tons.
+Paleta: grama `#79BC57`, terra `#CDA46E`, creme `#FFF6E0`, marrom `#6B4A2E`, verde dos porcos `#8CCB5E`,
+ouro `#F2C14E` e vermelho `#C8443A`. A interface usa painéis creme com borda marrom, botões verdes e texto
+creme contornado.
+
+## Estrutura
+
+```
+Assets/Revoada/
+├── Arte/      sprites PNG (gerados por Tools/gerar_arte.py; Arte/Fontes = urubu e arara do Iran)
+├── Audio/     sons e loops WAV (gerados por Tools/gerar_sons.py)
+├── Cenas/     Menu e Jogo
+├── Dados/     ScriptableObjects com todos os números
+├── Editor/    construtor (menu Revoada), números padrão e os robôs
+├── Prefabs/   pássaro, porco, tiro, texto flutuante e efeitos
+├── Scripts/   Nucleo/ (as regras, em C# puro), Visual/, UI/, Entrada/
+└── Testes/    testes EditMode (Window > General > Test Runner)
+Tools/         geradores de arte e som (Python 3 + Pillow)
+```
 
 ## Abrindo o projeto
 
 1. Unity **6000.6.4f1**
 2. Abra a pasta `New Unity Project` pelo Unity Hub
-3. Cena inicial: `Assets/FoxFling/Scenes/Menu` (as fases são `Fase1` a `Fase5`)
+3. Cena inicial: `Assets/Revoada/Cenas/Menu` (o jogo em si é `Jogo`)
+4. Na Game view, escolha o tamanho **Revoada 600x480**
 
-### Menu "Fox Fling" no Editor
-
-- **Reconstruir tudo**: gera de novo materiais, prefabs e as cenas a partir do código
-  (`Assets/FoxFling/Editor`). As cenas são sobrescritas; os números dos materiais que você
-  ajustou no Inspector são mantidos.
-- **Build WebGL (itch.io)**: gera o jogo para navegador em `Builds/WebGL` (precisa do módulo *Web Build Support*).
-
-### Editando as fases
-
-Dois jeitos:
-
-- **No código:** `Assets/FoxFling/Editor/DefinicoesFases.cs` descreve cada fase como uma
-  "planta" (`p.Andar(...)`, `p.Bloco(...)`, `p.Inimigo(...)`). Depois use *Reconstruir tudo*.
-  Os testes conferem se nada ficou flutuando, sobreposto ou fora da área.
-- **Na cena:** abra `Fase1`...`Fase5` e mova os prefabs à mão. Nesse caso, não use
-  *Reconstruir tudo* depois, porque ele apagaria suas mudanças.
-
-## Estrutura
-
-```
-Assets/FoxFling/
-├── Art/        sprites PNG (gerados por Tools/gerar_arte.py)
-├── Audio/      efeitos WAV (gerados por Tools/gerar_sons.py)
-├── Editor/     construtor do jogo (assets, prefabs, UI, cenas) e definições das fases
-├── Materiais/  materiais de bloco, materiais físicos e de render
-├── Prefabs/    raposas, bloco, inimigos, Sistemas (câmera, estilingue, HUD...)
-├── Scenes/     Menu, Fase1..Fase5
-├── Scripts/    código do jogo
-└── Tests/      testes EditMode (Window > General > Test Runner)
-Tools/          geradores de arte e som (Python 3 + Pillow)
-```
+O Fox Fling, o jogo anterior deste repositório, continua no histórico do git.
