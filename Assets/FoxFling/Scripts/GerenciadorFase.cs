@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// Juiz da fase (tower defense): a CPU manda uma leva de raposas que anda até a torre e
-// o jogador tem que manter pelo menos um tubarão vivo até a leva acabar.
-// Gera as raposas, acompanha tubarões e raposas e decide vitória ou derrota (Regras.EstadoAposOnda).
+// Juiz da fase (tower defense): a CPU manda levas de raposas que andam até a torre e
+// o jogador tem que manter pelo menos um tubarão vivo até a última leva acabar.
+// Gera as raposas de cada leva (Regras.ComporLeva), acompanha tubarões e raposas e decide
+// vitória ou derrota (Regras.EstadoAposOnda).
 public class GerenciadorFase : MonoBehaviour
 {
     public static GerenciadorFase Instance { get; private set; }
@@ -14,20 +15,22 @@ public class GerenciadorFase : MonoBehaviour
     public string nomeFase = "Fase 1";
     public string dificuldade = "Fácil";
 
-    [Tooltip("A leva: tipos das raposas, na ordem em que entram.")]
-    public TipoRaposa[] raposas = { TipoRaposa.Normal, TipoRaposa.Normal };
+    [Tooltip("Quantas levas de raposas a fase tem.")]
+    public int levas = Regras.LevasPorFase;
 
-    public RaposaAtacante atacanteNormal, atacanteNinja, atacanteBomba;
+    public RaposaAtacante atacanteNormal, atacanteNinja, atacanteBomba, atacanteGrande;
     public Hud hud;
 
-    [Tooltip("Segundos de calma antes da primeira raposa entrar.")]
+    [Tooltip("Segundos de calma antes da primeira leva.")]
     public float tempoAntesDaLeva = 2.5f;
 
-    [Tooltip("Segundos entre uma raposa e a próxima.")]
-    public float intervaloEntreRaposas = 1.6f;
+    [Tooltip("Segundos de descanso entre uma leva e a próxima.")]
+    public float descansoEntreLevas = 3f;
 
-    [Tooltip("Onde as raposas nascem (fora da tela, à esquerda, no chão).")]
-    public Vector2 pontoDeEntrada = new Vector2(-8.3f, -4.17f);
+    [Tooltip("De onde as raposas entram: fora da tela, à esquerda, em cima do chão.")]
+    public float xDeEntrada = -8.3f;
+
+    public float alturaDoChao = -4.5f;
 
     // Depois que a leva acaba, espera o mundo parar por no máximo isto antes de decidir.
     const float EsperaMaximaFimDaLeva = 4f;
@@ -36,6 +39,7 @@ public class GerenciadorFase : MonoBehaviour
     public EstadoFase Estado { get; private set; } = EstadoFase.Jogando;
     public int InimigosVivos => inimigos.Count;
     public int RaposasRestantes => porNascer + atacantes.Count;
+    public int LevaAtual { get; private set; }
 
     readonly List<Inimigo> inimigos = new List<Inimigo>();
     readonly List<RaposaAtacante> atacantes = new List<RaposaAtacante>();
@@ -71,45 +75,84 @@ public class GerenciadorFase : MonoBehaviour
         }
 
         // Os tubarões se registram no Start deles; depois da espera a lista está completa.
-        if (hud != null) hud.MostrarDica($"Defenda a torre! Uma leva de {raposas.Length} raposas vem aí...");
+        if (hud != null) hud.MostrarDica($"Defenda a torre! {levas} levas de raposas vêm aí...");
         yield return new WaitForSeconds(tempoAntesDaLeva);
-
         tubaroesNoInicio = inimigos.Count;
-        porNascer = raposas.Length;
+
+        for (LevaAtual = 1; LevaAtual <= levas; LevaAtual++)
+        {
+            yield return RodarLeva();
+            if (Estado != EstadoFase.Jogando) yield break; // perdeu
+
+            if (LevaAtual < levas)
+            {
+                if (hud != null) hud.MostrarDica($"Leva {LevaAtual} de {levas} concluída! Prepare-se...");
+                yield return new WaitForSeconds(descansoEntreLevas);
+            }
+        }
+
+        StartCoroutine(Vitoria());
+    }
+
+    // Gera as raposas da leva, uma a uma, e espera até a leva acabar (ou o jogador perder).
+    IEnumerator RodarLeva()
+    {
+        var leva = Regras.ComporLeva(numeroFase, LevaAtual);
+        float intervalo = Regras.IntervaloEntreRaposas(Regras.NivelDaLeva(numeroFase, LevaAtual));
+
+        porNascer = leva.Length;
+        instanteFimDaLeva = -1f;
         AtualizarDica();
 
-        for (int i = 0; i < raposas.Length; i++)
+        for (int i = 0; i < leva.Length; i++)
         {
             if (Estado != EstadoFase.Jogando) yield break;
 
-            Gerar(raposas[i]);
+            Gerar(leva[i]);
             porNascer--;
             AtualizarDica();
 
-            if (i < raposas.Length - 1)
-                yield return new WaitForSeconds(intervaloEntreRaposas);
+            if (i < leva.Length - 1)
+                yield return new WaitForSeconds(intervalo);
         }
 
-        yield return AcompanharFimDaLeva();
+        while (Estado == EstadoFase.Jogando)
+        {
+            yield return new WaitForSeconds(0.25f);
+
+            bool levaAcabou = porNascer == 0 && atacantes.Count == 0;
+            if (levaAcabou && instanteFimDaLeva < 0f) instanteFimDaLeva = Time.time;
+            bool parado = levaAcabou && (MundoParado() || Time.time - instanteFimDaLeva > EsperaMaximaFimDaLeva);
+
+            var novo = Regras.EstadoAposOnda(inimigos.Count, porNascer, atacantes.Count, parado);
+            if (novo == EstadoFase.Derrota) StartCoroutine(Derrota());
+            else if (novo == EstadoFase.Vitoria) yield break; // leva sobrevivida
+        }
     }
 
     RaposaAtacante Prefab(TipoRaposa tipo)
     {
+        RaposaAtacante p;
         switch (tipo)
         {
-            case TipoRaposa.Ninja: return atacanteNinja != null ? atacanteNinja : atacanteNormal;
-            case TipoRaposa.Bomba: return atacanteBomba != null ? atacanteBomba : atacanteNormal;
-            default: return atacanteNormal;
+            case TipoRaposa.Ninja: p = atacanteNinja; break;
+            case TipoRaposa.Bomba: p = atacanteBomba; break;
+            case TipoRaposa.Grande: p = atacanteGrande; break;
+            default: p = atacanteNormal; break;
         }
+        return p != null ? p : atacanteNormal;
     }
 
     void Gerar(TipoRaposa tipo)
     {
-        var raposa = Instantiate(Prefab(tipo), pontoDeEntrada, Quaternion.identity);
+        // Nasce em cima do chão, qualquer que seja o tamanho da raposa (raio × escala).
+        var prefab = Prefab(tipo);
+        float raio = prefab.GetComponent<CircleCollider2D>().radius * Mathf.Abs(prefab.transform.localScale.y);
+        var raposa = Instantiate(prefab, new Vector3(xDeEntrada, alturaDoChao + raio + 0.01f, 0f), Quaternion.identity);
+        var colisor = raposa.GetComponent<Collider2D>();
 
         // As raposas atravessam umas às outras: a leva chega junta na torre em vez de
         // ficar em fila atrás da primeira.
-        var colisor = raposa.GetComponent<Collider2D>();
         foreach (var outra in atacantes)
             Physics2D.IgnoreCollision(colisor, outra.GetComponent<Collider2D>());
 
@@ -126,23 +169,7 @@ public class GerenciadorFase : MonoBehaviour
     void AtualizarDica()
     {
         if (hud == null || Estado != EstadoFase.Jogando) return;
-        hud.MostrarDica($"Raposas restantes: {RaposasRestantes}   ·   Tubarões vivos: {inimigos.Count}");
-    }
-
-    IEnumerator AcompanharFimDaLeva()
-    {
-        while (Estado == EstadoFase.Jogando)
-        {
-            yield return new WaitForSeconds(0.25f);
-
-            bool levaAcabou = porNascer == 0 && atacantes.Count == 0;
-            if (levaAcabou && instanteFimDaLeva < 0f) instanteFimDaLeva = Time.time;
-            bool parado = levaAcabou && (MundoParado() || Time.time - instanteFimDaLeva > EsperaMaximaFimDaLeva);
-
-            var novo = Regras.EstadoAposOnda(inimigos.Count, porNascer, atacantes.Count, parado);
-            if (novo == EstadoFase.Vitoria) StartCoroutine(Vitoria());
-            else if (novo == EstadoFase.Derrota) StartCoroutine(Derrota());
-        }
+        hud.MostrarDica($"Leva {LevaAtual} de {levas}   ·   Raposas: {RaposasRestantes}   ·   Tubarões: {inimigos.Count}");
     }
 
     bool MundoParado()

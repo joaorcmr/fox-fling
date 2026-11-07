@@ -637,14 +637,16 @@ MonoBehaviour:
   numeroFase: 2
   nomeFase: Fase 2
   dificuldade: "M\xE9dio"
-  raposas: 000000000000000001000000i
+  levas: 3
   atacanteNormal: {fileID: 1913980661851314979, guid: 459d06c45e514a943988f0b229496f4f, type: 3}
   atacanteNinja: {fileID: 4566116511113776556, guid: 9396fdc68651a644f9f7e6ff64e3f06c, type: 3}
   atacanteBomba: {fileID: 2536882794081317258, guid: 79ac50ae71e32474a9201e1a2e0daf92, type: 3}
+  atacanteGrande: {fileID: 8436211895081003021, guid: e303ee23817daa543bf6cb08a7a12df7, type: 3}
   hud: {fileID: 652111264}
   tempoAntesDaLeva: 2.5
-  intervaloEntreRaposas: 1.6
-  pontoDeEntrada: {x: -8.3, y: -4.17}
+  descansoEntreLevas: 3
+  xDeEntrada: -8.3
+  alturaDoChao: -4.5
 --- !u!4 &473848893
 Transform:
   m_ObjectHideFlags: 0

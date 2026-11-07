@@ -59,10 +59,10 @@ public static class ConstrutorCenas
         fase.numeroFase = def.numero;
         fase.nomeFase = def.nome;
         fase.dificuldade = def.dificuldade;
-        fase.raposas = def.raposas;
         fase.atacanteNormal = ConstrutorPrefabs.AtacanteNormal;
         fase.atacanteNinja = ConstrutorPrefabs.AtacanteNinja;
         fase.atacanteBomba = ConstrutorPrefabs.AtacanteBomba;
+        fase.atacanteGrande = ConstrutorPrefabs.AtacanteGrande;
         fase.hud = sistemas.GetComponentInChildren<Hud>();
 
         var estrutura = new GameObject("Estrutura").transform;

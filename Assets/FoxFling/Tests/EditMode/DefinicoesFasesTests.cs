@@ -7,19 +7,12 @@ public class DefinicoesFasesTests
 {
     const float Tol = 0.01f;
 
-    static readonly TipoRaposa N = TipoRaposa.Normal, Ni = TipoRaposa.Ninja, B = TipoRaposa.Bomba;
-
     [Test]
-    public void RaposasBatemComOQuadro()
+    public void TemCincoFases()
     {
         // Quadro do Estágio 2: 1 fácil, 2 médios, 1 difícil e 1 desafio.
-        var fases = DefinicoesFases.Todas();
-        Assert.AreEqual(5, fases.Length);
-        CollectionAssert.AreEqual(new[] { N, N }, fases[0].raposas, "Fase 1");
-        CollectionAssert.AreEqual(new[] { N, N, Ni }, fases[1].raposas, "Fase 2");
-        CollectionAssert.AreEqual(new[] { N, N, Ni }, fases[2].raposas, "Fase 3");
-        CollectionAssert.AreEqual(new[] { N, N, Ni, B }, fases[3].raposas, "Fase 4");
-        CollectionAssert.AreEqual(new[] { N, Ni, B }, fases[4].raposas, "Fase 5");
+        // As raposas de cada fase agora vêm de Regras.ComporLeva (ver LevasTests).
+        Assert.AreEqual(5, DefinicoesFases.Todas().Length);
     }
 
     [Test]

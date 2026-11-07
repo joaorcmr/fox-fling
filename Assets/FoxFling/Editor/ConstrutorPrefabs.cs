@@ -9,7 +9,7 @@ public static class ConstrutorPrefabs
     public const string Pasta = Raiz + "/Prefabs";
 
     public static Raposa RaposaNormal, RaposaNinja, RaposaBomba;
-    public static RaposaAtacante AtacanteNormal, AtacanteNinja, AtacanteBomba;
+    public static RaposaAtacante AtacanteNormal, AtacanteNinja, AtacanteBomba, AtacanteGrande;
     public static GameObject Bloco, Inimigo, InimigoGrande, Sistemas;
 
     // Ordem de desenho (sortingOrder): quem tem número maior aparece na frente.
@@ -121,13 +121,28 @@ public static class ConstrutorPrefabs
         AtacanteNormal = CriarAtacante("Atacante_Normal", typeof(RaposaAtacante), TipoRaposa.Normal, "raposa_normal", 0.8f, 30f, 1.0f, 8f, 0.8f, 100);
         AtacanteNinja = CriarAtacante("Atacante_Ninja", typeof(RaposaAtacante), TipoRaposa.Ninja, "raposa_ninja", 0.7f, 20f, 2.0f, 5f, 0.6f, 150);
         AtacanteBomba = CriarAtacante("Atacante_Bomba", typeof(AtacanteBomba), TipoRaposa.Bomba, "raposa_bomba", 1.0f, 25f, 1.2f, 0f, 0.8f, 200);
+        AtacanteGrande = CriarGrande();
+    }
+
+    // A grande é a normal em tamanho 1,5, avermelhada: lenta, muito resistente e com golpe pesado.
+    // Separada para dar para criar só ela sem regravar os outros prefabs (regravar pode trocar os
+    // ids internos e desligar as referências que as cenas têm para eles).
+    public static RaposaAtacante CriarGrande()
+    {
+        GarantirPasta(Pasta);
+        fisicaAtacante = MaterialFisico("Atacante", 0f, 0f);
+        return CriarAtacante("Atacante_Grande", typeof(RaposaAtacante), TipoRaposa.Grande, "raposa_normal", 2.5f, 90f, 0.7f, 20f, 1.0f, 300,
+            1.5f, new Color(0.85f, 0.45f, 0.4f));
     }
 
     static RaposaAtacante CriarAtacante(string nome, System.Type script, TipoRaposa tipo, string sprite,
-        float massa, float vida, float velocidade, float dano, float intervalo, int pontos)
+        float massa, float vida, float velocidade, float dano, float intervalo, int pontos,
+        float escala = 1f, Color? cor = null)
     {
         var go = new GameObject(nome);
-        Desenho(go, sprite, OrdemRaposa);
+        var desenho = Desenho(go, sprite, OrdemRaposa);
+        if (cor.HasValue) desenho.color = cor.Value;
+        go.transform.localScale = Vector3.one * escala;
 
         var rb = go.AddComponent<Rigidbody2D>();
         rb.mass = massa;
