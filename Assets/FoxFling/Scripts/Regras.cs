@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public enum EstadoFase { Jogando, Vitoria, Derrota }
+// Preparando: entre as levas, com a loja aberta (as raposas só entram quando o jogador manda).
+public enum EstadoFase { Jogando, Vitoria, Derrota, Preparando }
 
 // Regras "puras" do jogo: só contas, sem GameObject nem cena.
 // Ficam separadas para dar pra testar (Tests/EditMode/RegrasTests.cs) e ajustar num lugar só.
@@ -86,10 +87,122 @@ public static class Regras
         return pontos.ToString("#,0", System.Globalization.CultureInfo.InvariantCulture).Replace(',', '.');
     }
 
-    public static EstadoFase EstadoAposRaposa(int inimigosVivos, int raposasRestantes, bool mundoParado)
+    // Regra do tower defense: os tubarões são o jogador e as raposas atacam a torre.
+    //  - Derrota: o último tubarão morreu (mesmo com raposas ainda por vir).
+    //  - Vitória: a leva inteira acabou (ninguém por nascer nem em campo), o mundo parou
+    //    de se mexer (pedra caindo ainda pode matar alguém) e sobrou pelo menos 1 tubarão.
+    public static EstadoFase EstadoAposOnda(int tubaroesVivos, int raposasPorNascer, int raposasEmCampo, bool mundoParado)
     {
-        if (inimigosVivos <= 0) return EstadoFase.Vitoria;
-        if (raposasRestantes > 0 || !mundoParado) return EstadoFase.Jogando;
-        return EstadoFase.Derrota;
+        if (tubaroesVivos <= 0) return EstadoFase.Derrota;
+        if (raposasPorNascer > 0 || raposasEmCampo > 0 || !mundoParado) return EstadoFase.Jogando;
+        return EstadoFase.Vitoria;
+    }
+
+    // Estrelas pelos tubarões que sobraram: todos = 3, metade ou mais = 2, algum = 1.
+    public static int EstrelasPorSobreviventes(int tubaroesVivos, int tubaroesNoInicio, bool venceu)
+    {
+        if (!venceu || tubaroesVivos <= 0) return 0;
+        if (tubaroesVivos >= tubaroesNoInicio) return 3;
+        if (tubaroesVivos * 2 >= tubaroesNoInicio) return 2;
+        return 1;
+    }
+
+    // ---- Pontos da leva (issue #4) ----
+    // Ao fim de cada leva o jogador ganha: base da leva (sobe com o nível) + pontos das
+    // raposas derrotadas − uma penalidade por cada tubarão que as raposas mataram. Nunca
+    // fica abaixo de zero. O resultado vai para o saldo da loja.
+    public const int PenalidadePorTubarao = 300;
+
+    public static int BaseDaLeva(int nivel) => 150 + 25 * nivel;
+
+    public static int PontosDaLeva(int pontosDasRaposas, int tubaroesPerdidos, int nivel)
+    {
+        int bruto = BaseDaLeva(nivel) + pontosDasRaposas - PenalidadePorTubarao * Mathf.Max(0, tubaroesPerdidos);
+        return Mathf.Max(0, bruto);
+    }
+
+    // ---- Colocar coisas no chão (issues #3 e #7) ----
+    // Muros e armas são colocados no chão, em posições de uma grade, dentro desta faixa:
+    // do lado esquerdo (por onde as raposas chegam) até o fim da área das estruturas.
+    public const float PassoDaColocacao = 0.25f;
+    public const float ColocacaoXMin = -6f, ColocacaoXMax = 7.4f;
+
+    // O x onde o item fica: o do mouse "grudado" na grade e sem sair da faixa (a largura
+    // conta para o item inteiro caber).
+    public static float XDaColocacao(float xDoMouse, float largura)
+    {
+        float x = Mathf.Round(xDoMouse / PassoDaColocacao) * PassoDaColocacao;
+        return Mathf.Clamp(x, ColocacaoXMin + largura / 2f, ColocacaoXMax - largura / 2f);
+    }
+
+    // ---- Mira das armas (issue #7) ----
+    // Qual das posições está mais perto da origem, dentro do alcance? Devolve o índice, ou -1
+    // se nenhuma estiver ao alcance. (A arma atira sempre na raposa mais próxima.)
+    public static int EscolherAlvo(Vector2 origem, System.Collections.Generic.IList<Vector2> posicoes, float alcance)
+    {
+        int melhor = -1;
+        float menor = float.MaxValue;
+        float limite = alcance * alcance;
+        for (int i = 0; i < posicoes.Count; i++)
+        {
+            float d = (posicoes[i] - origem).sqrMagnitude;
+            if (d <= limite && d < menor)
+            {
+                menor = d;
+                melhor = i;
+            }
+        }
+        return melhor;
+    }
+
+    // ---- Níveis e levas (issue #5) ----
+    // Cada fase tem LevasPorFase levas seguidas. O "nível" conta as levas de todas as
+    // fases (fase 1 leva 1 = nível 1; fase 5 leva 3 = nível 15): quanto maior, mais raposas
+    // e mais tipos fortes entre elas.
+    public const int LevasPorFase = 3;
+
+    public static int NivelDaLeva(int fase, int leva) => (fase - 1) * LevasPorFase + leva;
+
+    public static int QuantidadeDeRaposas(int nivel) => 1 + nivel;
+
+    // Nos níveis mais altos as raposas chegam mais seguidas.
+    public static float IntervaloEntreRaposas(int nivel) => Mathf.Max(0.7f, 1.6f - 0.06f * nivel);
+
+    // A leva em ordem de entrada: primeiro as normais, depois ninjas, grandes e bombas
+    // (a leva "cresce" até o fim). Cada tipo especial aparece a partir de um nível e sua
+    // fração sobe por nível até um teto; a fração das normais é o que sobra.
+    public static TipoRaposa[] ComporLeva(int fase, int leva)
+    {
+        int nivel = Mathf.Max(1, NivelDaLeva(fase, leva));
+        int total = QuantidadeDeRaposas(nivel);
+
+        int ninjas = QuantosDoTipo(total, nivel, 2, 0.04f, 0.30f);
+        int grandes = QuantosDoTipo(total, nivel, 6, 0.02f, 0.20f);
+        int bombas = QuantosDoTipo(total, nivel, 4, 0.025f, 0.20f);
+
+        // Sempre sobra pelo menos uma normal.
+        while (ninjas + grandes + bombas > total - 1)
+        {
+            if (ninjas >= grandes && ninjas >= bombas) ninjas--;
+            else if (bombas >= grandes) bombas--;
+            else grandes--;
+        }
+
+        var composicao = new TipoRaposa[total];
+        int i = 0;
+        int normais = total - ninjas - grandes - bombas;
+        for (int k = 0; k < normais; k++) composicao[i++] = TipoRaposa.Normal;
+        for (int k = 0; k < ninjas; k++) composicao[i++] = TipoRaposa.Ninja;
+        for (int k = 0; k < grandes; k++) composicao[i++] = TipoRaposa.Grande;
+        for (int k = 0; k < bombas; k++) composicao[i++] = TipoRaposa.Bomba;
+        return composicao;
+    }
+
+    // 0 antes do primeiro nível do tipo; depois, pelo menos 1 e a fração crescente (com teto).
+    static int QuantosDoTipo(int total, int nivel, int primeiroNivel, float fracaoPorNivel, float teto)
+    {
+        if (nivel < primeiroNivel) return 0;
+        float fracao = Mathf.Min(teto, fracaoPorNivel * (nivel - primeiroNivel + 1));
+        return Mathf.Max(1, Mathf.RoundToInt(total * fracao));
     }
 }

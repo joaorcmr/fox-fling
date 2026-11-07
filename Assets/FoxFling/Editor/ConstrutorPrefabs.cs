@@ -9,13 +9,15 @@ public static class ConstrutorPrefabs
     public const string Pasta = Raiz + "/Prefabs";
 
     public static Raposa RaposaNormal, RaposaNinja, RaposaBomba;
+    public static RaposaAtacante AtacanteNormal, AtacanteNinja, AtacanteBomba, AtacanteGrande;
+    public static GameObject ArmaEstilingue, ArmaCanhao;
     public static GameObject Bloco, Inimigo, InimigoGrande, Sistemas;
 
     // Ordem de desenho (sortingOrder): quem tem número maior aparece na frente.
     public const int OrdemFundo = -100, OrdemEstilingue = 1, OrdemBloco = 2, OrdemInimigo = 3, OrdemRastro = 4,
         OrdemElasticoTras = 5, OrdemRaposa = 6, OrdemElasticoFrente = 7, OrdemChao = 10, OrdemFumaca = 19, OrdemEfeitos = 20;
 
-    static PhysicsMaterial2D fisicaRaposa, fisicaChao, fisicaInimigo;
+    static PhysicsMaterial2D fisicaRaposa, fisicaChao, fisicaInimigo, fisicaAtacante;
 
     // Silhueta do tubarão (inimigo.png, 72×64 px, PPU 80, pivô no centro). Fica dentro
     // da caixa de 0.8 × 0.7 do antigo triângulo (DefinicoesFases.TamanhoInimigo), que é
@@ -44,6 +46,8 @@ public static class ConstrutorPrefabs
             "Raposa ninja: clique no ar para dar uma arrancada!", new Color(0.55f, 0.65f, 1f, 0.7f));
         RaposaBomba = CriarRaposa("Raposa_Bomba", typeof(RaposaBomba), TipoRaposa.Bomba, "raposa_bomba", 1.4f,
             "Raposa bomba: clique para explodir (ou espere o pavio)!", new Color(1f, 0.6f, 0.3f, 0.7f));
+        CriarAtacantes();
+        CriarArmas();
         Bloco = CriarBloco();
         Inimigo = CriarInimigo("Inimigo", 1f, 20f);
         InimigoGrande = CriarInimigo("Inimigo_Grande", DefinicoesFases.EscalaGrande, 45f);
@@ -105,6 +109,103 @@ public static class ConstrutorPrefabs
         r.tipo = tipo;
         r.dica = dica;
         return Salvar(go, nome).GetComponent<Raposa>();
+    }
+
+    // As raposas "zumbi" do tower defense (a leva que anda até a torre). Usam a mesma arte das
+    // raposas do estilingue, mas ficam em pé (sem girar) e andam sozinhas (RaposaAtacante).
+    // Público para dar para criar só elas, sem reconstruir o resto (ver MURAL.md).
+    public static void CriarAtacantes()
+    {
+        GarantirPasta(Pasta);
+        fisicaAtacante = MaterialFisico("Atacante", 0f, 0f); // sem atrito nem quique: deslizam até a torre
+
+        //                                  nome             script                 tipo              sprite          massa vida vel  dano  golpe pontos
+        AtacanteNormal = CriarAtacante("Atacante_Normal", typeof(RaposaAtacante), TipoRaposa.Normal, "raposa_normal", 0.8f, 30f, 1.0f, 8f, 0.8f, 100);
+        AtacanteNinja = CriarAtacante("Atacante_Ninja", typeof(RaposaAtacante), TipoRaposa.Ninja, "raposa_ninja", 0.7f, 20f, 2.0f, 5f, 0.6f, 150);
+        AtacanteBomba = CriarAtacante("Atacante_Bomba", typeof(AtacanteBomba), TipoRaposa.Bomba, "raposa_bomba", 1.0f, 25f, 1.2f, 0f, 0.8f, 200);
+        AtacanteGrande = CriarGrande();
+    }
+
+    // A grande é a normal em tamanho 1,5, avermelhada: lenta, muito resistente e com golpe pesado.
+    // Separada para dar para criar só ela sem regravar os outros prefabs (regravar pode trocar os
+    // ids internos e desligar as referências que as cenas têm para eles).
+    public static RaposaAtacante CriarGrande()
+    {
+        GarantirPasta(Pasta);
+        fisicaAtacante = MaterialFisico("Atacante", 0f, 0f);
+        return CriarAtacante("Atacante_Grande", typeof(RaposaAtacante), TipoRaposa.Grande, "raposa_normal", 2.5f, 90f, 0.7f, 20f, 1.0f, 300,
+            1.5f, new Color(0.85f, 0.45f, 0.4f));
+    }
+
+    static RaposaAtacante CriarAtacante(string nome, System.Type script, TipoRaposa tipo, string sprite,
+        float massa, float vida, float velocidade, float dano, float intervalo, int pontos,
+        float escala = 1f, Color? cor = null)
+    {
+        var go = new GameObject(nome);
+        var desenho = Desenho(go, sprite, OrdemRaposa);
+        if (cor.HasValue) desenho.color = cor.Value;
+        go.transform.localScale = Vector3.one * escala;
+
+        var rb = go.AddComponent<Rigidbody2D>();
+        rb.mass = massa;
+        rb.interpolation = RigidbodyInterpolation2D.Interpolate;
+        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+
+        var col = go.AddComponent<CircleCollider2D>();
+        col.radius = 26f / PixelsPorUnidade;
+        col.sharedMaterial = fisicaAtacante;
+
+        var r = (RaposaAtacante)go.AddComponent(script);
+        r.tipo = tipo;
+        r.vidaMaxima = vida;
+        r.velocidade = velocidade;
+        r.danoPorGolpe = dano;
+        r.intervaloGolpe = intervalo;
+        r.pontos = pontos;
+        // Andar até a torre não pode machucar a própria raposa: só pancada forte (pedra caindo).
+        r.impulsoMinimo = 3f;
+        r.multiplicadorDano = 6f;
+        return Salvar(go, nome).GetComponent<RaposaAtacante>();
+    }
+
+    // As armas de defesa (issue #7). Usam a arte do estilingue antigo (o canhão é o mesmo desenho,
+    // mais largo e azul-acinzentado, enquanto não há uma arte própria). Ficam paradas no chão
+    // (FreezeAll) mas continuam sendo corpos dinâmicos, para as explosões e as raposas
+    // conseguirem machucá-las. Público para dar para criar só elas, sem reconstruir o resto.
+    public static void CriarArmas()
+    {
+        GarantirPasta(Pasta);
+        //                            nome               tamanho (L x A)           vida  cor da arma                        cor do tiro
+        ArmaEstilingue = CriarArma("Arma_Estilingue", new Vector2(0.6f, 1.0f), 80f, Color.white, new Color(0.9f, 0.8f, 0.6f));
+        ArmaCanhao = CriarArma("Arma_Canhao", new Vector2(0.9f, 0.7f), 120f, new Color(0.55f, 0.62f, 0.78f), new Color(0.25f, 0.25f, 0.3f));
+    }
+
+    static GameObject CriarArma(string nome, Vector2 tamanho, float vida, Color cor, Color corDoTiro)
+    {
+        var go = new GameObject(nome);
+
+        var rb = go.AddComponent<Rigidbody2D>();
+        rb.constraints = RigidbodyConstraints2D.FreezeAll;
+
+        var caixa = go.AddComponent<BoxCollider2D>();
+        caixa.size = tamanho;
+        caixa.sharedMaterial = MaterialFisico("Chao", 0.9f, 0f);
+
+        // O desenho fica num filho: o sprite do estilingue tem o pivô na base, então o filho
+        // desce até o pé da arma (o objeto em si fica no centro da área que ela ocupa).
+        var filho = new GameObject("Desenho");
+        filho.transform.SetParent(go.transform, false);
+        var desenho = Desenho(filho, "estilingue", OrdemInimigo);
+        desenho.color = cor;
+        filho.transform.localScale = Vector3.one * (tamanho.y / desenho.sprite.bounds.size.y);
+        filho.transform.localPosition = new Vector3(0f, -tamanho.y / 2f, 0f);
+
+        var arma = go.AddComponent<Arma>();
+        arma.vidaMaxima = vida;
+        arma.impulsoMinimo = 50f; // só dano direto das raposas: encostar nela não conta
+        arma.spriteProjetil = Sprite("ponto");
+        arma.corProjetil = corDoTiro;
+        return Salvar(go, nome);
     }
 
     static GameObject CriarBloco()
@@ -188,7 +289,6 @@ public static class ConstrutorPrefabs
     {
         var raiz = new GameObject("Sistemas");
         CriarCenario(raiz.transform);
-        CriarEstilingue(raiz.transform);
         CriarSons(raiz.transform);
         CriarEfeitos(raiz.transform, prefabTexto);
         ConstrutorUI.CriarHud(raiz.transform);
@@ -217,7 +317,9 @@ public static class ConstrutorPrefabs
         var chao = Filho(pai, "Chao", new Vector3(0f, DefinicoesFases.Chao, 0f));
         Desenho(chao, "chao", OrdemChao);
         var colChao = chao.AddComponent<BoxCollider2D>();
-        colChao.size = new Vector2(15f, 1.5f);
+        // Mais largo que a tela (15): as raposas do tower defense entram andando de fora dela
+        // (x = -8.3). Passando de |x| = 9 já contam como fora do mundo (Regras.ForaDoMundo).
+        colChao.size = new Vector2(19f, 1.5f);
         colChao.offset = new Vector2(0f, -0.75f);
         colChao.sharedMaterial = fisicaChao;
     }
@@ -235,40 +337,6 @@ public static class ConstrutorPrefabs
         sons.derrota = Som("derrota");
         sons.clique = Som("clique");
         sons.estrela = Som("estrela");
-    }
-
-    static void CriarEstilingue(Transform pai)
-    {
-        var go = Filho(pai, "Estilingue", new Vector3(-5.5f, DefinicoesFases.Chao, 0f));
-        Desenho(go, "estilingue", OrdemEstilingue);
-        var est = go.AddComponent<Estilingue>();
-        est.ancora = Filho(go.transform, "Ancora", new Vector3(0f, 1.8f, 0f)).transform;
-        est.pontaTras = Filho(go.transform, "PontaTras", new Vector3(-0.3f, 1.975f, 0f)).transform;
-        est.pontaFrente = Filho(go.transform, "PontaFrente", new Vector3(0.3f, 1.975f, 0f)).transform;
-
-        LineRenderer Elastico(string nome, int ordem)
-        {
-            var lr = Filho(go.transform, nome, Vector3.zero).AddComponent<LineRenderer>();
-            lr.positionCount = 2;
-            lr.useWorldSpace = true;
-            lr.widthMultiplier = 0.11f;
-            lr.numCapVertices = 3;
-            lr.sharedMaterial = MaterialRender("Elastico", null);
-            lr.startColor = lr.endColor = new Color(0.33f, 0.19f, 0.1f);
-            lr.sortingOrder = ordem;
-            return lr;
-        }
-
-        est.elasticoTras = Elastico("ElasticoTras", OrdemElasticoTras);
-        est.elasticoFrente = Elastico("ElasticoFrente", OrdemElasticoFrente);
-        // Posição de repouso (para a cena já aparecer certa fora do Play).
-        est.elasticoTras.SetPositions(new[] { est.pontaTras.position, est.ancora.position });
-        est.elasticoFrente.SetPositions(new[] { est.pontaFrente.position, est.ancora.position });
-
-        var traj = Filho(go.transform, "Trajetoria", Vector3.zero).AddComponent<Trajetoria>();
-        traj.spritePonto = Sprite("ponto");
-        traj.chaoY = DefinicoesFases.Chao;
-        est.trajetoria = traj;
     }
 
     static void CriarEfeitos(Transform pai, TextoFlutuante prefabTexto)

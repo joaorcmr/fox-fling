@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// Juiz da fase: cria a fila de raposas, entrega uma de cada vez ao estilingue,
-// conta pontos e inimigos e decide vitória ou derrota (Regras.EstadoAposRaposa).
+// Juiz da fase (tower defense): a CPU manda levas de raposas que andam até a torre e
+// o jogador tem que manter pelo menos um tubarão vivo até a última leva acabar.
+//
+// O ciclo de cada leva: PREPARAR (loja aberta, o jogador compra e depois clica em "Iniciar
+// leva") → LEVA (as raposas de Regras.ComporLeva entram) → ganha pontos (Regras.PontosDaLeva).
+// Perder o último tubarão é derrota; sobreviver à última leva é vitória (Regras.EstadoAposOnda).
 public class GerenciadorFase : MonoBehaviour
 {
     public static GerenciadorFase Instance { get; private set; }
@@ -13,27 +17,51 @@ public class GerenciadorFase : MonoBehaviour
     public string nomeFase = "Fase 1";
     public string dificuldade = "Fácil";
 
-    [Tooltip("Raposas disponíveis, na ordem em que entram no estilingue.")]
-    public TipoRaposa[] raposas = { TipoRaposa.Normal, TipoRaposa.Normal };
+    [Tooltip("Quantas levas de raposas a fase tem.")]
+    public int levas = Regras.LevasPorFase;
 
-    public Raposa prefabNormal, prefabNinja, prefabBomba;
-    public Estilingue estilingue;
+    public RaposaAtacante atacanteNormal, atacanteNinja, atacanteBomba, atacanteGrande;
     public Hud hud;
 
-    [Tooltip("Lugar da primeira raposa da fila; as outras ficam à esquerda.")]
-    public Vector2 inicioFila = new Vector2(-6.2f, -4.17f);
-    public float espacoFila = 0.55f;
+    [Tooltip("O que a loja vende (Assets/FoxFling/Loja/Catalogo).")]
+    public CatalogoLoja catalogo;
 
+    [Tooltip("Pontos para gastar na loja quando a fase começa.")]
+    public int saldoInicial = 500;
+
+    [Tooltip("De onde as raposas entram: fora da tela, à esquerda, em cima do chão.")]
+    public float xDeEntrada = -8.3f;
+
+    public float alturaDoChao = -4.5f;
+
+    // Depois que a leva acaba, espera o mundo parar por no máximo isto antes de decidir.
+    const float EsperaMaximaFimDaLeva = 4f;
+
+    public int Saldo { get; private set; }
+
+    // Soma de tudo que o jogador ganhou nas levas (é o que aparece na tela de resultado).
     public int Pontos { get; private set; }
+
     public EstadoFase Estado { get; private set; } = EstadoFase.Jogando;
     public int InimigosVivos => inimigos.Count;
-    public int RaposasNaFila => fila.Count;
+    public int RaposasRestantes => porNascer + atacantes.Count;
+    public int LevaAtual { get; private set; }
+    public Loja Loja { get; private set; }
+
+    // As raposas em campo (as armas miram nelas).
+    public IReadOnlyList<RaposaAtacante> Atacantes => atacantes;
 
     readonly List<Inimigo> inimigos = new List<Inimigo>();
-    readonly List<Raposa> fila = new List<Raposa>();
-    int pontuacaoMaxima;
-    int lancamentos;
+    readonly List<RaposaAtacante> atacantes = new List<RaposaAtacante>();
+    readonly Dictionary<ItemLoja, int> niveisDasArmas = new Dictionary<ItemLoja, int>();
+    int porNascer;
+    int tubaroesNoInicio;
+    int tubaroesNoInicioDaLeva;
+    int pontosDaLeva;
+    float instanteFimDaLeva = -1f;
+    bool iniciarPedido;
     bool resultadoMostrado;
+    string mensagemDaLeva = "";
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     static void ResetarStatics() => Instance = null;
@@ -49,99 +77,163 @@ public class GerenciadorFase : MonoBehaviour
         if (Instance == this) Instance = null;
     }
 
+    void Update()
+    {
+        // Atalho para o botão "Iniciar leva". (Enter não: ele também "aperta" botões do UI.)
+        if (Estado == EstadoFase.Preparando && Input.GetKeyDown(KeyCode.Space))
+            IniciarLeva();
+    }
+
     IEnumerator Start()
     {
         if (hud != null) hud.Configurar(nomeFase, dificuldade);
 
-        for (int i = 0; i < raposas.Length; i++)
+        if (atacanteNormal == null)
         {
-            Vector2 lugar = LugarNaFila(i);
-            var r = Instantiate(Prefab(raposas[i]), lugar, Quaternion.identity);
-            r.IrParaFila(lugar);
-            r.Terminou += AoRaposaTerminar;
-            fila.Add(r);
-        }
-
-        // Pontuação máxima = tudo destruído + bônus de todas as raposas menos a primeira.
-        int soma = 0;
-        foreach (var d in FindObjectsByType<Destrutivel>())
-            soma += d.pontos;
-        pontuacaoMaxima = Regras.PontuacaoMaxima(soma, raposas.Length);
-        if (hud != null) hud.AtualizarPontos(0);
-
-        yield return new WaitForSeconds(0.6f);
-        CarregarProxima();
-    }
-
-    Vector2 LugarNaFila(int i) => inicioFila + Vector2.left * espacoFila * i;
-
-    Raposa Prefab(TipoRaposa tipo)
-    {
-        switch (tipo)
-        {
-            case TipoRaposa.Ninja: return prefabNinja != null ? prefabNinja : prefabNormal;
-            case TipoRaposa.Bomba: return prefabBomba != null ? prefabBomba : prefabNormal;
-            default: return prefabNormal;
-        }
-    }
-
-    void CarregarProxima()
-    {
-        if (Estado != EstadoFase.Jogando || fila.Count == 0) return;
-
-        var r = fila[0];
-        fila.RemoveAt(0);
-        for (int i = 0; i < fila.Count; i++)
-            fila[i].IrParaFila(LugarNaFila(i));
-
-        r.IrParaEstilingue(estilingue.Ancora, 0.45f);
-        estilingue.Carregar(r);
-
-        // A dica da raposa normal só aparece antes do primeiro tiro; a das especiais sempre.
-        if (hud != null) hud.MostrarDica(lancamentos == 0 || r.tipo != TipoRaposa.Normal ? r.dica : "");
-    }
-
-    void OnEnable()
-    {
-        if (estilingue != null) estilingue.Lancou += AoLancar;
-    }
-
-    void OnDisable()
-    {
-        if (estilingue != null) estilingue.Lancou -= AoLancar;
-    }
-
-    void AoLancar(Raposa r)
-    {
-        lancamentos++;
-        // Especiais mantêm a dica no ar ("clique para..."); a normal limpa a tela.
-        if (hud != null && r.tipo == TipoRaposa.Normal) hud.MostrarDica("");
-    }
-
-    void AoRaposaTerminar(Raposa r)
-    {
-        if (hud != null && Estado == EstadoFase.Jogando) hud.MostrarDica("");
-        if (Estado != EstadoFase.Jogando) return;
-        StartCoroutine(DepoisDaRaposa());
-    }
-
-    IEnumerator DepoisDaRaposa()
-    {
-        if (fila.Count > 0)
-        {
-            yield return new WaitForSeconds(0.5f);
-            CarregarProxima();
+            Debug.LogError("GerenciadorFase sem prefab de raposa atacante (atacanteNormal). " +
+                           "Rode o menu Fox Fling > Reconstruir tudo.");
             yield break;
         }
 
-        // Era a última raposa: espera o mundo parar (blocos caindo ainda podem matar alguém).
-        yield return new WaitForSeconds(0.5f);
-        float limite = Time.time + 4f;
-        while (Estado == EstadoFase.Jogando && Time.time < limite && !MundoParado())
-            yield return null;
+        Saldo = saldoInicial;
+        AtualizarSaldo();
 
-        if (Regras.EstadoAposRaposa(inimigos.Count, 0, true) == EstadoFase.Derrota && Estado == EstadoFase.Jogando)
-            StartCoroutine(Derrota());
+        // Os tubarões se registram no Start deles; um quadro depois a lista está completa.
+        yield return null;
+        tubaroesNoInicio = inimigos.Count;
+
+        Loja = gameObject.AddComponent<Loja>();
+        Loja.Configurar(this, catalogo);
+
+        for (LevaAtual = 1; LevaAtual <= levas; LevaAtual++)
+        {
+            yield return Preparar();
+            yield return RodarLeva();
+            if (Estado != EstadoFase.Jogando) yield break; // perdeu
+
+            ConcluirLeva();
+        }
+
+        StartCoroutine(Vitoria());
+    }
+
+    // Loja aberta: espera o jogador clicar em "Iniciar leva".
+    IEnumerator Preparar()
+    {
+        Estado = EstadoFase.Preparando;
+        iniciarPedido = false;
+        Loja.Abrir(mensagemDaLeva + $"Leva {LevaAtual} de {levas}: compre e clique em Iniciar leva (Espaço)");
+        mensagemDaLeva = "";
+
+        while (!iniciarPedido) yield return null;
+
+        Loja.Fechar();
+        Estado = EstadoFase.Jogando;
+    }
+
+    public void IniciarLeva()
+    {
+        if (Estado == EstadoFase.Preparando) iniciarPedido = true;
+    }
+
+    // Gera as raposas da leva, uma a uma, e espera até a leva acabar (ou o jogador perder).
+    IEnumerator RodarLeva()
+    {
+        var leva = Regras.ComporLeva(numeroFase, LevaAtual);
+        float intervalo = Regras.IntervaloEntreRaposas(Regras.NivelDaLeva(numeroFase, LevaAtual));
+
+        porNascer = leva.Length;
+        instanteFimDaLeva = -1f;
+        pontosDaLeva = 0;
+        tubaroesNoInicioDaLeva = inimigos.Count;
+        AtualizarSaldo();
+        AtualizarDica();
+
+        for (int i = 0; i < leva.Length; i++)
+        {
+            if (Estado != EstadoFase.Jogando) yield break;
+
+            Gerar(leva[i]);
+            porNascer--;
+            AtualizarDica();
+
+            if (i < leva.Length - 1)
+                yield return new WaitForSeconds(intervalo);
+        }
+
+        while (Estado == EstadoFase.Jogando)
+        {
+            yield return new WaitForSeconds(0.25f);
+
+            bool levaAcabou = porNascer == 0 && atacantes.Count == 0;
+            if (levaAcabou && instanteFimDaLeva < 0f) instanteFimDaLeva = Time.time;
+            bool parado = levaAcabou && (MundoParado() || Time.time - instanteFimDaLeva > EsperaMaximaFimDaLeva);
+
+            var novo = Regras.EstadoAposOnda(inimigos.Count, porNascer, atacantes.Count, parado);
+            if (novo == EstadoFase.Derrota) StartCoroutine(Derrota());
+            else if (novo == EstadoFase.Vitoria) yield break; // leva sobrevivida
+        }
+    }
+
+    // Sobreviveu à leva: os pontos viram saldo, menos a penalidade pelos tubarões perdidos.
+    void ConcluirLeva()
+    {
+        int perdidos = tubaroesNoInicioDaLeva - inimigos.Count;
+        int ganho = Regras.PontosDaLeva(pontosDaLeva, perdidos, Regras.NivelDaLeva(numeroFase, LevaAtual));
+        Saldo += ganho;
+        Pontos += ganho;
+        pontosDaLeva = 0;
+        AtualizarSaldo();
+
+        mensagemDaLeva = $"Leva {LevaAtual} concluída: +{Regras.FormatarPontos(ganho)} pontos"
+                       + (perdidos > 0 ? $"  ·  tubarões perdidos: {perdidos}" : "") + "\n";
+    }
+
+    RaposaAtacante Prefab(TipoRaposa tipo)
+    {
+        RaposaAtacante p;
+        switch (tipo)
+        {
+            case TipoRaposa.Ninja: p = atacanteNinja; break;
+            case TipoRaposa.Bomba: p = atacanteBomba; break;
+            case TipoRaposa.Grande: p = atacanteGrande; break;
+            default: p = atacanteNormal; break;
+        }
+        return p != null ? p : atacanteNormal;
+    }
+
+    void Gerar(TipoRaposa tipo)
+    {
+        // Nasce em cima do chão, qualquer que seja o tamanho da raposa (raio × escala).
+        var prefab = Prefab(tipo);
+        float raio = prefab.GetComponent<CircleCollider2D>().radius * Mathf.Abs(prefab.transform.localScale.y);
+        var raposa = Instantiate(prefab, new Vector3(xDeEntrada, alturaDoChao + raio + 0.01f, 0f), Quaternion.identity);
+        var colisor = raposa.GetComponent<Collider2D>();
+
+        // As raposas atravessam umas às outras: a leva chega junta na torre em vez de
+        // ficar em fila atrás da primeira.
+        foreach (var outra in atacantes)
+            Physics2D.IgnoreCollision(colisor, outra.GetComponent<Collider2D>());
+
+        raposa.Morreu += AoRaposaMorrer;
+        atacantes.Add(raposa);
+    }
+
+    void AoRaposaMorrer(RaposaAtacante raposa)
+    {
+        atacantes.Remove(raposa);
+        AtualizarDica();
+    }
+
+    void AtualizarDica()
+    {
+        if (hud == null || Estado != EstadoFase.Jogando) return;
+        hud.MostrarDica($"Leva {LevaAtual} de {levas}   ·   Raposas: {RaposasRestantes}   ·   Tubarões: {inimigos.Count}");
+    }
+
+    public void Mensagem(string texto)
+    {
+        if (hud != null) hud.MostrarDica(texto);
     }
 
     bool MundoParado()
@@ -162,43 +254,93 @@ public class GerenciadorFase : MonoBehaviour
     public void InimigoMorreu(Inimigo inimigo)
     {
         inimigos.Remove(inimigo);
-        if (Estado == EstadoFase.Jogando && Regras.EstadoAposRaposa(inimigos.Count, fila.Count, false) == EstadoFase.Vitoria)
-            StartCoroutine(Vitoria());
+        AtualizarDica();
+
+        // Perdeu o último tubarão: a torre caiu, não importa quantas raposas faltem.
+        if (Estado == EstadoFase.Jogando && inimigos.Count == 0 && tubaroesNoInicio > 0)
+            StartCoroutine(Derrota());
     }
 
+    // ---- pontos e loja ----
+
+    // Pontos de raposas derrotadas: ficam "pendentes" até o fim da leva (ver ConcluirLeva).
     public void AdicionarPontos(int pontos, Vector3 onde)
     {
-        if (resultadoMostrado) return;
-        Pontos += pontos;
-        if (hud != null) hud.AtualizarPontos(Pontos);
+        if (resultadoMostrado || pontos <= 0) return;
+        pontosDaLeva += pontos;
+        AtualizarSaldo();
         Efeitos.Pontos(onde, pontos);
     }
+
+    void AtualizarSaldo()
+    {
+        if (hud != null) hud.AtualizarPontos(Saldo, pontosDaLeva);
+        if (Loja != null) Loja.Atualizar();
+    }
+
+    public bool TentarGastar(int valor)
+    {
+        if (valor > Saldo) return false;
+        Saldo -= valor;
+        AtualizarSaldo();
+        return true;
+    }
+
+    // ---- melhorias das armas ----
+    // O nível é por TIPO de arma: melhorar o Estilingue melhora todos os estilingues da fase
+    // (os que já estão no chão e os que forem comprados depois).
+
+    public int NivelDaArma(ItemLoja item) => niveisDasArmas.TryGetValue(item, out int n) ? n : 1;
+
+    public bool PodeMelhorar(ItemLoja item) => item.tipo == TipoItem.Arma && NivelDaArma(item) < item.NivelMaximo;
+
+    // Preço do próximo nível (0 se já está no máximo).
+    public int CustoDaMelhoria(ItemLoja item) => PodeMelhorar(item) ? item.niveis[NivelDaArma(item)].custoMelhoria : 0;
+
+    public bool MelhorarArma(ItemLoja item)
+    {
+        if (!PodeMelhorar(item) || !TentarGastar(CustoDaMelhoria(item))) return false;
+        niveisDasArmas[item] = NivelDaArma(item) + 1;
+        AtualizarSaldo();
+        return true;
+    }
+
+    // A torre = tudo que quebra e não é raposa (blocos, tubarões e armas).
+    IEnumerable<Destrutivel> PecasDaTorre()
+    {
+        foreach (var d in FindObjectsByType<Destrutivel>())
+            if (!(d is RaposaAtacante) && !d.Morto) yield return d;
+    }
+
+    public bool TorreDanificada()
+    {
+        foreach (var d in PecasDaTorre())
+            if (d.Danificado) return true;
+        return false;
+    }
+
+    // Devolve quantas peças foram reparadas.
+    public int RepararTorre()
+    {
+        int n = 0;
+        foreach (var d in PecasDaTorre())
+        {
+            if (!d.Danificado) continue;
+            d.RestaurarVida();
+            n++;
+        }
+        return n;
+    }
+
+    // ---- fim da fase ----
 
     IEnumerator Vitoria()
     {
         Estado = EstadoFase.Vitoria;
         if (hud != null) hud.MostrarDica("");
+        yield return new WaitForSeconds(0.6f);
 
-        // Deixa os blocos terminarem de cair (e pontuarem) antes do bônus.
-        yield return new WaitForSeconds(1.5f);
-
-        var sobraram = new List<Raposa>();
-        var noEstilingue = estilingue.Descarregar();
-        if (noEstilingue != null) sobraram.Add(noEstilingue);
-        sobraram.AddRange(fila);
-        fila.Clear();
-
-        foreach (var r in sobraram)
-        {
-            if (r == null) continue;
-            AdicionarPontos(Regras.BonusRaposa, r.transform.position + Vector3.up * 0.5f);
-            Sons.Tocar(Sons.I != null ? Sons.I.estrela : null, 0.6f);
-            Efeitos.Fumaca(r.transform.position, 0.7f);
-            Destroy(r.gameObject);
-            yield return new WaitForSeconds(0.4f);
-        }
-
-        int estrelas = Regras.Estrelas(Pontos, pontuacaoMaxima, true);
+        int estrelas = Regras.EstrelasPorSobreviventes(inimigos.Count, tubaroesNoInicio, true);
         Progresso.RegistrarVitoria(numeroFase, estrelas);
         resultadoMostrado = true;
         Sons.Tocar(Sons.I != null ? Sons.I.vitoria : null);
@@ -209,6 +351,7 @@ public class GerenciadorFase : MonoBehaviour
     {
         Estado = EstadoFase.Derrota;
         resultadoMostrado = true;
+        if (hud != null) hud.MostrarDica("");
         yield return new WaitForSeconds(0.3f);
         Sons.Tocar(Sons.I != null ? Sons.I.derrota : null);
         if (hud != null) hud.MostrarResultado(false, Pontos, 0, false);

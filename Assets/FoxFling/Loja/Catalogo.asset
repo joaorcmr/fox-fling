@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be6a79c6c74c21547aeb12672814ed7b, type: 3}
+  m_Name: Catalogo
+  m_EditorClassIdentifier: FoxFling::CatalogoLoja
+  itens:
+  - {fileID: 11400000, guid: 180c22312c8e1534ea2273cde6822137, type: 2}
+  - {fileID: 11400000, guid: e24114a73385de748895d9fc4bce34c5, type: 2}
+  - {fileID: 11400000, guid: c4290e48fd9762a49afcc075306c4bed, type: 2}
+  - {fileID: 11400000, guid: e456a1d70074b2c408c1bff286d63d86, type: 2}
+  - {fileID: 11400000, guid: 865251c7632998440a0e48fd0616708c, type: 2}
+  - {fileID: 11400000, guid: 9502983303092e4418a834702bcb6489, type: 2}

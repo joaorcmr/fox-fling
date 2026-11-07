@@ -59,12 +59,12 @@ public static class ConstrutorCenas
         fase.numeroFase = def.numero;
         fase.nomeFase = def.nome;
         fase.dificuldade = def.dificuldade;
-        fase.raposas = def.raposas;
-        fase.prefabNormal = ConstrutorPrefabs.RaposaNormal;
-        fase.prefabNinja = ConstrutorPrefabs.RaposaNinja;
-        fase.prefabBomba = ConstrutorPrefabs.RaposaBomba;
-        fase.estilingue = sistemas.GetComponentInChildren<Estilingue>();
+        fase.atacanteNormal = ConstrutorPrefabs.AtacanteNormal;
+        fase.atacanteNinja = ConstrutorPrefabs.AtacanteNinja;
+        fase.atacanteBomba = ConstrutorPrefabs.AtacanteBomba;
+        fase.atacanteGrande = ConstrutorPrefabs.AtacanteGrande;
         fase.hud = sistemas.GetComponentInChildren<Hud>();
+        fase.catalogo = CriarCatalogo();
 
         var estrutura = new GameObject("Estrutura").transform;
         foreach (var peca in def.pecas)

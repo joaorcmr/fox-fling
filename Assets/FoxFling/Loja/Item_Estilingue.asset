@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e59fea6a6855d5248b50792e4738a3a1, type: 3}
+  m_Name: Item_Estilingue
+  m_EditorClassIdentifier: FoxFling::ItemLoja
+  nome: Estilingue
+  descricao: "Atira pedrinhas na raposa mais pr\xF3xima. Barato e r\xE1pido."
+  preco: 300
+  tipo: 2
+  prefab: {fileID: 2564423312182128223, guid: 4e1f47776a28b3c4c89ac2b889efa6e1, type: 3}
+  material: {fileID: 0}
+  tamanho: {x: 0.6, y: 1}
+  niveis:
+  - dano: 10
+    intervalo: 1.1
+    alcance: 5
+    raioArea: 0
+    custoMelhoria: 0
+  - dano: 15
+    intervalo: 0.9
+    alcance: 5.5
+    raioArea: 0
+    custoMelhoria: 250
+  - dano: 22
+    intervalo: 0.7
+    alcance: 6
+    raioArea: 0
+    custoMelhoria: 400

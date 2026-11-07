@@ -23,7 +23,6 @@ public class DefinicaoFase
     public int numero;
     public string nome;
     public string dificuldade;
-    public TipoRaposa[] raposas;
     public List<Peca> pecas = new List<Peca>();
 }
 
@@ -42,8 +41,6 @@ public static class DefinicoesFases
     public const float EscalaGrande = 1.4f;
 
     const TipoMaterial Madeira = TipoMaterial.Madeira, Vidro = TipoMaterial.Vidro, Rocha = TipoMaterial.Rocha;
-
-    static readonly TipoRaposa N = TipoRaposa.Normal, Ni = TipoRaposa.Ninja, B = TipoRaposa.Bomba;
 
     public static DefinicaoFase[] Todas()
     {
@@ -67,7 +64,6 @@ public static class DefinicoesFases
         return new DefinicaoFase
         {
             numero = 1, nome = "Fase 1", dificuldade = "Fácil",
-            raposas = new[] { N, N },
             pecas = p.pecas,
         };
     }
@@ -90,7 +86,6 @@ public static class DefinicoesFases
         return new DefinicaoFase
         {
             numero = 2, nome = "Fase 2", dificuldade = "Médio",
-            raposas = new[] { N, N, Ni },
             pecas = p.pecas,
         };
     }
@@ -111,7 +106,6 @@ public static class DefinicoesFases
         return new DefinicaoFase
         {
             numero = 3, nome = "Fase 3", dificuldade = "Médio",
-            raposas = new[] { N, N, Ni },
             pecas = p.pecas,
         };
     }
@@ -140,12 +134,11 @@ public static class DefinicoesFases
         return new DefinicaoFase
         {
             numero = 4, nome = "Fase 4", dificuldade = "Difícil",
-            raposas = new[] { N, N, Ni, B },
             pecas = p.pecas,
         };
     }
 
-    // Desafio: só 3 raposas contra 5 tubarões em duas fortalezas mistas.
+    // Desafio: duas fortalezas mistas com 5 tubarões.
     static DefinicaoFase Fase5()
     {
         var p = new Planta();
@@ -167,7 +160,6 @@ public static class DefinicoesFases
         return new DefinicaoFase
         {
             numero = 5, nome = "Fase 5", dificuldade = "Desafio",
-            raposas = new[] { N, Ni, B },
             pecas = p.pecas,
         };
     }

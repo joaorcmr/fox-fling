@@ -141,6 +141,91 @@ public static class ConstrutorAssets
         return m;
     }
 
+    // ---- Loja (Assets/FoxFling/Loja) ----
+    // Cada item e o catálogo são assets. Como nos materiais de bloco, os NÚMEROS (preço etc.)
+    // só são escritos quando o asset é criado: depois você pode ajustá-los no Inspector e
+    // "Reconstruir tudo" não desfaz. A lista de itens do catálogo é sempre reescrita.
+    public const string PastaLoja = Raiz + "/Loja";
+
+    public static CatalogoLoja CriarCatalogo()
+    {
+        GarantirPasta(PastaLoja);
+
+        // O prefab do bloco existe depois de "Reconstruir tudo" (ConstrutorPrefabs.Bloco) ou já está em disco.
+        var prefabBloco = ConstrutorPrefabs.Bloco != null
+            ? ConstrutorPrefabs.Bloco
+            : AssetDatabase.LoadAssetAtPath<GameObject>($"{ConstrutorPrefabs.Pasta}/Bloco.prefab");
+        var madeira = MaterialDeBloco(TipoMaterial.Madeira);
+        var rocha = MaterialDeBloco(TipoMaterial.Rocha);
+
+        var reparo = Item("Reparo", "Reparar", "Recupera a vida de todos os blocos e tubarões da torre.", 250, TipoItem.Reparo);
+        var muroMadeira = Item("MuroMadeira", "Muro madeira", "Muro de madeira em pé, barato.", 150, TipoItem.Muro,
+            prefabBloco, madeira, new Vector2(0.4f, 1.2f));
+        var muroRocha = Item("MuroRocha", "Muro rocha", "Muro de rocha: bem mais resistente, e esmaga quem cair.", 450, TipoItem.Muro,
+            prefabBloco, rocha, new Vector2(0.4f, 1.4f));
+        var barricada = Item("Barricada", "Barricada", "Bloco baixo e largo de madeira.", 200, TipoItem.Muro,
+            prefabBloco, madeira, new Vector2(1.2f, 0.6f));
+
+        // As armas: o prefab existe depois de "Reconstruir tudo" (ConstrutorPrefabs.Arma...) ou já está em disco.
+        // Os níveis: o 1º é o que se compra; os seguintes são as melhorias (custoMelhoria = preço para chegar nele).
+        var estilingue = Item("Estilingue", "Estilingue", "Atira pedrinhas na raposa mais próxima. Barato e rápido.", 300, TipoItem.Arma,
+            PrefabDeArma(ConstrutorPrefabs.ArmaEstilingue, "Arma_Estilingue"), null, new Vector2(0.6f, 1.0f), new[]
+            {
+                new NivelArma { dano = 10f, intervalo = 1.1f, alcance = 5.0f },
+                new NivelArma { dano = 15f, intervalo = 0.9f, alcance = 5.5f, custoMelhoria = 250 },
+                new NivelArma { dano = 22f, intervalo = 0.7f, alcance = 6.0f, custoMelhoria = 400 },
+            });
+        var canhao = Item("Canhao", "Canhão", "Bola de canhão com dano em área: acerta as raposas que andam juntas.", 700, TipoItem.Arma,
+            PrefabDeArma(ConstrutorPrefabs.ArmaCanhao, "Arma_Canhao"), null, new Vector2(0.9f, 0.7f), new[]
+            {
+                new NivelArma { dano = 45f, intervalo = 2.4f, alcance = 6.5f, raioArea = 1.2f },
+                new NivelArma { dano = 65f, intervalo = 2.1f, alcance = 7.0f, raioArea = 1.3f, custoMelhoria = 500 },
+                new NivelArma { dano = 90f, intervalo = 1.8f, alcance = 7.5f, raioArea = 1.4f, custoMelhoria = 800 },
+            });
+
+        string caminho = $"{PastaLoja}/Catalogo.asset";
+        var catalogo = AssetDatabase.LoadAssetAtPath<CatalogoLoja>(caminho);
+        if (catalogo == null)
+        {
+            catalogo = ScriptableObject.CreateInstance<CatalogoLoja>();
+            AssetDatabase.CreateAsset(catalogo, caminho);
+        }
+        catalogo.itens = new[] { reparo, muroMadeira, muroRocha, barricada, estilingue, canhao };
+        EditorUtility.SetDirty(catalogo);
+        AssetDatabase.SaveAssets();
+        return catalogo;
+    }
+
+    static GameObject PrefabDeArma(GameObject recemCriado, string arquivo)
+    {
+        return recemCriado != null
+            ? recemCriado
+            : AssetDatabase.LoadAssetAtPath<GameObject>($"{ConstrutorPrefabs.Pasta}/{arquivo}.prefab");
+    }
+
+    // nome, descrição, preço, tipo, tamanho e níveis só na criação; prefab e material (referências) sempre.
+    static ItemLoja Item(string arquivo, string nome, string descricao, int preco, TipoItem tipo,
+        GameObject prefab = null, MaterialBloco material = null, Vector2? tamanho = null, NivelArma[] niveis = null)
+    {
+        string caminho = $"{PastaLoja}/Item_{arquivo}.asset";
+        var item = AssetDatabase.LoadAssetAtPath<ItemLoja>(caminho);
+        if (item == null)
+        {
+            item = ScriptableObject.CreateInstance<ItemLoja>();
+            item.nome = nome;
+            item.descricao = descricao;
+            item.preco = preco;
+            item.tipo = tipo;
+            if (tamanho.HasValue) item.tamanho = tamanho.Value;
+            if (niveis != null) item.niveis = niveis;
+            AssetDatabase.CreateAsset(item, caminho);
+        }
+        item.prefab = prefab;
+        item.material = material;
+        EditorUtility.SetDirty(item);
+        return item;
+    }
+
     public static void GarantirPasta(string caminho)
     {
         if (AssetDatabase.IsValidFolder(caminho)) return;

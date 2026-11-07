@@ -107,22 +107,45 @@ public class RegrasTests
     }
 
     [Test]
-    public void EstadoAposRaposa_UltimoInimigoMorrendoJuntoComAUltimaRaposaEVitoria()
+    public void EstadoAposOnda_PerderOUltimoTubaraoEDerrotaMesmoComRaposasPorVir()
     {
-        Assert.AreEqual(EstadoFase.Vitoria, Regras.EstadoAposRaposa(0, 0, false));
+        Assert.AreEqual(EstadoFase.Derrota, Regras.EstadoAposOnda(0, 3, 2, false));
+        Assert.AreEqual(EstadoFase.Derrota, Regras.EstadoAposOnda(0, 0, 0, true));
     }
 
     [Test]
-    public void EstadoAposRaposa_ContinuaEnquantoHaRaposas()
+    public void EstadoAposOnda_ContinuaEnquantoHaRaposasPorNascerOuEmCampo()
     {
-        Assert.AreEqual(EstadoFase.Jogando, Regras.EstadoAposRaposa(2, 1, false));
+        Assert.AreEqual(EstadoFase.Jogando, Regras.EstadoAposOnda(2, 1, 0, true));
+        Assert.AreEqual(EstadoFase.Jogando, Regras.EstadoAposOnda(2, 0, 1, true));
     }
 
     [Test]
-    public void EstadoAposRaposa_SoPerdeDepoisQueOMundoPara()
+    public void EstadoAposOnda_SoVenceDepoisQueOMundoPara()
     {
-        Assert.AreEqual(EstadoFase.Jogando, Regras.EstadoAposRaposa(1, 0, false));
-        Assert.AreEqual(EstadoFase.Derrota, Regras.EstadoAposRaposa(1, 0, true));
+        Assert.AreEqual(EstadoFase.Jogando, Regras.EstadoAposOnda(1, 0, 0, false));
+        Assert.AreEqual(EstadoFase.Vitoria, Regras.EstadoAposOnda(1, 0, 0, true));
+    }
+
+    [Test]
+    public void EstrelasPorSobreviventes_TodosVivosValeTres()
+    {
+        Assert.AreEqual(3, Regras.EstrelasPorSobreviventes(4, 4, true));
+    }
+
+    [Test]
+    public void EstrelasPorSobreviventes_MetadeOuMaisValeDoisEMenosValeUma()
+    {
+        Assert.AreEqual(2, Regras.EstrelasPorSobreviventes(3, 4, true));
+        Assert.AreEqual(2, Regras.EstrelasPorSobreviventes(2, 4, true));
+        Assert.AreEqual(1, Regras.EstrelasPorSobreviventes(1, 4, true));
+    }
+
+    [Test]
+    public void EstrelasPorSobreviventes_DerrotaOuNinguemVivoNaoDaEstrela()
+    {
+        Assert.AreEqual(0, Regras.EstrelasPorSobreviventes(2, 4, false));
+        Assert.AreEqual(0, Regras.EstrelasPorSobreviventes(0, 4, true));
     }
 
     [Test]

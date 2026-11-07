@@ -161,7 +161,7 @@ public static class ConstrutorUI
         for (int i = 0; i < fases.Length; i++)
             menu.cartoes[i] = CriarCartao(t, fases[i], new Vector2(inicio + i * (largura + espaco), 12f), new Vector2(largura, 120f));
 
-        Texto(t, "Instrucoes", "Arraste a raposa e solte  ·  R reinicia  ·  Esc volta ao menu", 13, TextAnchor.MiddleCenter,
+        Texto(t, "Instrucoes", "Defenda a torre das raposas  ·  R reinicia  ·  Esc volta ao menu", 13, TextAnchor.MiddleCenter,
             Baixo, new Vector2(0f, 70f), new Vector2(560f, 20f), Creme);
         Texto(t, "Creditos", "Joao Ricardo Ribeiro · Insper", 12, TextAnchor.MiddleLeft, BaixoEsq, new Vector2(12f, 12f), new Vector2(260f, 20f), Creme);
 

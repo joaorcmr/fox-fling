@@ -2105,7 +2105,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "Arraste a raposa e solte  \xB7  R reinicia  \xB7  Esc volta ao menu"
+  m_Text: "Defenda a torre das raposas  \xB7  R reinicia  \xB7  Esc volta ao menu"
 --- !u!222 &601819590
 CanvasRenderer:
   m_ObjectHideFlags: 0

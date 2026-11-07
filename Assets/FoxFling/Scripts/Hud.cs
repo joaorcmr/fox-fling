@@ -40,7 +40,12 @@ public class Hud : MonoBehaviour
         var fase = GerenciadorFase.Instance;
         if (fase == null) return;
         if (Input.GetKeyDown(KeyCode.R)) fase.Reiniciar();
-        else if (Input.GetKeyDown(KeyCode.Escape)) fase.IrParaMenu();
+        else if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            // Com um item "na mão" (loja), o Esc só larga o item; sem nada, volta ao menu.
+            if (fase.Loja != null && fase.Loja.CancelarColocacao()) MostrarDica("Colocação cancelada.");
+            else fase.IrParaMenu();
+        }
     }
 
     public void Configurar(string nomeFase, string dificuldade)
@@ -48,9 +53,11 @@ public class Hud : MonoBehaviour
         textoFase.text = $"{nomeFase} · {dificuldade}";
     }
 
-    public void AtualizarPontos(int pontos)
+    // Saldo da loja; "pendentes" são os pontos da leva em andamento, que só entram no saldo no fim dela.
+    public void AtualizarPontos(int saldo, int pendentes = 0)
     {
-        textoPontos.text = "Pontos: " + Regras.FormatarPontos(pontos);
+        textoPontos.text = "Saldo: " + Regras.FormatarPontos(saldo)
+            + (pendentes > 0 ? "  (+" + Regras.FormatarPontos(pendentes) + ")" : "");
     }
 
     public void MostrarDica(string texto)
@@ -68,7 +75,7 @@ public class Hud : MonoBehaviour
     IEnumerator AnimarResultado(bool venceu, int pontos, int quantasEstrelas, bool temProxima)
     {
         painelResultado.SetActive(true);
-        tituloResultado.text = venceu ? "Fase concluída!" : "Ops! Acabaram as raposas";
+        tituloResultado.text = venceu ? "A torre resistiu!" : "Os tubarões caíram!";
         botaoProxima.gameObject.SetActive(venceu && temProxima);
         foreach (var e in estrelas) e.sprite = estrelaVazia;
 
