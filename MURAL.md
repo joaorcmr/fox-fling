@@ -1,3 +1,10 @@
+## 2026-11-07 · Regra de posição para colocar itens no chão
+- **Issue:** #3 (a #7 reaproveita)
+- **O que mudou:** `Regras.XDaColocacao(xDoMouse, largura)` calcula o x onde o item colocado fica: o do mouse "grudado" numa grade de 0,25 e sem sair da faixa permitida (de x = -6 a x = 7,4, contando a largura do item). Constantes `PassoDaColocacao`, `ColocacaoXMin` e `ColocacaoXMax`.
+- **Arquivos:** `Assets/FoxFling/Scripts/Regras.cs`, `Assets/FoxFling/Tests/EditMode/ColocacaoTests.cs` (novo, com `.meta`).
+- **Por quê / como testar:** muros (issue #3) e armas (issue #7) são colocados no chão, e essa conta fica pura para ser testada. No Test Runner (EditMode) rodam os 4 testes novos de `ColocacaoTests`.
+- **Atenção:** ainda não usada pelo jogo; o commit seguinte liga na loja.
+
 ## 2026-11-07 · Loja, saldo e preparação entre as levas
 - **Issue:** #4
 - **O que mudou:** a fase agora tem um ciclo: **preparar** (loja aberta, as raposas não entram) → o jogador clica em **Iniciar leva** (ou aperta Espaço) → **leva** → ganha os pontos (`Regras.PontosDaLeva`) → prepara de novo. O saldo aparece no canto do HUD ("Saldo: 500", e "(+120)" com os pontos pendentes da leva em andamento); cada fase começa com 500 (`saldoInicial`). A loja (`Loja.cs`) é uma barra no pé da tela, em cima da faixa de terra, com um botão por item do catálogo e o "Iniciar leva"; ela é montada por código quando a fase começa, reaproveitando o estilo dos botões do HUD. Itens e catálogo são assets (`ItemLoja`, `CatalogoLoja`, em `Assets/FoxFling/Loja`), com o preço ajustável no Inspector. Primeiro item: **Reparar** (250), que devolve a vida cheia de todos os blocos e tubarões (e o sprite sem rachaduras); se não houver nada danificado, não cobra. Só as raposas derrotadas dão pontos; a tela de resultado mostra o total ganho nas levas. O `GerenciadorFase` ganhou `catalogo`, `saldoInicial`, `Saldo`, `TentarGastar`, `TorreDanificada` e `RepararTorre`.

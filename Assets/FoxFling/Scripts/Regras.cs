@@ -121,6 +121,20 @@ public static class Regras
         return Mathf.Max(0, bruto);
     }
 
+    // ---- Colocar coisas no chão (issues #3 e #7) ----
+    // Muros e armas são colocados no chão, em posições de uma grade, dentro desta faixa:
+    // do lado esquerdo (por onde as raposas chegam) até o fim da área das estruturas.
+    public const float PassoDaColocacao = 0.25f;
+    public const float ColocacaoXMin = -6f, ColocacaoXMax = 7.4f;
+
+    // O x onde o item fica: o do mouse "grudado" na grade e sem sair da faixa (a largura
+    // conta para o item inteiro caber).
+    public static float XDaColocacao(float xDoMouse, float largura)
+    {
+        float x = Mathf.Round(xDoMouse / PassoDaColocacao) * PassoDaColocacao;
+        return Mathf.Clamp(x, ColocacaoXMin + largura / 2f, ColocacaoXMax - largura / 2f);
+    }
+
     // ---- Níveis e levas (issue #5) ----
     // Cada fase tem LevasPorFase levas seguidas. O "nível" conta as levas de todas as
     // fases (fase 1 leva 1 = nível 1; fase 5 leva 3 = nível 15): quanto maior, mais raposas
