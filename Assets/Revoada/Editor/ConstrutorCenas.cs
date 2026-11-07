@@ -64,6 +64,7 @@ public static class ConstrutorCenas
         controles.circuloFantasma = ConstrutorPrefabs.Circulo(controles.transform, "CirculoFantasma");
 
         ConstrutorUI.CriarHud(null, jogo, controles, jogo.porcos);
+        visuais.controles = controles;
 
         EditorSceneManager.SaveScene(cena, CenaJogo);
     }

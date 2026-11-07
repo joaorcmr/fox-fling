@@ -9,6 +9,10 @@ public class VisualPorco : MonoBehaviour
     public SpriteRenderer arma;
     public SpriteRenderer acessorio;
     public CirculoAlcance alcance;
+    public SpriteRenderer[] pontos;   // bolinhas de nível ●●○
+    public Sprite pontoCheio;
+    public Sprite pontoVazio;
+    public SpriteRenderer nota;       // ♪ quando está dentro da aura de um Tamboreiro
 
     [Header("Estado ao vivo (só leitura, para ver no Inspector durante o Play)")]
     public EspeciePorco especie;
@@ -71,10 +75,17 @@ public class VisualPorco : MonoBehaviour
         corpo.transform.localScale = new Vector3(achata, 1f / achata, 1f);
         corpo.transform.localPosition = new Vector3(0f, altura, 0f);
 
-        if (p.Especializacao >= 0 && tipo != null)
-            acessorio.sprite = p.Especializacao == 0 ? tipo.acessorioA : tipo.acessorioB;
+        acessorio.sprite = p.Especializacao >= 0 && tipo != null ? (p.Especializacao == 0 ? tipo.acessorioA : tipo.acessorioB) : null;
         acessorio.transform.localPosition = corpo.transform.localPosition;
         acessorio.flipX = corpo.flipX;
+
+        for (int i = 0; i < pontos.Length; i++)
+            pontos[i].sprite = i < Mathf.Min(p.Nivel, 3) ? pontoCheio : pontoVazio;
+
+        bool fortalecido = p.MultCadencia > 1.001f || p.MultAlcance > 1.001f;
+        nota.enabled = fortalecido;
+        if (fortalecido)
+            nota.transform.localPosition = new Vector3(0.4f, 0.55f + Mathf.Sin(Time.time * 4f + p.Id) * 0.06f, 0f);
 
         if (alcance.Visivel) alcance.Mostrar(p.Posicao, p.Alcance, alcance.Cor);
 

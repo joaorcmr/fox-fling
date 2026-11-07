@@ -33,6 +33,49 @@ public class Jogo : MonoBehaviour
 
     void FixedUpdate() => Sim.Passo();
 
+    // ------------------------------------------------------------------
+    // Tempo: pausa e velocidade são só o Time.timeScale do Unity. Com 2× ou 3×
+    // o Unity chama o FixedUpdate 2 ou 3 vezes por quadro; com 0 não chama
+    // nenhuma. Os comandos (comprar, melhorar) continuam funcionando pausado,
+    // porque não dependem do passo.
+    // ------------------------------------------------------------------
+    public int Velocidade { get; private set; } = 1;
+    public bool Pausado { get; private set; }
+
+    public void AlternarPausa()
+    {
+        Pausado = !Pausado;
+        AplicarTempo();
+    }
+
+    public void Pausar(bool pausar)
+    {
+        Pausado = pausar;
+        AplicarTempo();
+    }
+
+    public void ProximaVelocidade()
+    {
+        Velocidade = Velocidade >= 3 ? 1 : Velocidade + 1;
+        AplicarTempo();
+    }
+
+    void AplicarTempo() => Time.timeScale = Pausado ? 0f : Velocidade;
+
+    public void Reiniciar()
+    {
+        Time.timeScale = 1f; // a próxima cena não pode nascer pausada nem acelerada
+        UnityEngine.SceneManagement.SceneManager.LoadScene(gameObject.scene.name);
+    }
+
+    public void IrParaMenu()
+    {
+        Time.timeScale = 1f;
+        // O Menu entra nas Build Settings na Task 10; até lá, volta para o jogo.
+        string cena = Application.CanStreamedLevelBeLoaded("Menu") ? "Menu" : gameObject.scene.name;
+        UnityEngine.SceneManagement.SceneManager.LoadScene(cena);
+    }
+
     public TipoPassaro TipoDe(EspeciePassaro especie)
     {
         foreach (var t in passaros)

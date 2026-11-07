@@ -2,10 +2,14 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-// O mouse no mapa: escolher um porco na loja põe um "fantasma" na ponta do
-// mouse (verde = pode colocar aqui, vermelho = não pode); clicar coloca.
-// Sem fantasma, clicar num porco seleciona. Clique direito ou Esc cancela.
-// Cliques em cima da interface (a barra lateral) são ignorados aqui.
+// O mouse e o teclado no mapa. Escolher um porco na loja põe um "fantasma" na
+// ponta do mouse (verde = pode colocar aqui, vermelho = não pode); clicar
+// coloca. Sem fantasma, clicar num porco seleciona. Clique direito ou Esc
+// cancela; Esc sem nada selecionado abre o menu de pausa. Cliques em cima da
+// interface (a barra lateral) são ignorados aqui.
+//
+// Atalhos: 1–4 escolhem o porco da loja · Espaço solta a onda · P pausa ·
+// F troca a velocidade · U melhora o selecionado · Delete/Backspace vende.
 public class Controles : MonoBehaviour
 {
     static readonly Color Pode = new Color(0.75f, 1f, 0.75f, 0.85f);
@@ -15,6 +19,7 @@ public class Controles : MonoBehaviour
     public Camera cam;
     public SpriteRenderer fantasma;
     public CirculoAlcance circuloFantasma;
+    public MenuPausa menuPausa;
 
     public EspeciePorco? Colocando { get; private set; }
     public Porco Selecionado { get; private set; }
@@ -36,6 +41,12 @@ public class Controles : MonoBehaviour
 
     void Update()
     {
+        if (menuPausa != null && menuPausa.Aberto)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape)) menuPausa.Fechar();
+            return;
+        }
+
         Vector2 mundo = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10f));
         bool sobreUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
 
@@ -51,6 +62,25 @@ public class Controles : MonoBehaviour
         {
             if (Colocando.HasValue) CancelarColocacao();
             else if (Selecionado != null) Selecionar(null);
+            else if (Input.GetKeyDown(KeyCode.Escape) && menuPausa != null) menuPausa.Abrir();
+        }
+
+        Atalhos();
+    }
+
+    void Atalhos()
+    {
+        for (int i = 0; i < jogo.porcos.Length && i < 4; i++)
+            if (Input.GetKeyDown(KeyCode.Alpha1 + i) || Input.GetKeyDown(KeyCode.Keypad1 + i))
+                IniciarColocacao(jogo.porcos[i].dados.especie);
+
+        if (Input.GetKeyDown(KeyCode.Space)) Sim.SoltarOnda();
+        if (Input.GetKeyDown(KeyCode.P)) jogo.AlternarPausa();
+        if (Input.GetKeyDown(KeyCode.F)) jogo.ProximaVelocidade();
+        if (Selecionado != null)
+        {
+            if (Input.GetKeyDown(KeyCode.U)) Avisar(Sim.Melhorar(Selecionado));
+            if (Input.GetKeyDown(KeyCode.Delete) || Input.GetKeyDown(KeyCode.Backspace)) Sim.Vender(Selecionado);
         }
     }
 
@@ -85,8 +115,14 @@ public class Controles : MonoBehaviour
         if (!Colocando.HasValue) return Resultado.Indisponivel;
         var r = Sim.Comprar(Colocando.Value, mundo, out _);
         if (r == Resultado.Ok) CancelarColocacao();
-        else Falhou?.Invoke(r);
+        else Avisar(r);
         return r;
+    }
+
+    // Para a interface avisar quando um comando não deu certo (sem penas etc.).
+    public void Avisar(Resultado r)
+    {
+        if (r != Resultado.Ok) Falhou?.Invoke(r);
     }
 
     public void Selecionar(Porco p)

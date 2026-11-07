@@ -78,6 +78,21 @@ public static class ConstrutorPrefabs
         v.acessorio = Sprite(figura, "Acessorio", null, 3);
         v.alcance = Circulo(raiz.transform, "Alcance");
 
+        // Bolinhas de nível embaixo do porco e a ♪ de quem está numa aura.
+        v.pontoCheio = ConstrutorAssets.Sprite("ponto_nivel");
+        v.pontoVazio = ConstrutorAssets.Sprite("ponto_nivel_vazio");
+        v.pontos = new SpriteRenderer[3];
+        for (int i = 0; i < 3; i++)
+        {
+            v.pontos[i] = Sprite(figura, "Nivel" + (i + 1), v.pontoVazio, 4);
+            v.pontos[i].transform.localPosition = new Vector3((i - 1) * 0.2f, -0.62f, 0f);
+            v.pontos[i].transform.localScale = Vector3.one * 0.75f;
+        }
+        v.nota = Sprite(figura, "Nota", ConstrutorAssets.Sprite("nota"), 5);
+        v.nota.transform.localPosition = new Vector3(0.4f, 0.55f, 0f);
+        v.nota.transform.localScale = Vector3.one * 0.8f;
+        v.nota.enabled = false;
+
         Salvar(raiz, CaminhoPorco);
     }
 

@@ -16,6 +16,9 @@ public class GerenteVisuais : MonoBehaviour
     public VisualPorco prefabPorco;
     public VisualProjetil prefabProjetil;
     public Efeitos efeitos;
+    public Controles controles;
+
+    VisualPorco selecionado;
 
     readonly Dictionary<Passaro, VisualPassaro> passaros = new Dictionary<Passaro, VisualPassaro>();
     readonly Dictionary<Porco, VisualPorco> porcos = new Dictionary<Porco, VisualPorco>();
@@ -65,6 +68,20 @@ public class GerenteVisuais : MonoBehaviour
         };
         sim.ProjetilSumiu += RemoverTiro;
         sim.BombaExplodiu += (centro, raio) => efeitos.Lama(centro, raio);
+        sim.PorcoMelhorado += p =>
+        {
+            efeitos.Brilho(p.Posicao);
+            if (selecionado != null && selecionado.Porco == p) selecionado.MostrarAlcance(true); // o alcance pode ter crescido
+        };
+
+        // O porco selecionado mostra o alcance (ou a aura, no Tamboreiro).
+        if (controles != null)
+            controles.SelecaoMudou += p =>
+            {
+                if (selecionado != null) selecionado.MostrarAlcance(false);
+                selecionado = VisualDe(p);
+                if (selecionado != null) selecionado.MostrarAlcance(true);
+            };
 
         foreach (var p in sim.Passaros) CriarPassaro(p);
         foreach (var p in sim.Porcos) CriarPorco(p);
@@ -97,7 +114,10 @@ public class GerenteVisuais : MonoBehaviour
 
     void RemoverPorco(Porco p)
     {
-        if (porcos.Remove(p, out var v)) poolPorcos.Devolver(v);
+        if (!porcos.Remove(p, out var v)) return;
+        if (v == selecionado) selecionado = null;
+        v.MostrarAlcance(false);
+        poolPorcos.Devolver(v);
     }
 
     void CriarTiro(Projetil t)
