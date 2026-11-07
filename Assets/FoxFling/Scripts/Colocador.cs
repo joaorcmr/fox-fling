@@ -48,11 +48,10 @@ public class Colocador : MonoBehaviour
     void CriarSombra()
     {
         sombra = new GameObject("Sombra de " + item.nome);
-        desenhoDaSombra = sombra.AddComponent<SpriteRenderer>();
-        desenhoDaSombra.sortingOrder = 8;
 
         if (item.tipo == TipoItem.Muro && item.material != null)
         {
+            desenhoDaSombra = sombra.AddComponent<SpriteRenderer>();
             bool vertical = item.tamanho.y > item.tamanho.x && item.material.spriteVertical != null;
             desenhoDaSombra.sprite = vertical ? item.material.spriteVertical : item.material.sprite;
             desenhoDaSombra.drawMode = SpriteDrawMode.Tiled;
@@ -60,10 +59,25 @@ public class Colocador : MonoBehaviour
         }
         else if (item.prefab != null)
         {
-            var original = item.prefab.GetComponent<SpriteRenderer>();
-            if (original != null) desenhoDaSombra.sprite = original.sprite;
-            sombra.transform.localScale = item.prefab.transform.localScale;
+            // Armas: o desenho é um filho do prefab (para a arma ficar em pé no chão); a sombra
+            // copia a posição e a escala dele.
+            var original = item.prefab.GetComponentInChildren<SpriteRenderer>();
+            var filho = new GameObject("Desenho");
+            filho.transform.SetParent(sombra.transform, false);
+            desenhoDaSombra = filho.AddComponent<SpriteRenderer>();
+            if (original != null)
+            {
+                filho.transform.localPosition = original.transform.localPosition;
+                filho.transform.localScale = original.transform.localScale;
+                desenhoDaSombra.sprite = original.sprite;
+            }
         }
+        else
+        {
+            desenhoDaSombra = sombra.AddComponent<SpriteRenderer>();
+        }
+
+        desenhoDaSombra.sortingOrder = 8;
     }
 
     void Update()
@@ -123,6 +137,12 @@ public class Colocador : MonoBehaviour
             // Muro é defesa: as raposas não podem empurrá-lo nem derrubá-lo, só quebrá-lo.
             // (Os blocos da torre continuam livres: a torre desmoronar é parte do jogo.)
             go.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+        }
+        else if (item.tipo == TipoItem.Arma)
+        {
+            // A arma pega os números (dano, alcance...) do item; o nível é da loja.
+            go.GetComponent<Arma>().item = item;
+            go.name = item.nome.Replace(' ', '_');
         }
 
         Sons.Tocar(Sons.I != null ? Sons.I.clique : null);

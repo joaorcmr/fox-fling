@@ -19,3 +19,4 @@ MonoBehaviour:
   prefab: {fileID: 3387469707939042043, guid: 50ed1caef686e4ef686b4dd7d5471ff5, type: 3}
   material: {fileID: 11400000, guid: 3318e44ea85de4386850603796bb82a9, type: 2}
   tamanho: {x: 0.4, y: 1.4}
+  niveis: []

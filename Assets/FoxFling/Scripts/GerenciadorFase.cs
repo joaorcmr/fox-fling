@@ -48,8 +48,12 @@ public class GerenciadorFase : MonoBehaviour
     public int LevaAtual { get; private set; }
     public Loja Loja { get; private set; }
 
+    // As raposas em campo (as armas miram nelas).
+    public IReadOnlyList<RaposaAtacante> Atacantes => atacantes;
+
     readonly List<Inimigo> inimigos = new List<Inimigo>();
     readonly List<RaposaAtacante> atacantes = new List<RaposaAtacante>();
+    readonly Dictionary<ItemLoja, int> niveisDasArmas = new Dictionary<ItemLoja, int>();
     int porNascer;
     int tubaroesNoInicio;
     int tubaroesNoInicioDaLeva;
@@ -282,7 +286,26 @@ public class GerenciadorFase : MonoBehaviour
         return true;
     }
 
-    // A torre = tudo que quebra e não é raposa (blocos e tubarões).
+    // ---- melhorias das armas ----
+    // O nível é por TIPO de arma: melhorar o Estilingue melhora todos os estilingues da fase
+    // (os que já estão no chão e os que forem comprados depois).
+
+    public int NivelDaArma(ItemLoja item) => niveisDasArmas.TryGetValue(item, out int n) ? n : 1;
+
+    public bool PodeMelhorar(ItemLoja item) => item.tipo == TipoItem.Arma && NivelDaArma(item) < item.NivelMaximo;
+
+    // Preço do próximo nível (0 se já está no máximo).
+    public int CustoDaMelhoria(ItemLoja item) => PodeMelhorar(item) ? item.niveis[NivelDaArma(item)].custoMelhoria : 0;
+
+    public bool MelhorarArma(ItemLoja item)
+    {
+        if (!PodeMelhorar(item) || !TentarGastar(CustoDaMelhoria(item))) return false;
+        niveisDasArmas[item] = NivelDaArma(item) + 1;
+        AtualizarSaldo();
+        return true;
+    }
+
+    // A torre = tudo que quebra e não é raposa (blocos, tubarões e armas).
     IEnumerable<Destrutivel> PecasDaTorre()
     {
         foreach (var d in FindObjectsByType<Destrutivel>())

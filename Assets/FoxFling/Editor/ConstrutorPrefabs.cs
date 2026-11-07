@@ -10,6 +10,7 @@ public static class ConstrutorPrefabs
 
     public static Raposa RaposaNormal, RaposaNinja, RaposaBomba;
     public static RaposaAtacante AtacanteNormal, AtacanteNinja, AtacanteBomba, AtacanteGrande;
+    public static GameObject ArmaEstilingue, ArmaCanhao;
     public static GameObject Bloco, Inimigo, InimigoGrande, Sistemas;
 
     // Ordem de desenho (sortingOrder): quem tem número maior aparece na frente.
@@ -46,6 +47,7 @@ public static class ConstrutorPrefabs
         RaposaBomba = CriarRaposa("Raposa_Bomba", typeof(RaposaBomba), TipoRaposa.Bomba, "raposa_bomba", 1.4f,
             "Raposa bomba: clique para explodir (ou espere o pavio)!", new Color(1f, 0.6f, 0.3f, 0.7f));
         CriarAtacantes();
+        CriarArmas();
         Bloco = CriarBloco();
         Inimigo = CriarInimigo("Inimigo", 1f, 20f);
         InimigoGrande = CriarInimigo("Inimigo_Grande", DefinicoesFases.EscalaGrande, 45f);
@@ -164,6 +166,46 @@ public static class ConstrutorPrefabs
         r.impulsoMinimo = 3f;
         r.multiplicadorDano = 6f;
         return Salvar(go, nome).GetComponent<RaposaAtacante>();
+    }
+
+    // As armas de defesa (issue #7). Usam a arte do estilingue antigo (o canhão é o mesmo desenho,
+    // mais largo e azul-acinzentado, enquanto não há uma arte própria). Ficam paradas no chão
+    // (FreezeAll) mas continuam sendo corpos dinâmicos, para as explosões e as raposas
+    // conseguirem machucá-las. Público para dar para criar só elas, sem reconstruir o resto.
+    public static void CriarArmas()
+    {
+        GarantirPasta(Pasta);
+        //                            nome               tamanho (L x A)           vida  cor da arma                        cor do tiro
+        ArmaEstilingue = CriarArma("Arma_Estilingue", new Vector2(0.6f, 1.0f), 80f, Color.white, new Color(0.9f, 0.8f, 0.6f));
+        ArmaCanhao = CriarArma("Arma_Canhao", new Vector2(0.9f, 0.7f), 120f, new Color(0.55f, 0.62f, 0.78f), new Color(0.25f, 0.25f, 0.3f));
+    }
+
+    static GameObject CriarArma(string nome, Vector2 tamanho, float vida, Color cor, Color corDoTiro)
+    {
+        var go = new GameObject(nome);
+
+        var rb = go.AddComponent<Rigidbody2D>();
+        rb.constraints = RigidbodyConstraints2D.FreezeAll;
+
+        var caixa = go.AddComponent<BoxCollider2D>();
+        caixa.size = tamanho;
+        caixa.sharedMaterial = MaterialFisico("Chao", 0.9f, 0f);
+
+        // O desenho fica num filho: o sprite do estilingue tem o pivô na base, então o filho
+        // desce até o pé da arma (o objeto em si fica no centro da área que ela ocupa).
+        var filho = new GameObject("Desenho");
+        filho.transform.SetParent(go.transform, false);
+        var desenho = Desenho(filho, "estilingue", OrdemInimigo);
+        desenho.color = cor;
+        filho.transform.localScale = Vector3.one * (tamanho.y / desenho.sprite.bounds.size.y);
+        filho.transform.localPosition = new Vector3(0f, -tamanho.y / 2f, 0f);
+
+        var arma = go.AddComponent<Arma>();
+        arma.vidaMaxima = vida;
+        arma.impulsoMinimo = 50f; // só dano direto das raposas: encostar nela não conta
+        arma.spriteProjetil = Sprite("ponto");
+        arma.corProjetil = corDoTiro;
+        return Salvar(go, nome);
     }
 
     static GameObject CriarBloco()
