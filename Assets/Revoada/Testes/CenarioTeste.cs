@@ -55,4 +55,11 @@ public static class CenarioTeste
     {
         return new GrupoOnda { especie = e, quantidade = quantidade, intervalo = intervalo, atraso = atraso };
     }
+
+    // Avança a simulação por "segundos" de jogo (em passos fixos de 1/60 s).
+    public static void Avancar(Simulacao s, float segundos)
+    {
+        int passos = Mathf.CeilToInt(segundos / Simulacao.Dt - 1e-3f);
+        for (int i = 0; i < passos; i++) s.Passo();
+    }
 }
