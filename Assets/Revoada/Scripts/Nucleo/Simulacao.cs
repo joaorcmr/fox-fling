@@ -92,10 +92,6 @@ public partial class Simulacao
         if (p.Vida <= 0f) Estourar(p);
     }
 
-    // Quanto a mais rendem as penas de um pássaro estourado neste ponto
-    // (a aura do Tambor das Penas entra aqui).
-    public float BonusPenas(Vector2 posicao) => 1f;
-
     // ------------------------------------------------------------------
     // Consultas para a interface
     // ------------------------------------------------------------------
@@ -177,6 +173,15 @@ public partial class Simulacao
         {
             var p = passaros[i];
             if (!p.Vivo) continue;
+            if (p.TempoLentidao > 0f)
+            {
+                p.TempoLentidao -= Dt;
+                if (p.TempoLentidao <= 0f)
+                {
+                    p.TempoLentidao = 0f;
+                    p.Lentidao = 0f; // a lama secou
+                }
+            }
             p.Distancia += p.Velocidade * Dt;
             if (p.Distancia >= Trilha.Comprimento)
             {
@@ -209,6 +214,11 @@ public partial class Simulacao
         p.Vivo = false;
         int ganhas = Economia.Creditar(p.Dados.penas * Economia.Multiplicador * BonusPenas(p.Posicao));
         PassaroEstourou?.Invoke(p, ganhas);
+
+        // A pata solta os patinhos onde estourou, um pouco espalhados para trás
+        // na trilha e com vida cheia. Eles contam para o fim da onda.
+        for (int k = 0; k < p.Dados.quantidadeFilhos; k++)
+            Nascer(p.Dados.filho, 1f, Mathf.Max(0f, p.Distancia - 0.3f * k));
     }
 
     void TerminarOnda()

@@ -97,6 +97,7 @@ public partial class Simulacao
                 t.Atingidos.Add(p);
                 t.PerfuracaoRestante--;
                 Atingir(p, t.A.dano, t.A.ignoraCouraca);
+                EfeitosDoGolpe(p, t.A);
             }
 
             if (t.PerfuracaoRestante <= 0 || t.DistanciaRestante <= 0f) Sumir(t);
@@ -117,8 +118,36 @@ public partial class Simulacao
             float r = raio + p.Raio;
             if ((p.Posicao - centro).sqrMagnitude > r * r) continue;
             Atingir(p, t.A.dano, true);
+            EfeitosDoGolpe(p, t.A);
         }
         BombaExplodiu?.Invoke(centro, raio);
+    }
+
+    // Lama Grudenta (lentidão) e Barril de Estrume (empurrão), em quem sobreviveu.
+    void EfeitosDoGolpe(Passaro p, Atributos a)
+    {
+        if (!p.Vivo) return;
+        if (a.lentidao > 0f) AplicarLentidao(p, a.lentidao, a.duracaoLentidao);
+        if (a.empurrao > 0f) Empurrar(p, a.empurrao);
+    }
+
+    // Lentidões não se acumulam: vale a mais forte e a mais longa. O chefe fica
+    // no máximo 30% mais lento.
+    public void AplicarLentidao(Passaro p, float lentidao, float duracao)
+    {
+        if (p == null || !p.Vivo || lentidao <= 0f) return;
+        if (p.Dados.chefe) lentidao = Mathf.Min(lentidao, 0.3f);
+        p.Lentidao = Mathf.Max(p.Lentidao, lentidao);
+        p.TempoLentidao = Mathf.Max(p.TempoLentidao, duracao);
+    }
+
+    // Empurra o pássaro para trás na trilha (nunca para antes do começo). O chefe
+    // é pesado demais para ser empurrado.
+    public void Empurrar(Passaro p, float distancia)
+    {
+        if (p == null || !p.Vivo || p.Dados.chefe || distancia <= 0f) return;
+        p.Distancia = Mathf.Max(0f, p.Distancia - distancia);
+        p.Posicao = Trilha.Posicao(p.Distancia);
     }
 
     void Sumir(Projetil t)
