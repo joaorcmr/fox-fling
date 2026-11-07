@@ -76,7 +76,7 @@ componentes do Unity a cada passo. Recurso por recurso:
 | **Input Manager** e `EventSystem.IsPointerOverGameObject` (clique na loja não vaza para o mapa) | `Scripts/Entrada/Controles.cs` |
 | **PlayerPrefs** (recorde, vitórias, dicas vistas, volumes) | `Scripts/Progresso.cs` |
 | **Editor scripting**: menu Revoada (`MenuItem`), `AssetDatabase`, `PrefabUtility`, `EditorSceneManager`, `TextureImporter`, `SerializedObject` | `Editor/` |
-| **Unity Test Framework**: 91 testes EditMode, incluindo os robôs de balanceamento | `Testes/` |
+| **Unity Test Framework**: 93 testes EditMode, incluindo os robôs de balanceamento | `Testes/` |
 | **Build WebGL** (`BuildPipeline`) | `ConstrutorRevoada.BuildWebGL` |
 
 Durante o Play, selecione um pássaro ou um porco na Hierarchy: o Inspector mostra o estado dele ao vivo

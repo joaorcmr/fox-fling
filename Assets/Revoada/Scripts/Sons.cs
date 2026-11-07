@@ -31,6 +31,7 @@ public class Sons : MonoBehaviour
 
     AudioSource[] fontes;
     AudioSource fonteAmbiente, fonteMusica;
+    bool ambienteComecou, musicaComecou;
     int proxima;
     readonly Dictionary<AudioClip, float> ultimaVez = new Dictionary<AudioClip, float>();
 
@@ -44,9 +45,30 @@ public class Sons : MonoBehaviour
         for (int i = 0; i < vozes; i++) fontes[i] = NovaFonte(false);
         fonteAmbiente = NovaFonte(true);
         fonteMusica = NovaFonte(true);
-        Loop(fonteAmbiente, ambiente);
-        Loop(fonteMusica, musica);
+
+        // No navegador (WebGL) o próprio navegador decodifica o áudio, sem
+        // esperar: um Play() aqui chegaria antes do som estar pronto e não
+        // tocaria nada. Então o Awake só pede o carregamento de tudo, e os
+        // loops começam no Update, quando o clipe já carregou. No Editor o
+        // carregamento é na hora e os loops começam logo no primeiro quadro.
+        foreach (var clip in Clipes())
+            if (clip != null) clip.LoadAudioData();
     }
+
+    IEnumerable<AudioClip> Clipes()
+    {
+        if (estouros != null)
+            foreach (var e in estouros) yield return e;
+        yield return tiroEstilingue; yield return tiroArpao; yield return tiroBomba; yield return explosao;
+        yield return compra; yield return upgrade; yield return venda; yield return erro; yield return clique;
+        yield return onda; yield return chefe; yield return torre; yield return vitoria; yield return derrota;
+        yield return ambiente; yield return musica;
+    }
+
+    // A regra do loop, à parte para ser testada (SonsTests): começa uma vez só,
+    // e só quando o clipe terminou de carregar.
+    public static bool PodeComecarLoop(bool jaComecou, bool temClip, AudioDataLoadState estado) =>
+        !jaComecou && temClip && estado == AudioDataLoadState.Loaded;
 
     void OnDestroy()
     {
@@ -62,15 +84,20 @@ public class Sons : MonoBehaviour
         return f;
     }
 
-    static void Loop(AudioSource fonte, AudioClip clip)
+    static void ComecarSePronto(AudioSource fonte, AudioClip clip, ref bool comecou)
     {
-        if (clip == null) return;
+        var estado = clip != null ? clip.loadState : AudioDataLoadState.Unloaded;
+        if (!PodeComecarLoop(comecou, clip != null, estado)) return;
         fonte.clip = clip;
         fonte.Play();
+        comecou = true;
     }
 
     void Update()
     {
+        ComecarSePronto(fonteAmbiente, ambiente, ref ambienteComecou);
+        ComecarSePronto(fonteMusica, musica, ref musicaComecou);
+
         // Pausado, a música abaixa 6 dB (metade do volume) em vez de parar.
         float abaixar = Time.timeScale == 0f ? 0.5f : 1f;
         fonteMusica.volume = volumeMusicaBase * VolumeMusica * abaixar;
@@ -90,6 +117,7 @@ public class Sons : MonoBehaviour
 
     void TocarAqui(AudioClip clip, float volume, float variacaoTom)
     {
+        if (clip.loadState != AudioDataLoadState.Loaded) return; // no navegador, ainda decodificando
         float agora = Time.unscaledTime;
         if (ultimaVez.TryGetValue(clip, out float antes) && agora - antes < intervaloMinimo) return;
         ultimaVez[clip] = agora;
