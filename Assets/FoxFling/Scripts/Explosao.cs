@@ -8,7 +8,8 @@ public static class Explosao
 {
     static readonly HashSet<Rigidbody2D> atingidos = new HashSet<Rigidbody2D>();
 
-    public static void Explodir(Vector2 centro, float raio = 2.2f, float impulso = 14f, float danoMaximo = 120f, GameObject ignorar = null)
+    // poupaAtacantes: a bomba das raposas do tower defense não machuca as próprias raposas.
+    public static void Explodir(Vector2 centro, float raio = 2.2f, float impulso = 14f, float danoMaximo = 120f, GameObject ignorar = null, bool poupaAtacantes = false)
     {
         Efeitos.Explosao(centro, raio);
         Sons.Tocar(Sons.I != null ? Sons.I.explosao : null);
@@ -19,6 +20,7 @@ public static class Explosao
         {
             var corpo = colisor.attachedRigidbody;
             if (corpo == null || corpo.gameObject == ignorar || corpo.bodyType != RigidbodyType2D.Dynamic) continue;
+            if (poupaAtacantes && corpo.GetComponent<RaposaAtacante>() != null) continue;
             if (!atingidos.Add(corpo)) continue; // um corpo com vários colliders só leva um empurrão
 
             // Distância até a borda mais próxima (não até o centro): bloco grande encostado

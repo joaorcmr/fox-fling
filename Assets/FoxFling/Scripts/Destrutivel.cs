@@ -70,13 +70,17 @@ public abstract class Destrutivel : MonoBehaviour
 
     protected virtual void AoMudarVida() { }
 
+    // Quantos pontos o jogador ganha quando isto morre. Por padrão, o campo "pontos";
+    // blocos e tubarões sobrescrevem para 0 (no tower defense só as raposas valem).
+    protected virtual int PontosAoMorrer => pontos;
+
     protected virtual void Morrer()
     {
         if (Morto) return;
         Morto = true;
 
         if (GerenciadorFase.Instance != null)
-            GerenciadorFase.Instance.AdicionarPontos(pontos, transform.position);
+            GerenciadorFase.Instance.AdicionarPontos(PontosAoMorrer, transform.position);
 
         Destroy(gameObject);
     }
