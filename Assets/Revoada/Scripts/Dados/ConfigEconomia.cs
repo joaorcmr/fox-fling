@@ -1,0 +1,8 @@
+using UnityEngine;
+
+// Penas iniciais, vida da Torre, bônus de onda, venda e os níveis do Ninho.
+[CreateAssetMenu(menuName = "Revoada/Economia")]
+public class ConfigEconomia : ScriptableObject
+{
+    public DadosEconomia dados = new DadosEconomia();
+}

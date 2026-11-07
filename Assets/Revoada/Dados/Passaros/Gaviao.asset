@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1c3ef0b685b9479aadf239503d682b6, type: 3}
+  m_Name: Gaviao
+  m_EditorClassIdentifier: Revoada::TipoPassaro
+  dados:
+    especie: 7
+    nome: "Gavi\xE3o-real"
+    vida: 250
+    velocidade: 0.9
+    raio: 0.8
+    danoTorre: 30
+    penas: 100
+    couraca: 0
+    chefe: 1
+    filho: 0
+    quantidadeFilhos: 0
+  sprite: {fileID: 21300000, guid: 1f8af9feef7e14a3f9f74b2caee4d9e8, type: 3}
+  corPenas: {r: 0.6039216, g: 0.6313726, b: 0.65882355, a: 1}
+  tamanho: 1

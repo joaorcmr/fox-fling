@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 // Monta o Revoada inteiro a partir do código: configurações, dados, prefabs e
@@ -11,12 +12,31 @@ public static class ConstrutorRevoada
     public const int Largura = 600, Altura = 480; // regra da disciplina
 
     [MenuItem("Revoada/Reconstruir tudo")]
-    static void ReconstruirTudoPeloMenu() => Debug.Log(ReconstruirTudo());
+    static void ReconstruirTudoPeloMenu()
+    {
+        if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
+        Debug.Log(ReconstruirTudo());
+    }
 
+    // Gera tudo a partir do código. As cenas são sobrescritas; os números dos
+    // assets de dados que já existem são mantidos.
     public static string ReconstruirTudo()
     {
         ConfigurarProjeto();
-        return "Revoada: projeto configurado";
+        ConstrutorAssets.ImportarArte();
+        ConstrutorDados.GarantirDados(false);
+        ConstrutorPrefabs.Tudo();
+        ConstrutorCenas.Tudo();
+        AssetDatabase.SaveAssets();
+        var d = ConstrutorDados.Carregar();
+        return $"Revoada reconstruído: {d.passaros.Count} pássaros, {d.porcos.Count} porcos, {d.ondas.Count} ondas";
+    }
+
+    [MenuItem("Revoada/Restaurar números padrão")]
+    static void RestaurarNumerosPadrao()
+    {
+        ConstrutorDados.GarantirDados(true);
+        Debug.Log("Revoada: números padrão restaurados (Assets/Revoada/Dados)");
     }
 
     public static void ConfigurarProjeto()
@@ -32,8 +52,28 @@ public static class ConstrutorRevoada
         EditorSettings.defaultBehaviorMode = EditorBehaviorMode.Mode2D;
 
         // A simulação anda em passos de 1/60 s; o FixedUpdate do Unity no mesmo
-        // ritmo faz cada FixedUpdate ser exatamente um passo do jogo.
-        Time.fixedDeltaTime = 1f / 60f;
+        // ritmo faz cada FixedUpdate ser exatamente um passo do jogo. O Unity 6
+        // guarda o passo fixo como fração (m_Count / m_Rate) no TimeManager;
+        // mudar Time.fixedDeltaTime fora do Play não chega ao arquivo, então a
+        // fração é escrita direto (141120000 / 60 = 2352000).
+        var tempo = AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/TimeManager.asset");
+        if (tempo.Length > 0)
+        {
+            var so = new SerializedObject(tempo[0]);
+            var contagem = so.FindProperty("Fixed Timestep.m_Count");
+            var numerador = so.FindProperty("Fixed Timestep.m_Rate.m_Numerator");
+            var denominador = so.FindProperty("Fixed Timestep.m_Rate.m_Denominator");
+            if (contagem != null && numerador != null && denominador != null)
+            {
+                numerador.longValue = 141120000;
+                denominador.longValue = 1;
+                contagem.longValue = 141120000 / 60;
+                so.ApplyModifiedPropertiesWithoutUndo();
+                // Configurações do projeto só vão para o disco se marcadas como sujas.
+                EditorUtility.SetDirty(tempo[0]);
+                AssetDatabase.SaveAssetIfDirty(tempo[0]);
+            }
+        }
 
         ConfigurarGameView();
     }
