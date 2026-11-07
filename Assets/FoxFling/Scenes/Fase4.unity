@@ -969,13 +969,13 @@ MonoBehaviour:
   nomeFase: Fase 4
   dificuldade: "Dif\xEDcil"
   raposas: 00000000000000000100000002000000i
-  prefabNormal: {fileID: 1282143549153078504, guid: 7e5319f0cd6db4ec59ba7acc50009522, type: 3}
-  prefabNinja: {fileID: 278874465981248700, guid: 94c9f4511a6174befad60461287df154, type: 3}
-  prefabBomba: {fileID: 6897525767638045152, guid: a9b548533d5a3465eacd58a1c59dd51e, type: 3}
-  estilingue: {fileID: 2106911480}
+  atacanteNormal: {fileID: 1913980661851314979, guid: 459d06c45e514a943988f0b229496f4f, type: 3}
+  atacanteNinja: {fileID: 4566116511113776556, guid: 9396fdc68651a644f9f7e6ff64e3f06c, type: 3}
+  atacanteBomba: {fileID: 2536882794081317258, guid: 79ac50ae71e32474a9201e1a2e0daf92, type: 3}
   hud: {fileID: 2106911479}
-  inicioFila: {x: -6.2, y: -4.17}
-  espacoFila: 0.55
+  tempoAntesDaLeva: 2.5
+  intervaloEntreRaposas: 1.6
+  pontoDeEntrada: {x: -8.3, y: -4.17}
 --- !u!4 &853627079
 Transform:
   m_ObjectHideFlags: 0
@@ -1707,17 +1707,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cc917e5fb033496582b422d78e37d35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: FoxFling::Hud
---- !u!114 &2106911480 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4081198644156826142, guid: 27599c18442c14ab6851944c75a608c0, type: 3}
-  m_PrefabInstance: {fileID: 2106911478}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b9c383d3f51b4089aaeca397138c4fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: FoxFling::Estilingue
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
