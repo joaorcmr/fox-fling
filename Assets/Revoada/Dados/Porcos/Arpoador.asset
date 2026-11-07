@@ -1,0 +1,141 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a613fb7d3d6304e989d4f8f15c73312c, type: 3}
+  m_Name: Arpoador
+  m_EditorClassIdentifier: Revoada::TipoPorco
+  dados:
+    especie: 1
+    nome: Arpoador
+    papel: "O arp\xE3o atravessa a fila: rende nas retas longas."
+    custo: 220
+    raio: 0.45
+    nivel1:
+      tiro: 2
+      dano: 2
+      alcance: 5
+      recarga: 1.6
+      velocidadeProjetil: 14
+      raioProjetil: 0.18
+      perfura: 4
+      alcanceVoo: 1.6
+      tiros: 1
+      abertura: 0
+      raioArea: 0
+      lentidao: 0
+      duracaoLentidao: 0
+      empurrao: 0
+      ignoraCouraca: 0
+      raioAura: 0
+      bonusCadencia: 0
+      bonusAlcance: 0
+      bonusPenas: 0
+    nivel2:
+      nome: "Arp\xE3o Comprido"
+      descricao: "Atravessa 7 e voa at\xE9 2\xD7 o alcance."
+      custo: 160
+      atributos:
+        tiro: 2
+        dano: 2
+        alcance: 5
+        recarga: 1.6
+        velocidadeProjetil: 14
+        raioProjetil: 0.18
+        perfura: 7
+        alcanceVoo: 2
+        tiros: 1
+        abertura: 0
+        raioArea: 0
+        lentidao: 0
+        duracaoLentidao: 0
+        empurrao: 0
+        ignoraCouraca: 0
+        raioAura: 0
+        bonusCadencia: 0
+        bonusAlcance: 0
+        bonusPenas: 0
+    nivel3:
+      nome: Ponta de Ferro
+      descricao: "Dano 3 e ignora a coura\xE7a."
+      custo: 260
+      atributos:
+        tiro: 2
+        dano: 3
+        alcance: 5
+        recarga: 1.6
+        velocidadeProjetil: 14
+        raioProjetil: 0.18
+        perfura: 7
+        alcanceVoo: 2
+        tiros: 1
+        abertura: 0
+        raioArea: 0
+        lentidao: 0
+        duracaoLentidao: 0
+        empurrao: 0
+        ignoraCouraca: 1
+        raioAura: 0
+        bonusCadencia: 0
+        bonusAlcance: 0
+        bonusPenas: 0
+    especializacaoA:
+      nome: "Arp\xE3o Gigante"
+      descricao: "Atravessa 20, dano 6, arp\xE3o mais largo."
+      custo: 750
+      atributos:
+        tiro: 2
+        dano: 6
+        alcance: 5
+        recarga: 1.6
+        velocidadeProjetil: 14
+        raioProjetil: 0.35
+        perfura: 20
+        alcanceVoo: 2
+        tiros: 1
+        abertura: 0
+        raioArea: 0
+        lentidao: 0
+        duracaoLentidao: 0
+        empurrao: 0
+        ignoraCouraca: 1
+        raioAura: 0
+        bonusCadencia: 0
+        bonusAlcance: 0
+        bonusPenas: 0
+    especializacaoB:
+      nome: "Arp\xE3o Ligeiro"
+      descricao: "Atira muito mais r\xE1pido (recarga 0,6 s)."
+      custo: 650
+      atributos:
+        tiro: 2
+        dano: 3
+        alcance: 5
+        recarga: 0.6
+        velocidadeProjetil: 14
+        raioProjetil: 0.18
+        perfura: 7
+        alcanceVoo: 2
+        tiros: 1
+        abertura: 0
+        raioArea: 0
+        lentidao: 0
+        duracaoLentidao: 0
+        empurrao: 0
+        ignoraCouraca: 1
+        raioAura: 0
+        bonusCadencia: 0
+        bonusAlcance: 0
+        bonusPenas: 0
+  corpo: {fileID: 21300000, guid: 5d71f9361d9f74fbb8b34410edec8f82, type: 3}
+  arma: {fileID: 21300000, guid: 3f3bbde96fc604217b93e9a93f4ce8c9, type: 3}
+  projetil: {fileID: 21300000, guid: 7fead58ea35194cfba0282ee047684d9, type: 3}
+  acessorioA: {fileID: 21300000, guid: f9a14635350c44e9f8742b74d9a522c2, type: 3}
+  acessorioB: {fileID: 21300000, guid: 8d2223d955d32411c873bd4c20a44d33, type: 3}

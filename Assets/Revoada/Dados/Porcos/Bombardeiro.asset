@@ -1,0 +1,141 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a613fb7d3d6304e989d4f8f15c73312c, type: 3}
+  m_Name: Bombardeiro
+  m_EditorClassIdentifier: Revoada::TipoPorco
+  dados:
+    especie: 2
+    nome: Bombardeiro
+    papel: "Bomba de lama em \xE1rea: bandos, curvas e coura\xE7a."
+    custo: 350
+    raio: 0.45
+    nivel1:
+      tiro: 3
+      dano: 2
+      alcance: 3.5
+      recarga: 1.5
+      velocidadeProjetil: 8
+      raioProjetil: 0.2
+      perfura: 1
+      alcanceVoo: 1
+      tiros: 1
+      abertura: 0
+      raioArea: 1
+      lentidao: 0
+      duracaoLentidao: 0
+      empurrao: 0
+      ignoraCouraca: 0
+      raioAura: 0
+      bonusCadencia: 0
+      bonusAlcance: 0
+      bonusPenas: 0
+    nivel2:
+      nome: Barril Maior
+      descricao: "Explos\xE3o maior (raio 1,4)."
+      custo: 220
+      atributos:
+        tiro: 3
+        dano: 2
+        alcance: 3.5
+        recarga: 1.5
+        velocidadeProjetil: 8
+        raioProjetil: 0.2
+        perfura: 1
+        alcanceVoo: 1
+        tiros: 1
+        abertura: 0
+        raioArea: 1.4
+        lentidao: 0
+        duracaoLentidao: 0
+        empurrao: 0
+        ignoraCouraca: 0
+        raioAura: 0
+        bonusCadencia: 0
+        bonusAlcance: 0
+        bonusPenas: 0
+    nivel3:
+      nome: Lama Grudenta
+      descricao: Atingidos ficam 40% mais lentos por 1,5 s.
+      custo: 300
+      atributos:
+        tiro: 3
+        dano: 2
+        alcance: 3.5
+        recarga: 1.5
+        velocidadeProjetil: 8
+        raioProjetil: 0.2
+        perfura: 1
+        alcanceVoo: 1
+        tiros: 1
+        abertura: 0
+        raioArea: 1.4
+        lentidao: 0.4
+        duracaoLentidao: 1.5
+        empurrao: 0
+        ignoraCouraca: 0
+        raioAura: 0
+        bonusCadencia: 0
+        bonusAlcance: 0
+        bonusPenas: 0
+    especializacaoA:
+      nome: Chuva de Lama
+      descricao: Atira o dobro (recarga 0,7 s).
+      custo: 850
+      atributos:
+        tiro: 3
+        dano: 2
+        alcance: 3.5
+        recarga: 0.7
+        velocidadeProjetil: 8
+        raioProjetil: 0.2
+        perfura: 1
+        alcanceVoo: 1
+        tiros: 1
+        abertura: 0
+        raioArea: 1.4
+        lentidao: 0.4
+        duracaoLentidao: 1.5
+        empurrao: 0
+        ignoraCouraca: 0
+        raioAura: 0
+        bonusCadencia: 0
+        bonusAlcance: 0
+        bonusPenas: 0
+    especializacaoB:
+      nome: Barril de Estrume
+      descricao: "Dano 7, raio 1,8 e empurra os p\xE1ssaros para tr\xE1s."
+      custo: 800
+      atributos:
+        tiro: 3
+        dano: 7
+        alcance: 3.5
+        recarga: 1.5
+        velocidadeProjetil: 8
+        raioProjetil: 0.2
+        perfura: 1
+        alcanceVoo: 1
+        tiros: 1
+        abertura: 0
+        raioArea: 1.8
+        lentidao: 0.4
+        duracaoLentidao: 1.5
+        empurrao: 1
+        ignoraCouraca: 0
+        raioAura: 0
+        bonusCadencia: 0
+        bonusAlcance: 0
+        bonusPenas: 0
+  corpo: {fileID: 21300000, guid: 2d4803f77113e4b0d9618cf1a82f1933, type: 3}
+  arma: {fileID: 21300000, guid: 2b6fb73c9103d427b9053fe0945221ef, type: 3}
+  projetil: {fileID: 21300000, guid: 03e6e10185f174af1b19a90cd7dde67b, type: 3}
+  acessorioA: {fileID: 21300000, guid: 0f5a51352eea44d25af6faf05eff95da, type: 3}
+  acessorioB: {fileID: 21300000, guid: ef4946b16032f4b33bb4b39d83416bd3, type: 3}

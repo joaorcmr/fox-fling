@@ -6,21 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/FoxFling/Scenes/Menu.unity
-    guid: 78baa95b187a54b13ba26eeb8f6c51f0
+    path: Assets/Revoada/Cenas/Menu.unity
+    guid: 31ed6889e02d945848d93a9cec1efba3
   - enabled: 1
-    path: Assets/FoxFling/Scenes/Fase1.unity
-    guid: fd94d322049a24cbdae05982d188bd7e
-  - enabled: 1
-    path: Assets/FoxFling/Scenes/Fase2.unity
-    guid: cd709450e6c204ea69a159f038b3b5b1
-  - enabled: 1
-    path: Assets/FoxFling/Scenes/Fase3.unity
-    guid: 500aa5e2b45eb445694a651917efe9b5
-  - enabled: 1
-    path: Assets/FoxFling/Scenes/Fase4.unity
-    guid: edc41016af4c446bc8775afef6feaaf8
-  - enabled: 1
-    path: Assets/FoxFling/Scenes/Fase5.unity
-    guid: 7f9c2070d3af248e19ed428bd1b83275
+    path: Assets/Revoada/Cenas/Jogo.unity
+    guid: c3b00bd7ebfbe499cbe1268d0b1e28ac
   m_configObjects: {}

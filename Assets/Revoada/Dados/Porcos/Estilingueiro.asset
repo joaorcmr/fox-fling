@@ -1,0 +1,141 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a613fb7d3d6304e989d4f8f15c73312c, type: 3}
+  m_Name: Estilingueiro
+  m_EditorClassIdentifier: Revoada::TipoPorco
+  dados:
+    especie: 0
+    nome: Estilingueiro
+    papel: "Barato e r\xE1pido: segura o come\xE7o."
+    custo: 120
+    raio: 0.45
+    nivel1:
+      tiro: 1
+      dano: 1
+      alcance: 3
+      recarga: 0.8
+      velocidadeProjetil: 12
+      raioProjetil: 0.15
+      perfura: 1
+      alcanceVoo: 1.3
+      tiros: 1
+      abertura: 0
+      raioArea: 0
+      lentidao: 0
+      duracaoLentidao: 0
+      empurrao: 0
+      ignoraCouraca: 0
+      raioAura: 0
+      bonusCadencia: 0
+      bonusAlcance: 0
+      bonusPenas: 0
+    nivel2:
+      nome: "El\xE1stico Refor\xE7ado"
+      descricao: "Atira mais r\xE1pido (recarga 0,55 s)."
+      custo: 100
+      atributos:
+        tiro: 1
+        dano: 1
+        alcance: 3
+        recarga: 0.55
+        velocidadeProjetil: 12
+        raioProjetil: 0.15
+        perfura: 1
+        alcanceVoo: 1.3
+        tiros: 1
+        abertura: 0
+        raioArea: 0
+        lentidao: 0
+        duracaoLentidao: 0
+        empurrao: 0
+        ignoraCouraca: 0
+        raioAura: 0
+        bonusCadencia: 0
+        bonusAlcance: 0
+        bonusPenas: 0
+    nivel3:
+      nome: Pedra Afiada
+      descricao: Dano 2 e alcance 3,5.
+      custo: 180
+      atributos:
+        tiro: 1
+        dano: 2
+        alcance: 3.5
+        recarga: 0.55
+        velocidadeProjetil: 12
+        raioProjetil: 0.15
+        perfura: 1
+        alcanceVoo: 1.3
+        tiros: 1
+        abertura: 0
+        raioArea: 0
+        lentidao: 0
+        duracaoLentidao: 0
+        empurrao: 0
+        ignoraCouraca: 0
+        raioAura: 0
+        bonusCadencia: 0
+        bonusAlcance: 0
+        bonusPenas: 0
+    especializacaoA:
+      nome: Rajada
+      descricao: Solta 3 pedrinhas em leque.
+      custo: 500
+      atributos:
+        tiro: 1
+        dano: 2
+        alcance: 3.5
+        recarga: 0.55
+        velocidadeProjetil: 12
+        raioProjetil: 0.15
+        perfura: 1
+        alcanceVoo: 1.3
+        tiros: 3
+        abertura: 15
+        raioArea: 0
+        lentidao: 0
+        duracaoLentidao: 0
+        empurrao: 0
+        ignoraCouraca: 0
+        raioAura: 0
+        bonusCadencia: 0
+        bonusAlcance: 0
+        bonusPenas: 0
+    especializacaoB:
+      nome: Mira Certeira
+      descricao: Alcance 5,5, dano 4, atravessa 2.
+      custo: 550
+      atributos:
+        tiro: 1
+        dano: 4
+        alcance: 5.5
+        recarga: 0.55
+        velocidadeProjetil: 12
+        raioProjetil: 0.15
+        perfura: 2
+        alcanceVoo: 1.3
+        tiros: 1
+        abertura: 0
+        raioArea: 0
+        lentidao: 0
+        duracaoLentidao: 0
+        empurrao: 0
+        ignoraCouraca: 0
+        raioAura: 0
+        bonusCadencia: 0
+        bonusAlcance: 0
+        bonusPenas: 0
+  corpo: {fileID: 21300000, guid: d8d419705c224430b86b7dc361f0596e, type: 3}
+  arma: {fileID: 21300000, guid: 377ae6b4f4320498895aff12e569f6b7, type: 3}
+  projetil: {fileID: 21300000, guid: c93d2740c50194225bbc1a34e683a5bb, type: 3}
+  acessorioA: {fileID: 21300000, guid: b431a9cf416424ba493fb7438df12438, type: 3}
+  acessorioB: {fileID: 21300000, guid: 2564bb5cde53b4e09a660e140449d25c, type: 3}

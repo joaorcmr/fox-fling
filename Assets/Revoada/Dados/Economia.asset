@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f330322e1670643028d67d58f21bb611, type: 3}
+  m_Name: Economia
+  m_EditorClassIdentifier: Revoada::ConfigEconomia
+  dados:
+    penasIniciais: 300
+    vidaInicial: 100
+    bonusOndaBase: 25
+    bonusOndaPorOnda: 5
+    fracaoVenda: 0.7
+    esperaAuto: 2
+    ninho:
+    - multiplicador: 1.25
+      custo: 120
+    - multiplicador: 1.5
+      custo: 250
+    - multiplicador: 1.75
+      custo: 450
+    - multiplicador: 2
+      custo: 750
+    - multiplicador: 2.5
+      custo: 1200

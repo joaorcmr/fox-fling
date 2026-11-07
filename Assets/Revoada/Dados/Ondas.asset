@@ -1,0 +1,345 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af8649ab32a35492caebd9f7b6e7df91, type: 3}
+  m_Name: Ondas
+  m_EditorClassIdentifier: Revoada::ListaOndas
+  ondas:
+  - grupos:
+    - especie: 0
+      quantidade: 12
+      intervalo: 0.9
+      atraso: 0
+      multiplicadorVida: 1
+  - grupos:
+    - especie: 0
+      quantidade: 18
+      intervalo: 0.7
+      atraso: 0
+      multiplicadorVida: 1
+  - grupos:
+    - especie: 0
+      quantidade: 15
+      intervalo: 0.6
+      atraso: 0
+      multiplicadorVida: 1
+    - especie: 1
+      quantidade: 5
+      intervalo: 1.2
+      atraso: 4
+      multiplicadorVida: 1
+  - grupos:
+    - especie: 0
+      quantidade: 20
+      intervalo: 0.5
+      atraso: 0
+      multiplicadorVida: 1
+    - especie: 1
+      quantidade: 8
+      intervalo: 1
+      atraso: 5
+      multiplicadorVida: 1
+  - grupos:
+    - especie: 1
+      quantidade: 14
+      intervalo: 0.8
+      atraso: 0
+      multiplicadorVida: 1
+    - especie: 0
+      quantidade: 16
+      intervalo: 0.35
+      atraso: 3
+      multiplicadorVida: 1
+  - grupos:
+    - especie: 2
+      quantidade: 6
+      intervalo: 1.5
+      atraso: 0
+      multiplicadorVida: 1
+    - especie: 1
+      quantidade: 18
+      intervalo: 0.7
+      atraso: 2
+      multiplicadorVida: 1
+  - grupos:
+    - especie: 0
+      quantidade: 30
+      intervalo: 0.25
+      atraso: 0
+      multiplicadorVida: 1
+    - especie: 2
+      quantidade: 10
+      intervalo: 0.8
+      atraso: 6
+      multiplicadorVida: 1
+  - grupos:
+    - especie: 3
+      quantidade: 3
+      intervalo: 2.5
+      atraso: 0
+      multiplicadorVida: 1
+    - especie: 1
+      quantidade: 20
+      intervalo: 0.6
+      atraso: 1
+      multiplicadorVida: 1
+  - grupos:
+    - especie: 3
+      quantidade: 6
+      intervalo: 1.8
+      atraso: 0
+      multiplicadorVida: 1
+    - especie: 2
+      quantidade: 12
+      intervalo: 0.7
+      atraso: 3
+      multiplicadorVida: 1
+  - grupos:
+    - especie: 1
+      quantidade: 20
+      intervalo: 0.8
+      atraso: 0
+      multiplicadorVida: 1
+    - especie: 7
+      quantidade: 1
+      intervalo: 1
+      atraso: 4
+      multiplicadorVida: 1
+  - grupos:
+    - especie: 3
+      quantidade: 10
+      intervalo: 1.2
+      atraso: 0
+      multiplicadorVida: 1.08
+    - especie: 0
+      quantidade: 30
+      intervalo: 0.3
+      atraso: 2
+      multiplicadorVida: 1.08
+  - grupos:
+    - especie: 4
+      quantidade: 4
+      intervalo: 2.5
+      atraso: 0
+      multiplicadorVida: 1.16
+    - especie: 1
+      quantidade: 15
+      intervalo: 0.6
+      atraso: 1
+      multiplicadorVida: 1.16
+  - grupos:
+    - especie: 2
+      quantidade: 15
+      intervalo: 0.5
+      atraso: 0
+      multiplicadorVida: 1.24
+    - especie: 3
+      quantidade: 8
+      intervalo: 1.2
+      atraso: 4
+      multiplicadorVida: 1.24
+  - grupos:
+    - especie: 4
+      quantidade: 8
+      intervalo: 1.6
+      atraso: 0
+      multiplicadorVida: 1.3199999
+    - especie: 3
+      quantidade: 10
+      intervalo: 1.2
+      atraso: 2
+      multiplicadorVida: 1.3199999
+  - grupos:
+    - especie: 6
+      quantidade: 3
+      intervalo: 4
+      atraso: 0
+      multiplicadorVida: 1.4
+    - especie: 1
+      quantidade: 20
+      intervalo: 0.5
+      atraso: 1
+      multiplicadorVida: 1.4
+  - grupos:
+    - especie: 6
+      quantidade: 8
+      intervalo: 2.5
+      atraso: 0
+      multiplicadorVida: 1.48
+    - especie: 2
+      quantidade: 25
+      intervalo: 0.45
+      atraso: 2
+      multiplicadorVida: 1.48
+  - grupos:
+    - especie: 4
+      quantidade: 12
+      intervalo: 1.2
+      atraso: 0
+      multiplicadorVida: 1.56
+    - especie: 3
+      quantidade: 12
+      intervalo: 1
+      atraso: 3
+      multiplicadorVida: 1.56
+  - grupos:
+    - especie: 0
+      quantidade: 80
+      intervalo: 0.12
+      atraso: 0
+      multiplicadorVida: 1.64
+    - especie: 2
+      quantidade: 20
+      intervalo: 0.35
+      atraso: 4
+      multiplicadorVida: 1.64
+  - grupos:
+    - especie: 6
+      quantidade: 13
+      intervalo: 1.8
+      atraso: 0
+      multiplicadorVida: 1.72
+    - especie: 4
+      quantidade: 10
+      intervalo: 1.4
+      atraso: 3
+      multiplicadorVida: 1.72
+  - grupos:
+    - especie: 6
+      quantidade: 4
+      intervalo: 3
+      atraso: 0
+      multiplicadorVida: 1.8
+    - especie: 7
+      quantidade: 1
+      intervalo: 1
+      atraso: 3
+      multiplicadorVida: 3.96
+  - grupos:
+    - especie: 3
+      quantidade: 25
+      intervalo: 0.6
+      atraso: 0
+      multiplicadorVida: 1.88
+    - especie: 1
+      quantidade: 30
+      intervalo: 0.3
+      atraso: 2
+      multiplicadorVida: 1.88
+  - grupos:
+    - especie: 6
+      quantidade: 10
+      intervalo: 1.2
+      atraso: 0
+      multiplicadorVida: 1.96
+    - especie: 2
+      quantidade: 30
+      intervalo: 0.35
+      atraso: 3
+      multiplicadorVida: 1.96
+  - grupos:
+    - especie: 4
+      quantidade: 16
+      intervalo: 0.8
+      atraso: 0
+      multiplicadorVida: 2.04
+    - especie: 3
+      quantidade: 20
+      intervalo: 0.7
+      atraso: 2
+      multiplicadorVida: 2.04
+  - grupos:
+    - especie: 6
+      quantidade: 14
+      intervalo: 1
+      atraso: 0
+      multiplicadorVida: 2.12
+    - especie: 0
+      quantidade: 40
+      intervalo: 0.15
+      atraso: 4
+      multiplicadorVida: 2.12
+  - grupos:
+    - especie: 1
+      quantidade: 60
+      intervalo: 0.15
+      atraso: 0
+      multiplicadorVida: 2.2
+    - especie: 2
+      quantidade: 40
+      intervalo: 0.2
+      atraso: 3
+      multiplicadorVida: 2.2
+  - grupos:
+    - especie: 6
+      quantidade: 18
+      intervalo: 0.8
+      atraso: 0
+      multiplicadorVida: 2.28
+    - especie: 4
+      quantidade: 12
+      intervalo: 1
+      atraso: 4
+      multiplicadorVida: 2.28
+  - grupos:
+    - especie: 3
+      quantidade: 30
+      intervalo: 0.4
+      atraso: 0
+      multiplicadorVida: 2.36
+    - especie: 4
+      quantidade: 20
+      intervalo: 0.6
+      atraso: 3
+      multiplicadorVida: 2.36
+  - grupos:
+    - especie: 6
+      quantidade: 22
+      intervalo: 0.6
+      atraso: 0
+      multiplicadorVida: 2.44
+    - especie: 2
+      quantidade: 50
+      intervalo: 0.2
+      atraso: 3
+      multiplicadorVida: 2.44
+  - grupos:
+    - especie: 6
+      quantidade: 25
+      intervalo: 0.5
+      atraso: 0
+      multiplicadorVida: 2.52
+    - especie: 4
+      quantidade: 25
+      intervalo: 0.5
+      atraso: 2
+      multiplicadorVida: 2.52
+    - especie: 3
+      quantidade: 30
+      intervalo: 0.4
+      atraso: 6
+      multiplicadorVida: 2.52
+  - grupos:
+    - especie: 6
+      quantidade: 20
+      intervalo: 0.8
+      atraso: 0
+      multiplicadorVida: 2.6
+    - especie: 3
+      quantidade: 30
+      intervalo: 0.5
+      atraso: 5
+      multiplicadorVida: 2.6
+    - especie: 7
+      quantidade: 1
+      intervalo: 1
+      atraso: 8
+      multiplicadorVida: 15.599999

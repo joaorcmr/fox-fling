@@ -1,0 +1,106 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
+using UnityEngine;
+
+// Cria e lê os assets de dados (Assets/Revoada/Dados). Com sobrescrever =
+// false, um asset que já existe não é tocado: os números que o João ajustou no
+// Inspector ficam. Os sprites são sempre religados (vêm da pasta de arte).
+public static class ConstrutorDados
+{
+    public const string Pasta = "Assets/Revoada/Dados";
+    const string PastaPassaros = Pasta + "/Passaros";
+    const string PastaPorcos = Pasta + "/Porcos";
+
+    // Sprite e cor das penas de cada pássaro.
+    static readonly Dictionary<EspeciePassaro, (string sprite, string cor)> VisualPassaro = new Dictionary<EspeciePassaro, (string, string)>
+    {
+        { EspeciePassaro.Pardal, ("pardal", "#B98352") },
+        { EspeciePassaro.Sabia, ("sabia", "#E07B37") },
+        { EspeciePassaro.BeijaFlor, ("beija_flor", "#3FBF7A") },
+        { EspeciePassaro.Arara, ("arara", "#3E8FE0") },
+        { EspeciePassaro.Pata, ("pata", "#F4F1EA") },
+        { EspeciePassaro.Patinho, ("patinho", "#F7D84A") },
+        { EspeciePassaro.Urubu, ("urubu", "#3A3A40") },
+        { EspeciePassaro.Gaviao, ("gaviao", "#9AA1A8") },
+    };
+
+    // Sprites de cada porco: corpo, arma, tiro e os acessórios das especializações.
+    static readonly Dictionary<EspeciePorco, string[]> VisualPorco = new Dictionary<EspeciePorco, string[]>
+    {
+        { EspeciePorco.Estilingueiro, new[] { "porco_estilingueiro", "arma_estilingue", "pedrinha", "acc_rajada", "acc_mira" } },
+        { EspeciePorco.Arpoador, new[] { "porco_arpoador", "arma_arpao", "arpao", "acc_gigante", "acc_ligeiro" } },
+        { EspeciePorco.Bombardeiro, new[] { "porco_bombardeiro", "arma_canhao", "bomba", "acc_chuva", "acc_estrume" } },
+        { EspeciePorco.Tamboreiro, new[] { "porco_tamboreiro", "arma_tambor", null, "acc_fanfarra", "acc_penas" } },
+    };
+
+    public static void GarantirDados(bool sobrescrever)
+    {
+        ConstrutorAssets.GarantirPasta(PastaPassaros);
+        ConstrutorAssets.GarantirPasta(PastaPorcos);
+
+        foreach (var padrao in DefinicoesPadrao.Passaros())
+        {
+            var tipo = Unico<TipoPassaro>($"{PastaPassaros}/{padrao.especie}.asset", t => t.dados = padrao, sobrescrever);
+            var (sprite, cor) = VisualPassaro[padrao.especie];
+            tipo.sprite = ConstrutorAssets.Sprite(sprite);
+            ColorUtility.TryParseHtmlString(cor, out tipo.corPenas);
+            EditorUtility.SetDirty(tipo);
+        }
+
+        foreach (var padrao in DefinicoesPadrao.Porcos())
+        {
+            var tipo = Unico<TipoPorco>($"{PastaPorcos}/{padrao.especie}.asset", t => t.dados = padrao, sobrescrever);
+            var s = VisualPorco[padrao.especie];
+            tipo.corpo = ConstrutorAssets.Sprite(s[0]);
+            tipo.arma = ConstrutorAssets.Sprite(s[1]);
+            tipo.projetil = s[2] != null ? ConstrutorAssets.Sprite(s[2]) : null;
+            tipo.acessorioA = ConstrutorAssets.Sprite(s[3]);
+            tipo.acessorioB = ConstrutorAssets.Sprite(s[4]);
+            EditorUtility.SetDirty(tipo);
+        }
+
+        Unico<ListaOndas>($"{Pasta}/Ondas.asset", a => a.ondas = DefinicoesPadrao.Ondas(), sobrescrever);
+        Unico<ConfigEconomia>($"{Pasta}/Economia.asset", a => a.dados = DefinicoesPadrao.Economia(), sobrescrever);
+        Unico<Mapa>($"{Pasta}/Fazenda.asset", a => a.dados = DefinicoesPadrao.Fazenda(), sobrescrever);
+        AssetDatabase.SaveAssets();
+    }
+
+    // Carrega o asset; se não existe, cria com os números padrão. Com
+    // "sobrescrever", troca os números de um asset existente pelos padrão.
+    static T Unico<T>(string caminho, Action<T> preencher, bool sobrescrever) where T : ScriptableObject
+    {
+        var asset = AssetDatabase.LoadAssetAtPath<T>(caminho);
+        if (asset == null)
+        {
+            asset = ScriptableObject.CreateInstance<T>();
+            preencher(asset);
+            AssetDatabase.CreateAsset(asset, caminho);
+        }
+        else if (sobrescrever)
+        {
+            preencher(asset);
+            EditorUtility.SetDirty(asset);
+        }
+        return asset;
+    }
+
+    public static TipoPassaro[] Passaros() => Todos<TipoPassaro>(PastaPassaros).OrderBy(t => t.dados.especie).ToArray();
+    public static TipoPorco[] Porcos() => Todos<TipoPorco>(PastaPorcos).OrderBy(t => t.dados.especie).ToArray();
+    public static ListaOndas Ondas() => AssetDatabase.LoadAssetAtPath<ListaOndas>($"{Pasta}/Ondas.asset");
+    public static ConfigEconomia Economia() => AssetDatabase.LoadAssetAtPath<ConfigEconomia>($"{Pasta}/Economia.asset");
+    public static Mapa Fazenda() => AssetDatabase.LoadAssetAtPath<Mapa>($"{Pasta}/Fazenda.asset");
+
+    public static DadosJogo Carregar() => ConversorDados.Montar(Passaros(), Porcos(), Ondas(), Economia(), Fazenda());
+
+    static IEnumerable<T> Todos<T>(string pasta) where T : UnityEngine.Object
+    {
+        if (!AssetDatabase.IsValidFolder(pasta)) yield break;
+        foreach (var guid in AssetDatabase.FindAssets("t:" + typeof(T).Name, new[] { pasta }))
+        {
+            var asset = AssetDatabase.LoadAssetAtPath<T>(AssetDatabase.GUIDToAssetPath(guid));
+            if (asset != null) yield return asset;
+        }
+    }
+}
