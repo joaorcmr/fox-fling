@@ -72,6 +72,8 @@ public class Hud : MonoBehaviour
             if (Sons.Instancia != null) Sons.Tocar(Sons.Instancia.erro, 0.6f, 0f);
         };
         s.TorreAtingida += dano => pulsoVida = 1f;
+        // Jogo acabado: pausar, acelerar e abrir o menu de pausa não fazem mais sentido.
+        s.FimDeJogo += venceu => botaoPausa.interactable = botaoVelocidade.interactable = botaoMenu.interactable = false;
         penasNaTela = s.Penas;
         corTexto = textoVida.color;
 
@@ -110,7 +112,10 @@ public class Hud : MonoBehaviour
         // Penas: o contador corre até o valor novo.
         penasNaTela = Mathf.Abs(s.Penas - penasNaTela) < 0.5f ? s.Penas : Mathf.Lerp(penasNaTela, s.Penas, 1f - Mathf.Exp(-12f * dt));
         textoPenas.text = Mathf.RoundToInt(penasNaTela).ToString();
-        int numero = s.Estado == EstadoJogo.EmOnda ? s.Onda : Mathf.Min(s.Onda + 1, s.TotalOndas);
+        // Entre ondas mostra a próxima; durante a onda e na derrota, a atual (a
+        // mesma que a tela de fim diz que derrubou a Torre).
+        bool ondaAtual = s.Estado == EstadoJogo.EmOnda || s.Estado == EstadoJogo.Derrota;
+        int numero = ondaAtual ? s.Onda : Mathf.Min(s.Onda + 1, s.TotalOndas);
         textoOnda.text = $"Onda {numero}/{s.TotalOndas}";
 
         iconePausa.sprite = jogo.Pausado ? spritePlay : spritePausa;

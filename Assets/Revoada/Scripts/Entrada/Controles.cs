@@ -37,6 +37,14 @@ public class Controles : MonoBehaviour
         {
             if (p == Selecionado) Selecionar(null);
         };
+        // Acabou: daqui em diante só a tela de fim responde. Sem isto, Esc abria
+        // o menu de pausa por cima dela e 1–4 punham um porco fantasma no mapa.
+        Sim.FimDeJogo += _ =>
+        {
+            CancelarColocacao();
+            Selecionar(null);
+            enabled = false;
+        };
     }
 
     void Update()

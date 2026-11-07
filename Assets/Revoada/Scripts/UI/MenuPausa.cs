@@ -2,7 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // Esc (sem nada selecionado) ou ☰: pausa e oferece continuar, reiniciar ou
-// voltar ao menu. Reiniciar e Menu voltam o Time.timeScale para 1 (no Jogo).
+// voltar ao menu. Com Reiniciar ou Menu o jogo segue pausado durante o
+// escurecer, e o Time.timeScale volta a 1 na troca de cena (Transicao).
 public class MenuPausa : MonoBehaviour
 {
     public Jogo jogo;

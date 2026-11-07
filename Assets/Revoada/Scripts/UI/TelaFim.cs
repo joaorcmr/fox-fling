@@ -38,6 +38,9 @@ public class TelaFim : MonoBehaviour
     IEnumerator Mostrar(bool venceu)
     {
         var s = jogo.Sim;
+        // Desde já só esta tela recebe cliques (a loja e o mapa ficam de fora),
+        // mesmo nos 0,8 s em que ela ainda está invisível.
+        grupo.blocksRaycasts = true;
         int melhorAntes = Progresso.MelhorOnda;
         Progresso.RegistrarFim(s.Onda, venceu);
 
@@ -55,7 +58,6 @@ public class TelaFim : MonoBehaviour
         if (venceu && efeitos != null)
             for (int i = 0; i < 12; i++) efeitos.Penas(new Vector2(1f + i * 1.1f, 14.5f), CoresConfete[i % CoresConfete.Length], 4);
 
-        grupo.blocksRaycasts = true;
         for (float t = 0f; t < 1f; t += Time.unscaledDeltaTime / 0.35f)
         {
             clarao.color = new Color(1f, 0.95f, 0.75f, 0.6f * (1f - Mathf.Clamp01(t * 3.5f))); // clarão de 0,1 s

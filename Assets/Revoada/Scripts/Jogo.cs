@@ -62,15 +62,13 @@ public class Jogo : MonoBehaviour
 
     void AplicarTempo() => Time.timeScale = Pausado ? 0f : Velocidade;
 
-    public void Reiniciar()
-    {
-        Time.timeScale = 1f; // a próxima cena não pode nascer pausada nem acelerada
-        Transicao.Carregar(gameObject.scene.name);
-    }
+    // Reiniciar e Menu não mexem no Time.timeScale: durante o escurecer o jogo
+    // fica como estava (pausado, se veio do menu de pausa). A Transicao volta o
+    // tempo para 1 na hora de trocar de cena.
+    public void Reiniciar() => Transicao.Carregar(gameObject.scene.name);
 
     public void IrParaMenu()
     {
-        Time.timeScale = 1f;
         string cena = Application.CanStreamedLevelBeLoaded("Menu") ? "Menu" : gameObject.scene.name;
         Transicao.Carregar(cena);
     }

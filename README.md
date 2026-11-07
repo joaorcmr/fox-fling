@@ -76,7 +76,7 @@ componentes do Unity a cada passo. Recurso por recurso:
 | **Input Manager** e `EventSystem.IsPointerOverGameObject` (clique na loja não vaza para o mapa) | `Scripts/Entrada/Controles.cs` |
 | **PlayerPrefs** (recorde, vitórias, dicas vistas, volumes) | `Scripts/Progresso.cs` |
 | **Editor scripting**: menu Revoada (`MenuItem`), `AssetDatabase`, `PrefabUtility`, `EditorSceneManager`, `TextureImporter`, `SerializedObject` | `Editor/` |
-| **Unity Test Framework**: 93 testes EditMode, incluindo os robôs de balanceamento | `Testes/` |
+| **Unity Test Framework**: 93 testes EditMode (incluindo os robôs de balanceamento) e 3 testes PlayMode, que carregam a cena Jogo de verdade (pausa, escurecer entre cenas, fim de jogo) | `Testes/`, `TestesPlay/` |
 | **Build WebGL** (`BuildPipeline`) | `ConstrutorRevoada.BuildWebGL` |
 
 Durante o Play, selecione um pássaro ou um porco na Hierarchy: o Inspector mostra o estado dele ao vivo
@@ -97,7 +97,8 @@ mesma ordem de construção e só mudam o que fazem com o Ninho:
 | **Equilibrado** | mistura defesa e Ninho (compra quando ele se paga em até 6 ondas) | **vence** a onda 30 com 46 de vida |
 
 A virada do jogo são as ondas 16 e 19, com urubus de couraça: quem só tem pedrinha, ou não investiu em penas,
-cai ali ou logo depois. Se alguém mexer num número e quebrar esse equilíbrio, os testes avisam.
+cai ali ou logo depois. Se alguém mexer num número e quebrar esse equilíbrio, os testes avisam. As metas estão
+com pouca folga, então depois de mexer em qualquer número rode os robôs (ou os testes) antes de jogar.
 
 ## Mexendo nos números
 
@@ -131,7 +132,8 @@ Assets/Revoada/
 ├── Editor/    construtor (menu Revoada), números padrão e os robôs
 ├── Prefabs/   pássaro, porco, tiro, texto flutuante e efeitos
 ├── Scripts/   Nucleo/ (as regras, em C# puro), Visual/, UI/, Entrada/
-└── Testes/    testes EditMode (Window > General > Test Runner)
+├── Testes/    testes EditMode (Window > General > Test Runner)
+└── TestesPlay/ testes PlayMode (carregam a cena Jogo e rodam quadros)
 Tools/         geradores de arte e som (Python 3 + Pillow)
 ```
 

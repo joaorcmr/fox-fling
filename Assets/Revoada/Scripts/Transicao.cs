@@ -14,6 +14,8 @@ public class Transicao : MonoBehaviour
     Image veu;
     bool trocando;
 
+    public static bool Trocando => instancia != null && instancia.trocando;
+
     public static void Carregar(string cena)
     {
         Garantir();
@@ -45,6 +47,10 @@ public class Transicao : MonoBehaviour
         trocando = true;
         veu.raycastTarget = true; // ninguém clica em nada durante a troca
         yield return Fade(0f, 1f);
+        // Só agora o tempo volta ao normal: até aqui a cena velha ficou como
+        // estava (pausada, se veio do menu de pausa), e a nova não pode nascer
+        // pausada nem em 3×.
+        Time.timeScale = 1f;
         SceneManager.LoadScene(cena);
         yield return null;
         yield return Fade(1f, 0f);
