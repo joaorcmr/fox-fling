@@ -135,6 +135,26 @@ public static class Regras
         return Mathf.Clamp(x, ColocacaoXMin + largura / 2f, ColocacaoXMax - largura / 2f);
     }
 
+    // ---- Mira das armas (issue #7) ----
+    // Qual das posições está mais perto da origem, dentro do alcance? Devolve o índice, ou -1
+    // se nenhuma estiver ao alcance. (A arma atira sempre na raposa mais próxima.)
+    public static int EscolherAlvo(Vector2 origem, System.Collections.Generic.IList<Vector2> posicoes, float alcance)
+    {
+        int melhor = -1;
+        float menor = float.MaxValue;
+        float limite = alcance * alcance;
+        for (int i = 0; i < posicoes.Count; i++)
+        {
+            float d = (posicoes[i] - origem).sqrMagnitude;
+            if (d <= limite && d < menor)
+            {
+                menor = d;
+                melhor = i;
+            }
+        }
+        return melhor;
+    }
+
     // ---- Níveis e levas (issue #5) ----
     // Cada fase tem LevasPorFase levas seguidas. O "nível" conta as levas de todas as
     // fases (fase 1 leva 1 = nível 1; fase 5 leva 3 = nível 15): quanto maior, mais raposas

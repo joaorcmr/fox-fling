@@ -1,3 +1,10 @@
+## 2026-11-07 · Mira das armas
+- **Issue:** #7
+- **O que mudou:** `Regras.EscolherAlvo(origem, posicoes, alcance)` devolve qual raposa está mais perto da arma, só entre as que estão dentro do alcance (ou -1 se nenhuma estiver). É assim que as armas escolhem em quem atirar.
+- **Arquivos:** `Assets/FoxFling/Scripts/Regras.cs`, `Assets/FoxFling/Tests/EditMode/ArmasTests.cs` (novo, com `.meta`).
+- **Por quê / como testar:** a conta fica pura para ser testada. No Test Runner (EditMode) rodam os 5 testes novos de `ArmasTests`.
+- **Atenção:** a `Arma` do commit seguinte usa esta regra.
+
 ## 2026-11-07 · Muros na loja e colocação com o mouse (fortificação)
 - **Issue:** #3
 - **O que mudou:** a loja passa a vender 3 itens de fortificação: **Muro madeira** (0,4 × 1,2, preço 150), **Muro rocha** (0,4 × 1,4, preço 450) e **Barricada** (1,2 × 0,6, madeira, preço 200). Ao clicar no botão, uma "sombra" segue o mouse, grudada numa grade e apoiada no chão: **verde** = pode colocar, **vermelho** = lugar ocupado ou sem saldo. Clique esquerdo coloca e cobra; clique direito (ou Esc) só larga o item; o jogador continua no modo de colocação enquanto houver saldo para outro igual. Só dá para colocar entre as levas. Os muros ficam travados na horizontal e não tombam: as raposas só conseguem quebrá-los, e os blocos da torre continuam livres (a torre desmoronar é parte do jogo). O Esc do HUD agora cancela a colocação antes de voltar ao menu. `ItemLoja` ganhou `prefab`, `material` e `tamanho`, e `TipoItem.Muro`; novo `Colocador.cs`.
