@@ -1,3 +1,10 @@
+## 2026-11-07 · Regra dos pontos de cada leva
+- **Issue:** #4
+- **O que mudou:** `Regras.PontosDaLeva(pontosDasRaposas, tubaroesPerdidos, nivel)`: ao fim de cada leva o jogador ganha a **base da leva** (`150 + 25 × nível`, então sobe com a dificuldade) mais os **pontos das raposas derrotadas**, menos **300 por cada tubarão que as raposas mataram** na leva (`PenalidadePorTubarao`), sem nunca ficar abaixo de zero. Também ganhou o estado `EstadoFase.Preparando` (entre as levas, com a loja aberta).
+- **Arquivos:** `Assets/FoxFling/Scripts/Regras.cs`, `Assets/FoxFling/Tests/EditMode/PontosTests.cs` (novo, com `.meta`).
+- **Por quê / como testar:** é a regra da issue #4 ("os pontos são descontados para cada personagem do usuário que as raposas matam"). No Test Runner (EditMode) rodam os 5 testes novos de `PontosTests`.
+- **Atenção:** ainda não usadas pelo jogo; o commit seguinte liga na loja. Os números (150, 25, 300) são provisórios e ficam em `Regras.cs` para balancear.
+
 ## 2026-11-07 · Levas em sequência e raposa grande nas fases
 - **Issue:** #5 (e #6)
 - **O que mudou:** cada fase agora tem 3 levas seguidas (`levas`), com a composição de `Regras.ComporLeva`; entre uma e outra há 3 s de descanso ("Leva N de 3 concluída!"). O HUD mostra "Leva N de 3 · Raposas · Tubarões". A fase só é vencida ao sobreviver à última leva (derrota continua sendo perder o último tubarão). Novo prefab `Atacante_Grande` (tamanho 1,5, avermelhada, vida 90, velocidade 0,7, golpe de 20 a cada 1,0 s, vale 300 pontos). As raposas passam a nascer em cima do chão qualquer que seja o tamanho (`alturaDoChao` e `xDeEntrada` no `GerenciadorFase`). A lista fixa `raposas` saiu de `DefinicaoFase`, do `GerenciadorFase` e das cenas; o teste `RaposasBatemComOQuadro` virou `TemCincoFases`.

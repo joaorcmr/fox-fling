@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public enum EstadoFase { Jogando, Vitoria, Derrota }
+// Preparando: entre as levas, com a loja aberta (as raposas só entram quando o jogador manda).
+public enum EstadoFase { Jogando, Vitoria, Derrota, Preparando }
 
 // Regras "puras" do jogo: só contas, sem GameObject nem cena.
 // Ficam separadas para dar pra testar (Tests/EditMode/RegrasTests.cs) e ajustar num lugar só.
@@ -104,6 +105,20 @@ public static class Regras
         if (tubaroesVivos >= tubaroesNoInicio) return 3;
         if (tubaroesVivos * 2 >= tubaroesNoInicio) return 2;
         return 1;
+    }
+
+    // ---- Pontos da leva (issue #4) ----
+    // Ao fim de cada leva o jogador ganha: base da leva (sobe com o nível) + pontos das
+    // raposas derrotadas − uma penalidade por cada tubarão que as raposas mataram. Nunca
+    // fica abaixo de zero. O resultado vai para o saldo da loja.
+    public const int PenalidadePorTubarao = 300;
+
+    public static int BaseDaLeva(int nivel) => 150 + 25 * nivel;
+
+    public static int PontosDaLeva(int pontosDasRaposas, int tubaroesPerdidos, int nivel)
+    {
+        int bruto = BaseDaLeva(nivel) + pontosDasRaposas - PenalidadePorTubarao * Mathf.Max(0, tubaroesPerdidos);
+        return Mathf.Max(0, bruto);
     }
 
     // ---- Níveis e levas (issue #5) ----
