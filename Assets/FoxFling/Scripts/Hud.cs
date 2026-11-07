@@ -68,7 +68,7 @@ public class Hud : MonoBehaviour
     IEnumerator AnimarResultado(bool venceu, int pontos, int quantasEstrelas, bool temProxima)
     {
         painelResultado.SetActive(true);
-        tituloResultado.text = venceu ? "Fase concluída!" : "Ops! Acabaram as raposas";
+        tituloResultado.text = venceu ? "A torre resistiu!" : "Os tubarões caíram!";
         botaoProxima.gameObject.SetActive(venceu && temProxima);
         foreach (var e in estrelas) e.sprite = estrelaVazia;
 

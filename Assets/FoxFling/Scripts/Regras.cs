@@ -105,11 +105,4 @@ public static class Regras
         if (tubaroesVivos * 2 >= tubaroesNoInicio) return 2;
         return 1;
     }
-
-    public static EstadoFase EstadoAposRaposa(int inimigosVivos, int raposasRestantes, bool mundoParado)
-    {
-        if (inimigosVivos <= 0) return EstadoFase.Vitoria;
-        if (raposasRestantes > 0 || !mundoParado) return EstadoFase.Jogando;
-        return EstadoFase.Derrota;
-    }
 }

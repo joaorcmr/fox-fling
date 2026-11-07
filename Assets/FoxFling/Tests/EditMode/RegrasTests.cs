@@ -149,25 +149,6 @@ public class RegrasTests
     }
 
     [Test]
-    public void EstadoAposRaposa_UltimoInimigoMorrendoJuntoComAUltimaRaposaEVitoria()
-    {
-        Assert.AreEqual(EstadoFase.Vitoria, Regras.EstadoAposRaposa(0, 0, false));
-    }
-
-    [Test]
-    public void EstadoAposRaposa_ContinuaEnquantoHaRaposas()
-    {
-        Assert.AreEqual(EstadoFase.Jogando, Regras.EstadoAposRaposa(2, 1, false));
-    }
-
-    [Test]
-    public void EstadoAposRaposa_SoPerdeDepoisQueOMundoPara()
-    {
-        Assert.AreEqual(EstadoFase.Jogando, Regras.EstadoAposRaposa(1, 0, false));
-        Assert.AreEqual(EstadoFase.Derrota, Regras.EstadoAposRaposa(1, 0, true));
-    }
-
-    [Test]
     public void FormatarPontos_UsaPontoComoSeparadorDeMilhar()
     {
         Assert.AreEqual("0", Regras.FormatarPontos(0));
