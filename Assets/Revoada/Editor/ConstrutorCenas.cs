@@ -22,7 +22,7 @@ public static class ConstrutorCenas
     static void CriarCenaJogo()
     {
         var cena = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
-        CriarCamera();
+        var camera = CriarCamera();
 
         var jogo = new GameObject("Jogo").AddComponent<Jogo>();
         jogo.passaros = ConstrutorDados.Passaros();
@@ -43,11 +43,37 @@ public static class ConstrutorCenas
         mapa.materialBorda = ConstrutorAssets.MaterialSprite("TerraBorda", ConstrutorAssets.Textura("terra_borda"));
         mapa.Desenhar();
 
+        var efeitos = new GameObject("Efeitos").AddComponent<Efeitos>();
+        efeitos.penas = Instanciar<ParticleSystem>(ConstrutorPrefabs.CaminhoParticulas("Penas"), efeitos.transform);
+        efeitos.poeira = Instanciar<ParticleSystem>(ConstrutorPrefabs.CaminhoParticulas("Poeira"), efeitos.transform);
+        efeitos.brilho = Instanciar<ParticleSystem>(ConstrutorPrefabs.CaminhoParticulas("Brilho"), efeitos.transform);
+        efeitos.prefabLama = AssetDatabase.LoadAssetAtPath<SpriteRenderer>(ConstrutorPrefabs.CaminhoLama);
+        efeitos.prefabTexto = AssetDatabase.LoadAssetAtPath<TextoFlutuante>(ConstrutorPrefabs.CaminhoTexto);
+
         var visuais = new GameObject("Visuais").AddComponent<GerenteVisuais>();
         visuais.jogo = jogo;
         visuais.prefabPassaro = AssetDatabase.LoadAssetAtPath<VisualPassaro>(ConstrutorPrefabs.CaminhoPassaro);
+        visuais.prefabPorco = AssetDatabase.LoadAssetAtPath<VisualPorco>(ConstrutorPrefabs.CaminhoPorco);
+        visuais.prefabProjetil = AssetDatabase.LoadAssetAtPath<VisualProjetil>(ConstrutorPrefabs.CaminhoProjetil);
+        visuais.efeitos = efeitos;
+
+        var controles = new GameObject("Controles").AddComponent<Controles>();
+        controles.jogo = jogo;
+        controles.cam = camera;
+        controles.fantasma = ConstrutorPrefabs.Sprite(controles.transform, "Fantasma", null, 40);
+        controles.circuloFantasma = ConstrutorPrefabs.Circulo(controles.transform, "CirculoFantasma");
+
+        ConstrutorUI.CriarHud(null, jogo, controles, jogo.porcos);
 
         EditorSceneManager.SaveScene(cena, CenaJogo);
+    }
+
+    // Põe na cena uma instância do prefab (ligada a ele) e devolve o componente.
+    static T Instanciar<T>(string caminho, Transform pai) where T : Component
+    {
+        var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(caminho);
+        var go = (GameObject)PrefabUtility.InstantiatePrefab(prefab, pai);
+        return go.GetComponent<T>();
     }
 
     static Camera CriarCamera()
