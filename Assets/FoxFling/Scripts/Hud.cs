@@ -40,7 +40,12 @@ public class Hud : MonoBehaviour
         var fase = GerenciadorFase.Instance;
         if (fase == null) return;
         if (Input.GetKeyDown(KeyCode.R)) fase.Reiniciar();
-        else if (Input.GetKeyDown(KeyCode.Escape)) fase.IrParaMenu();
+        else if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            // Com um item "na mão" (loja), o Esc só larga o item; sem nada, volta ao menu.
+            if (fase.Loja != null && fase.Loja.CancelarColocacao()) MostrarDica("Colocação cancelada.");
+            else fase.IrParaMenu();
+        }
     }
 
     public void Configurar(string nomeFase, string dificuldade)

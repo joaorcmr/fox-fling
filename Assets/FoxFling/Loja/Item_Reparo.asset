@@ -16,3 +16,6 @@ MonoBehaviour:
   descricao: "Recupera a vida de todos os blocos e tubar\xF5es da torre."
   preco: 250
   tipo: 0
+  prefab: {fileID: 0}
+  material: {fileID: 0}
+  tamanho: {x: 0.4, y: 1.2}

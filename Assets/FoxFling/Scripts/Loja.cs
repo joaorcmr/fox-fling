@@ -20,6 +20,7 @@ public class Loja : MonoBehaviour
 
     GerenciadorFase fase;
     CatalogoLoja catalogo;
+    Colocador colocador;
     GameObject raiz;
     Font fonte;
     Sprite spriteBotao, spritePainel;
@@ -27,10 +28,18 @@ public class Loja : MonoBehaviour
 
     public bool Aberta => raiz != null && raiz.activeSelf;
 
+    // O jogador está com um item "na mão", escolhendo onde colocar.
+    public bool EmColocacao => colocador != null && colocador.Ativo;
+
+    // Devolve true se havia uma colocação em andamento (o HUD usa isso para o Esc).
+    public bool CancelarColocacao() => colocador != null && colocador.Cancelar();
+
     public void Configurar(GerenciadorFase gerenciador, CatalogoLoja itens)
     {
         fase = gerenciador;
         catalogo = itens;
+        colocador = gameObject.AddComponent<Colocador>();
+        colocador.Configurar(gerenciador);
         PegarEstiloDoHud();
         Construir();
         Fechar();
@@ -45,6 +54,7 @@ public class Loja : MonoBehaviour
 
     public void Fechar()
     {
+        CancelarColocacao();
         raiz.SetActive(false);
     }
 
@@ -97,7 +107,7 @@ public class Loja : MonoBehaviour
                 if (item == null) continue;
                 var entrada = new Entrada { item = item };
                 var capturado = item;
-                entrada.botao = CriarBotao(barra, item.nome + "\n" + Regras.FormatarPontos(item.preco),
+                entrada.botao = CriarBotao(barra, item.nome.Replace(' ', '\n') + "\n" + Regras.FormatarPontos(item.preco),
                     new Vector2(0f, 0.5f), new Vector2(x, 0f), new Vector2(larguraItem, altura), () => AoComprar(capturado));
                 entradas.Add(entrada);
                 x += larguraItem + espaco;
@@ -138,6 +148,16 @@ public class Loja : MonoBehaviour
                 if (!fase.TorreDanificada()) return "A torre não tem danos para reparar.";
                 fase.TentarGastar(item.preco);
                 return $"Torre reparada ({fase.RepararTorre()} peças)!";
+
+            case TipoItem.Muro:
+                // Clicar de novo no mesmo item larga ele; o pagamento é feito ao colocar.
+                if (colocador.Ativo && colocador.ItemAtual == item)
+                {
+                    colocador.Cancelar();
+                    return "Colocação cancelada.";
+                }
+                colocador.Comecar(item);
+                return "Clique no chão para colocar (clique direito cancela).";
         }
         return "";
     }
@@ -174,7 +194,7 @@ public class Loja : MonoBehaviour
         var t = Retangulo(rt, "Texto", new Vector2(0.5f, 0.5f), Vector2.zero, tamanho).gameObject.AddComponent<Text>();
         t.font = fonte;
         t.text = texto;
-        t.fontSize = 12;
+        t.fontSize = 11; // cabem até 3 linhas (nome em 2 palavras + preço) nos 44 px do botão
         t.fontStyle = FontStyle.Bold;
         t.alignment = TextAnchor.MiddleCenter;
         t.color = Marrom;

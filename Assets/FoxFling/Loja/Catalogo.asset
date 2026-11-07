@@ -14,3 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: FoxFling::CatalogoLoja
   itens:
   - {fileID: 11400000, guid: 180c22312c8e1534ea2273cde6822137, type: 2}
+  - {fileID: 11400000, guid: e24114a73385de748895d9fc4bce34c5, type: 2}
+  - {fileID: 11400000, guid: c4290e48fd9762a49afcc075306c4bed, type: 2}
+  - {fileID: 11400000, guid: e456a1d70074b2c408c1bff286d63d86, type: 2}

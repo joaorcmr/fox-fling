@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e59fea6a6855d5248b50792e4738a3a1, type: 3}
+  m_Name: Item_MuroMadeira
+  m_EditorClassIdentifier: FoxFling::ItemLoja
+  nome: Muro madeira
+  descricao: "Muro de madeira em p\xE9, barato."
+  preco: 150
+  tipo: 1
+  prefab: {fileID: 3387469707939042043, guid: 50ed1caef686e4ef686b4dd7d5471ff5, type: 3}
+  material: {fileID: 11400000, guid: 26bf9d9b3b42042db82db87793c49dd7, type: 2}
+  tamanho: {x: 0.4, y: 1.2}

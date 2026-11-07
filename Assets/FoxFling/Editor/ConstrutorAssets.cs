@@ -151,7 +151,20 @@ public static class ConstrutorAssets
     {
         GarantirPasta(PastaLoja);
 
+        // O prefab do bloco existe depois de "Reconstruir tudo" (ConstrutorPrefabs.Bloco) ou já está em disco.
+        var prefabBloco = ConstrutorPrefabs.Bloco != null
+            ? ConstrutorPrefabs.Bloco
+            : AssetDatabase.LoadAssetAtPath<GameObject>($"{ConstrutorPrefabs.Pasta}/Bloco.prefab");
+        var madeira = MaterialDeBloco(TipoMaterial.Madeira);
+        var rocha = MaterialDeBloco(TipoMaterial.Rocha);
+
         var reparo = Item("Reparo", "Reparar", "Recupera a vida de todos os blocos e tubarões da torre.", 250, TipoItem.Reparo);
+        var muroMadeira = Item("MuroMadeira", "Muro madeira", "Muro de madeira em pé, barato.", 150, TipoItem.Muro,
+            prefabBloco, madeira, new Vector2(0.4f, 1.2f));
+        var muroRocha = Item("MuroRocha", "Muro rocha", "Muro de rocha: bem mais resistente, e esmaga quem cair.", 450, TipoItem.Muro,
+            prefabBloco, rocha, new Vector2(0.4f, 1.4f));
+        var barricada = Item("Barricada", "Barricada", "Bloco baixo e largo de madeira.", 200, TipoItem.Muro,
+            prefabBloco, madeira, new Vector2(1.2f, 0.6f));
 
         string caminho = $"{PastaLoja}/Catalogo.asset";
         var catalogo = AssetDatabase.LoadAssetAtPath<CatalogoLoja>(caminho);
@@ -160,13 +173,15 @@ public static class ConstrutorAssets
             catalogo = ScriptableObject.CreateInstance<CatalogoLoja>();
             AssetDatabase.CreateAsset(catalogo, caminho);
         }
-        catalogo.itens = new[] { reparo };
+        catalogo.itens = new[] { reparo, muroMadeira, muroRocha, barricada };
         EditorUtility.SetDirty(catalogo);
         AssetDatabase.SaveAssets();
         return catalogo;
     }
 
-    static ItemLoja Item(string arquivo, string nome, string descricao, int preco, TipoItem tipo)
+    // nome, descrição, preço, tipo e tamanho só na criação; prefab e material (referências) sempre.
+    static ItemLoja Item(string arquivo, string nome, string descricao, int preco, TipoItem tipo,
+        GameObject prefab = null, MaterialBloco material = null, Vector2? tamanho = null)
     {
         string caminho = $"{PastaLoja}/Item_{arquivo}.asset";
         var item = AssetDatabase.LoadAssetAtPath<ItemLoja>(caminho);
@@ -177,8 +192,12 @@ public static class ConstrutorAssets
             item.descricao = descricao;
             item.preco = preco;
             item.tipo = tipo;
+            if (tamanho.HasValue) item.tamanho = tamanho.Value;
             AssetDatabase.CreateAsset(item, caminho);
         }
+        item.prefab = prefab;
+        item.material = material;
+        EditorUtility.SetDirty(item);
         return item;
     }
 
