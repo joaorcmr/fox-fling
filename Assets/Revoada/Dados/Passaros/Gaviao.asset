@@ -15,11 +15,11 @@ MonoBehaviour:
   dados:
     especie: 7
     nome: "Gavi\xE3o-real"
-    vida: 250
+    vida: 90
     velocidade: 0.9
     raio: 0.8
     danoTorre: 30
-    penas: 100
+    penas: 200
     couraca: 0
     chefe: 1
     filho: 0

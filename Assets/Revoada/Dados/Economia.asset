@@ -21,12 +21,12 @@ MonoBehaviour:
     esperaAuto: 2
     ninho:
     - multiplicador: 1.25
-      custo: 250
+      custo: 120
     - multiplicador: 1.5
-      custo: 500
+      custo: 250
     - multiplicador: 1.75
-      custo: 900
+      custo: 450
     - multiplicador: 2
-      custo: 1500
+      custo: 750
     - multiplicador: 2.5
-      custo: 2500
+      custo: 1200

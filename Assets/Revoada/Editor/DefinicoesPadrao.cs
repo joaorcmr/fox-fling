@@ -12,14 +12,17 @@ public static class DefinicoesPadrao
     {
         return new[]
         {
-            P(Pardal, "Pardal", vida: 1, vel: 2.5f, dano: 1, penas: 1, raio: 0.35f),
-            P(Sabia, "Sabiá", vida: 3, vel: 2.8f, dano: 2, penas: 2, raio: 0.35f),
-            P(BeijaFlor, "Beija-flor", vida: 2, vel: 5f, dano: 2, penas: 3, raio: 0.35f),
-            P(Arara, "Arara-azul", vida: 10, vel: 2f, dano: 4, penas: 6, raio: 0.45f),
-            Com(P(Pata, "Pata", vida: 8, vel: 1.8f, dano: 3, penas: 4, raio: 0.45f), p => { p.filho = Patinho; p.quantidadeFilhos = 4; }),
-            P(Patinho, "Patinho", vida: 1, vel: 3f, dano: 1, penas: 1, raio: 0.3f),
-            Com(P(Urubu, "Urubu", vida: 28, vel: 1.4f, dano: 6, penas: 12, raio: 0.45f), p => p.couraca = true),
-            Com(P(Gaviao, "Gavião-real", vida: 250, vel: 0.9f, dano: 30, penas: 100, raio: 0.8f), p => p.chefe = true),
+            // Penas: o dobro do ponto de partida do design (os robôs mostraram que,
+            // com 1 pena por pardal, o Ninho nunca se pagava). Chefe: 90 de vida
+            // base (250 era mais do que qualquer defesa da onda 10 aguenta).
+            P(Pardal, "Pardal", vida: 1, vel: 2.5f, dano: 1, penas: 2, raio: 0.35f),
+            P(Sabia, "Sabiá", vida: 3, vel: 2.8f, dano: 2, penas: 4, raio: 0.35f),
+            P(BeijaFlor, "Beija-flor", vida: 2, vel: 5f, dano: 2, penas: 6, raio: 0.35f),
+            P(Arara, "Arara-azul", vida: 10, vel: 2f, dano: 4, penas: 12, raio: 0.45f),
+            Com(P(Pata, "Pata", vida: 8, vel: 1.8f, dano: 3, penas: 8, raio: 0.45f), p => { p.filho = Patinho; p.quantidadeFilhos = 4; }),
+            P(Patinho, "Patinho", vida: 1, vel: 3f, dano: 1, penas: 2, raio: 0.3f),
+            Com(P(Urubu, "Urubu", vida: 28, vel: 1.4f, dano: 6, penas: 24, raio: 0.45f), p => p.couraca = true),
+            Com(P(Gaviao, "Gavião-real", vida: 90, vel: 0.9f, dano: 30, penas: 200, raio: 0.8f), p => p.chefe = true),
         };
     }
 
@@ -114,7 +117,26 @@ public static class DefinicoesPadrao
         return new Melhoria { nome = nome, descricao = descricao, custo = custo, atributos = atributos };
     }
 
+    // Curva de dificuldade: a partir da onda 11, os pássaros de cada onda têm
+    // 8% a mais de vida por onda (onda 20 = ×1,8; onda 30 = ×2,6). É o número
+    // que mais mexe no "difícil na medida certa": a renda do jogador cresce
+    // rápido no fim, e a vida dos pássaros acompanha.
+    public const float CrescimentoVidaPorOnda = 0.08f;
+    public const int OndaInicioCrescimento = 10;
+
     public static List<DadosOnda> Ondas()
+    {
+        var ondas = OndasBase();
+        for (int i = 0; i < ondas.Count; i++)
+        {
+            int numero = i + 1;
+            if (numero <= OndaInicioCrescimento) continue;
+            foreach (var g in ondas[i].grupos) g.multiplicadorVida *= 1f + CrescimentoVidaPorOnda * (numero - OndaInicioCrescimento);
+        }
+        return ondas;
+    }
+
+    static List<DadosOnda> OndasBase()
     {
         return new List<DadosOnda>
         {
@@ -136,14 +158,16 @@ public static class DefinicoesPadrao
             O(G(Pata, 4, 2.5f), G(Sabia, 15, 0.6f, 1f)),
             O(G(BeijaFlor, 15, 0.5f), G(Arara, 8, 1.2f, 4f)),
             O(G(Pata, 8, 1.6f), G(Arara, 10, 1.2f, 2f)),
-            // 15–19: urubus (couraça); a 18 é uma revoada densa
-            O(G(Urubu, 2, 4f), G(Sabia, 20, 0.5f, 1f)),
-            O(G(Urubu, 5, 2.5f), G(BeijaFlor, 25, 0.45f, 2f)),
+            // 15–19: urubus (couraça); a 18 é uma revoada densa. As ondas 16 e 19
+            // são a virada do jogo: quem só tem pedrinha (meia força na couraça)
+            // ou não investiu em penas costuma cair aqui ou logo depois.
+            O(G(Urubu, 3, 4f), G(Sabia, 20, 0.5f, 1f)),
+            O(G(Urubu, 8, 2.5f), G(BeijaFlor, 25, 0.45f, 2f)),
             O(G(Pata, 12, 1.2f), G(Arara, 12, 1f, 3f)),
             O(G(Pardal, 80, 0.12f), G(BeijaFlor, 20, 0.35f, 4f)),
-            O(G(Urubu, 8, 1.8f), G(Pata, 10, 1.4f, 3f)),
+            O(G(Urubu, 13, 1.8f), G(Pata, 10, 1.4f, 3f)),
             // 20: chefe 2
-            O(G(Urubu, 4, 3f), G(Gaviao, 1, 1f, 3f, 2.8f)),
+            O(G(Urubu, 4, 3f), G(Gaviao, 1, 1f, 3f, 2.2f)),
             // 21–29: misturas densas
             O(G(Arara, 25, 0.6f), G(Sabia, 30, 0.3f, 2f)),
             O(G(Urubu, 10, 1.2f), G(BeijaFlor, 30, 0.35f, 3f)),
@@ -171,11 +195,13 @@ public static class DefinicoesPadrao
             esperaAuto = 2f,
             ninho = new List<NivelNinho>
             {
-                new NivelNinho { multiplicador = 1.25f, custo = 250 },
-                new NivelNinho { multiplicador = 1.5f, custo = 500 },
-                new NivelNinho { multiplicador = 1.75f, custo = 900 },
-                new NivelNinho { multiplicador = 2f, custo = 1500 },
-                new NivelNinho { multiplicador = 2.5f, custo = 2500 },
+                // Mais barato que o ponto de partida do design (250 … 2500): com os
+                // preços antigos o Ninho não se pagava nunca e a escolha não existia.
+                new NivelNinho { multiplicador = 1.25f, custo = 120 },
+                new NivelNinho { multiplicador = 1.5f, custo = 250 },
+                new NivelNinho { multiplicador = 1.75f, custo = 450 },
+                new NivelNinho { multiplicador = 2f, custo = 750 },
+                new NivelNinho { multiplicador = 2.5f, custo = 1200 },
             },
         };
     }

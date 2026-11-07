@@ -32,6 +32,21 @@ public static class ConstrutorRevoada
         return $"Revoada reconstruído: {d.passaros.Count} pássaros, {d.porcos.Count} porcos, {d.ondas.Count} ondas";
     }
 
+    [MenuItem("Revoada/Balanceamento (robôs)")]
+    static void Balanceamento() => Debug.Log(Robos.Relatorio(ConstrutorDados.Carregar()));
+
+    // No Play: o robô Equilibrado joga até a onda 18 (a revoada densa), para ver de perto.
+    [MenuItem("Revoada/Pular para a onda 18 (robô)")]
+    static void PularParaOnda18()
+    {
+        if (!Application.isPlaying || Jogo.Atual == null)
+        {
+            Debug.Log("Revoada: dê Play primeiro.");
+            return;
+        }
+        Robos.AvancarAteOnda(Jogo.Atual.Sim, 18);
+    }
+
     [MenuItem("Revoada/Restaurar números padrão")]
     static void RestaurarNumerosPadrao()
     {
