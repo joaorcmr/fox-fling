@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Gera os efeitos sonoros do Fox Fling em WAV (Assets/FoxFling/Audio).
+"""Gera os efeitos sonoros do Revoada em WAV (Assets/Revoada/Audio).
 
 Uso:  python3 Tools/gerar_sons.py
 
 Síntese simples com Python puro: senos com envelope, ruído filtrado e
-varreduras de frequência. 22 050 Hz, mono, 16 bits.
+varreduras de frequência. 22 050 Hz, mono, 16 bits. Imprime a duração e o
+pico de cada som (o pico fica abaixo de 0,95 para não distorcer).
 """
 import math
 import os
@@ -13,7 +14,7 @@ import struct
 import wave
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SAIDA = os.path.join(RAIZ, "Assets", "FoxFling", "Audio")
+SAIDA = os.path.join(RAIZ, "Assets", "Revoada", "Audio")
 TAXA = 22050
 
 
@@ -53,7 +54,7 @@ def envelope(faixa, ataque=0.005, queda=None):
     return out
 
 
-def seno(freq_ini, duracao, freq_fim=None, vol=1.0, harmonicos=(1.0,)):
+def seno(freq_ini, duracao, freq_fim=None, vol=1.0, harmonicos=(1.0,), vibrato=0.0, vel_vibrato=6.0):
     freq_fim = freq_ini if freq_fim is None else freq_fim
     n = amostras(duracao)
     fase = 0.0
@@ -61,15 +62,16 @@ def seno(freq_ini, duracao, freq_fim=None, vol=1.0, harmonicos=(1.0,)):
     for i in range(n):
         t = i / max(1, n - 1)
         f = freq_ini * (freq_fim / freq_ini) ** t  # varredura exponencial soa mais natural
+        if vibrato:
+            f *= 1 + vibrato * math.sin(2 * math.pi * vel_vibrato * i / TAXA)
         fase += 2 * math.pi * f / TAXA
-        v = sum(a * math.sin(fase * (k + 1)) for k, a in enumerate(harmonicos))
-        out.append(v * vol)
+        out.append(vol * sum(a * math.sin(fase * (k + 1)) for k, a in enumerate(harmonicos)))
     return out
 
 
-def quadrada(freq, duracao, vol=1.0):
-    n = amostras(duracao)
-    return [vol * (1.0 if math.sin(2 * math.pi * freq * i / TAXA) >= 0 else -1.0) for i in range(n)]
+def quadrada(freq, duracao, vol=1.0, brilho=0.35):
+    """Onda quadrada suavizada (soma de harmônicos ímpares), menos estridente."""
+    return seno(freq, duracao, vol=vol, harmonicos=(1.0, 0, brilho, 0, brilho * 0.5, 0, brilho * 0.25))
 
 
 def ruido(duracao, vol=1.0, corte=1.0, semente=0):
@@ -108,77 +110,86 @@ def salvar(nome, faixa, pico=0.85):
         w.setsampwidth(2)
         w.setframerate(TAXA)
         w.writeframes(b"".join(struct.pack("<h", int(max(-1, min(1, v)) * 32767)) for v in faixa))
-    return caminho, len(faixa) / TAXA
+    return len(faixa) / TAXA, max(abs(v) for v in faixa)
+
+
+def nota(freq, dur, vol=1.0, queda=None, harmonicos=(1, 0.4, 0.15)):
+    return envelope(seno(freq, dur, vol=vol, harmonicos=harmonicos), ataque=0.006, queda=queda or dur * 0.7)
 
 
 def sons():
     s = {}
-    s["lancar"] = misturar(
-        envelope(ruido_varrido(0.4, 0.05, 0.4, vol=0.6, semente=1), ataque=0.06, queda=0.25),
-        envelope(seno(220, 0.25, 110, vol=0.7, harmonicos=(1, 0.5, 0.25)), queda=0.1),
+    # Estouro: um "plop" de bolha que cai de tom e um sopro de penas.
+    for k, (f0, f1) in enumerate(((900, 260), (1050, 300), (780, 220))):
+        s["estouro_%d" % (k + 1)] = misturar(
+            envelope(seno(f0, 0.12, f1, vol=0.9, harmonicos=(1, 0.25)), ataque=0.002, queda=0.06),
+            atrasar(envelope(ruido_varrido(0.22, 0.5, 0.08, vol=0.35, semente=40 + k), ataque=0.01, queda=0.12), 0.015),
+        )
+    # Tiros.
+    s["tiro_estilingue"] = misturar(
+        envelope(seno(380, 0.09, 820, vol=0.6), ataque=0.003, queda=0.05),
+        envelope(ruido(0.05, vol=0.4, corte=0.6, semente=1), queda=0.02),
     )
-    s["esticar"] = envelope(seno(110, 0.3, 190, vol=0.5, harmonicos=(1, 0.6, 0.4, 0.3)), ataque=0.05, queda=0.4)
-    s["pulo"] = envelope(seno(300, 0.18, 620, vol=0.8), queda=0.12)
-    s["impacto_madeira"] = misturar(
-        envelope(seno(190, 0.2, 150, harmonicos=(1, 0.5, 0.3)), queda=0.06),
-        envelope(ruido(0.08, vol=0.5, corte=0.3, semente=2), queda=0.03),
+    s["tiro_arpao"] = misturar(
+        envelope(ruido_varrido(0.28, 0.08, 0.55, vol=0.55, semente=2), ataque=0.02, queda=0.18),
+        envelope(seno(520, 0.16, 240, vol=0.5, harmonicos=(1, 0.5, 0.3)), ataque=0.002, queda=0.07),
     )
-    quebra_madeira = [envelope(ruido(0.12, vol=0.9, corte=0.5, semente=10 + k), queda=0.05) for k in range(4)]
-    s["quebra_madeira"] = misturar(
-        envelope(seno(150, 0.3, 90, harmonicos=(1, 0.4)), queda=0.12),
-        *[atrasar(q, 0.04 + 0.07 * k) for k, q in enumerate(quebra_madeira)],
+    s["tiro_bomba"] = misturar(
+        envelope(seno(140, 0.22, 60, vol=1.0, harmonicos=(1, 0.3)), ataque=0.002, queda=0.12),
+        envelope(ruido(0.12, vol=0.5, corte=0.12, semente=3), queda=0.05),
     )
-    s["impacto_vidro"] = misturar(*[envelope(seno(f, 0.3, vol=v), queda=0.1) for f, v in ((2300, 0.6), (3450, 0.4), (4200, 0.3))])
-    rnd = random.Random(5)
-    s["quebra_vidro"] = misturar(
-        envelope(ruido(0.5, vol=0.5, corte=0.9, semente=3), queda=0.2),
-        *[atrasar(envelope(seno(rnd.uniform(2500, 5200), 0.15, vol=0.5), queda=0.05), rnd.uniform(0, 0.45)) for _ in range(14)],
-    )
-    s["impacto_rocha"] = misturar(
-        envelope(seno(95, 0.22, 70, harmonicos=(1, 0.3)), queda=0.08),
-        envelope(ruido(0.1, vol=0.6, corte=0.15, semente=4), queda=0.04),
-    )
-    s["quebra_rocha"] = misturar(
-        envelope(ruido(0.7, vol=1.0, corte=0.08, semente=6), ataque=0.01, queda=0.35),
-        *[atrasar(envelope(seno(rnd.uniform(70, 130), 0.15, harmonicos=(1, 0.4)), queda=0.06), 0.08 * k) for k in range(5)],
-    )
-    s["inimigo_morre"] = misturar(
-        envelope(seno(900, 0.25, 180, vol=0.8, harmonicos=(1, 0.3)), queda=0.15),
-        atrasar(envelope(ruido(0.25, vol=0.5, corte=0.2, semente=7), ataque=0.02, queda=0.12), 0.05),
-    )
+    # Explosão de lama: estrondo abafado e um "splash" molhado.
     s["explosao"] = misturar(
-        envelope(ruido(1.4, vol=1.0, corte=0.06, semente=8), ataque=0.003, queda=0.7),
-        envelope(ruido(0.25, vol=0.6, corte=0.6, semente=9), ataque=0.001, queda=0.08),
-        envelope(seno(70, 0.8, 35), queda=0.4),
+        envelope(ruido(0.6, vol=0.9, corte=0.07, semente=4), ataque=0.003, queda=0.28),
+        envelope(seno(220, 0.3, 70, vol=0.6, vibrato=0.08, vel_vibrato=28), ataque=0.004, queda=0.16),
+        atrasar(envelope(ruido_varrido(0.25, 0.4, 0.05, vol=0.4, semente=5), queda=0.12), 0.04),
     )
-    s["arrancada"] = misturar(
-        envelope(ruido_varrido(0.35, 0.05, 0.7, vol=0.7, semente=12), ataque=0.02, queda=0.25),
-        envelope(seno(300, 0.3, 1300, vol=0.5), ataque=0.01, queda=0.2),
+    # Loja.
+    s["compra"] = misturar(nota(1318.5, 0.12, 0.7, 0.08), atrasar(nota(1975.5, 0.22, 0.6, 0.16), 0.07))
+    s["upgrade"] = misturar(*[atrasar(nota(f, 0.2, 0.7, 0.14), 0.065 * k)
+                              for k, f in enumerate((523.25, 659.25, 783.99, 1046.5))])
+    s["venda"] = misturar(nota(1046.5, 0.12, 0.6, 0.08), atrasar(nota(783.99, 0.2, 0.6, 0.14), 0.08))
+    s["erro"] = misturar(envelope(quadrada(196, 0.12, vol=0.5), queda=0.1),
+                         atrasar(envelope(quadrada(147, 0.18, vol=0.5), queda=0.14), 0.12))
+    # Corneta de início de onda.
+    corneta = (1, 0.7, 0.5, 0.35, 0.2)
+    s["onda"] = misturar(
+        envelope(seno(392, 0.22, vol=0.6, harmonicos=corneta, vibrato=0.01), ataque=0.03, queda=0.3),
+        atrasar(envelope(seno(523.25, 0.5, vol=0.6, harmonicos=corneta, vibrato=0.012), ataque=0.03, queda=0.45), 0.2),
     )
-    notas = (523.25, 659.25, 783.99, 1046.5)
+    # Chefe: notas graves descendo, com tremor, e um tambor.
+    s["chefe"] = misturar(
+        *[atrasar(envelope(seno(f, 0.45, vol=0.6, harmonicos=corneta, vibrato=0.02, vel_vibrato=9), ataque=0.02,
+                           queda=0.5), 0.32 * k) for k, f in enumerate((196.0, 185.0, 146.83))],
+        *[atrasar(envelope(seno(90, 0.15, 50, vol=0.9), queda=0.08), 0.32 * k) for k in range(3)],
+    )
+    # Torre apanhando: pancada e um grunhido de porco.
+    s["torre"] = misturar(
+        envelope(seno(110, 0.18, 70, vol=0.8, harmonicos=(1, 0.4)), queda=0.08),
+        envelope(ruido(0.1, vol=0.5, corte=0.2, semente=6), queda=0.04),
+        atrasar(envelope(seno(560, 0.24, 1150, vol=0.45, harmonicos=(1, 0.6, 0.4), vibrato=0.05, vel_vibrato=32),
+                         ataque=0.01, queda=0.2), 0.05),
+    )
+    # Fim de jogo.
     s["vitoria"] = misturar(
-        *[atrasar(envelope(seno(f, 0.5, harmonicos=(1, 0.3, 0.1)), queda=0.35), 0.12 * k) for k, f in enumerate(notas)],
-        atrasar(envelope(seno(1046.5, 0.9, harmonicos=(1, 0.3, 0.1)), queda=0.7), 0.5),
-        atrasar(envelope(seno(1318.5, 0.9, harmonicos=(1, 0.3)), queda=0.7), 0.5),
+        *[atrasar(nota(f, 0.5, 0.7, 0.35), 0.12 * k) for k, f in enumerate((523.25, 659.25, 783.99, 1046.5))],
+        atrasar(nota(1046.5, 1.0, 0.6, 0.8), 0.5),
+        atrasar(nota(1318.5, 1.0, 0.5, 0.8), 0.5),
     )
     s["derrota"] = misturar(
-        *[atrasar(envelope(seno(f, 0.4 if k < 3 else 0.9, f * 0.97 if k < 3 else f * 0.85, harmonicos=(1, 0.5, 0.3)), queda=0.3 if k < 3 else 0.8), 0.3 * k)
+        *[atrasar(envelope(seno(f, 0.4 if k < 3 else 1.0, f * 0.97 if k < 3 else f * 0.85, harmonicos=(1, 0.5, 0.3)),
+                           queda=0.3 if k < 3 else 0.8), 0.3 * k)
           for k, f in enumerate((392.0, 369.99, 349.23, 329.63))],
     )
     s["clique"] = envelope(seno(1500, 0.05, 900, vol=0.6), queda=0.02)
-    s["estrela"] = misturar(
-        envelope(seno(1318.5, 0.6, vol=0.7), queda=0.3),
-        envelope(seno(1975.5, 0.6, vol=0.4), queda=0.25),
-        atrasar(envelope(seno(2637, 0.3, vol=0.25), queda=0.15), 0.05),
-    )
     return s
 
 
 def main():
     os.makedirs(SAIDA, exist_ok=True)
     for nome, faixa in sons().items():
-        caminho, dur = salvar(nome, faixa)
-        print("%-16s %.2fs  %6d bytes" % (nome, dur, os.path.getsize(caminho)))
+        dur, pico = salvar(nome, faixa)
+        print("%-16s %.2fs  pico %.2f" % (nome, dur, pico))
 
 
 if __name__ == "__main__":
