@@ -279,8 +279,8 @@ MonoBehaviour:
   atacanteBomba: {fileID: 2536882794081317258, guid: 79ac50ae71e32474a9201e1a2e0daf92, type: 3}
   atacanteGrande: {fileID: 8436211895081003021, guid: e303ee23817daa543bf6cb08a7a12df7, type: 3}
   hud: {fileID: 1127991377}
-  tempoAntesDaLeva: 2.5
-  descansoEntreLevas: 3
+  catalogo: {fileID: 11400000, guid: f179e555b1e6d7444b73d0f28be0c5e7, type: 2}
+  saldoInicial: 500
   xDeEntrada: -8.3
   alturaDoChao: -4.5
 --- !u!4 &162649255

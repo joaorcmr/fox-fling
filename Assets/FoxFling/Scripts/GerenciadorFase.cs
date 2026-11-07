@@ -5,8 +5,10 @@ using UnityEngine.SceneManagement;
 
 // Juiz da fase (tower defense): a CPU manda levas de raposas que andam até a torre e
 // o jogador tem que manter pelo menos um tubarão vivo até a última leva acabar.
-// Gera as raposas de cada leva (Regras.ComporLeva), acompanha tubarões e raposas e decide
-// vitória ou derrota (Regras.EstadoAposOnda).
+//
+// O ciclo de cada leva: PREPARAR (loja aberta, o jogador compra e depois clica em "Iniciar
+// leva") → LEVA (as raposas de Regras.ComporLeva entram) → ganha pontos (Regras.PontosDaLeva).
+// Perder o último tubarão é derrota; sobreviver à última leva é vitória (Regras.EstadoAposOnda).
 public class GerenciadorFase : MonoBehaviour
 {
     public static GerenciadorFase Instance { get; private set; }
@@ -21,11 +23,11 @@ public class GerenciadorFase : MonoBehaviour
     public RaposaAtacante atacanteNormal, atacanteNinja, atacanteBomba, atacanteGrande;
     public Hud hud;
 
-    [Tooltip("Segundos de calma antes da primeira leva.")]
-    public float tempoAntesDaLeva = 2.5f;
+    [Tooltip("O que a loja vende (Assets/FoxFling/Loja/Catalogo).")]
+    public CatalogoLoja catalogo;
 
-    [Tooltip("Segundos de descanso entre uma leva e a próxima.")]
-    public float descansoEntreLevas = 3f;
+    [Tooltip("Pontos para gastar na loja quando a fase começa.")]
+    public int saldoInicial = 500;
 
     [Tooltip("De onde as raposas entram: fora da tela, à esquerda, em cima do chão.")]
     public float xDeEntrada = -8.3f;
@@ -35,18 +37,27 @@ public class GerenciadorFase : MonoBehaviour
     // Depois que a leva acaba, espera o mundo parar por no máximo isto antes de decidir.
     const float EsperaMaximaFimDaLeva = 4f;
 
+    public int Saldo { get; private set; }
+
+    // Soma de tudo que o jogador ganhou nas levas (é o que aparece na tela de resultado).
     public int Pontos { get; private set; }
+
     public EstadoFase Estado { get; private set; } = EstadoFase.Jogando;
     public int InimigosVivos => inimigos.Count;
     public int RaposasRestantes => porNascer + atacantes.Count;
     public int LevaAtual { get; private set; }
+    public Loja Loja { get; private set; }
 
     readonly List<Inimigo> inimigos = new List<Inimigo>();
     readonly List<RaposaAtacante> atacantes = new List<RaposaAtacante>();
     int porNascer;
     int tubaroesNoInicio;
+    int tubaroesNoInicioDaLeva;
+    int pontosDaLeva;
     float instanteFimDaLeva = -1f;
+    bool iniciarPedido;
     bool resultadoMostrado;
+    string mensagemDaLeva = "";
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     static void ResetarStatics() => Instance = null;
@@ -62,10 +73,16 @@ public class GerenciadorFase : MonoBehaviour
         if (Instance == this) Instance = null;
     }
 
+    void Update()
+    {
+        // Atalho para o botão "Iniciar leva". (Enter não: ele também "aperta" botões do UI.)
+        if (Estado == EstadoFase.Preparando && Input.GetKeyDown(KeyCode.Space))
+            IniciarLeva();
+    }
+
     IEnumerator Start()
     {
         if (hud != null) hud.Configurar(nomeFase, dificuldade);
-        if (hud != null) hud.AtualizarPontos(0);
 
         if (atacanteNormal == null)
         {
@@ -74,24 +91,45 @@ public class GerenciadorFase : MonoBehaviour
             yield break;
         }
 
-        // Os tubarões se registram no Start deles; depois da espera a lista está completa.
-        if (hud != null) hud.MostrarDica($"Defenda a torre! {levas} levas de raposas vêm aí...");
-        yield return new WaitForSeconds(tempoAntesDaLeva);
+        Saldo = saldoInicial;
+        AtualizarSaldo();
+
+        // Os tubarões se registram no Start deles; um quadro depois a lista está completa.
+        yield return null;
         tubaroesNoInicio = inimigos.Count;
+
+        Loja = gameObject.AddComponent<Loja>();
+        Loja.Configurar(this, catalogo);
 
         for (LevaAtual = 1; LevaAtual <= levas; LevaAtual++)
         {
+            yield return Preparar();
             yield return RodarLeva();
             if (Estado != EstadoFase.Jogando) yield break; // perdeu
 
-            if (LevaAtual < levas)
-            {
-                if (hud != null) hud.MostrarDica($"Leva {LevaAtual} de {levas} concluída! Prepare-se...");
-                yield return new WaitForSeconds(descansoEntreLevas);
-            }
+            ConcluirLeva();
         }
 
         StartCoroutine(Vitoria());
+    }
+
+    // Loja aberta: espera o jogador clicar em "Iniciar leva".
+    IEnumerator Preparar()
+    {
+        Estado = EstadoFase.Preparando;
+        iniciarPedido = false;
+        Loja.Abrir(mensagemDaLeva + $"Leva {LevaAtual} de {levas}: compre e clique em Iniciar leva (Espaço)");
+        mensagemDaLeva = "";
+
+        while (!iniciarPedido) yield return null;
+
+        Loja.Fechar();
+        Estado = EstadoFase.Jogando;
+    }
+
+    public void IniciarLeva()
+    {
+        if (Estado == EstadoFase.Preparando) iniciarPedido = true;
     }
 
     // Gera as raposas da leva, uma a uma, e espera até a leva acabar (ou o jogador perder).
@@ -102,6 +140,9 @@ public class GerenciadorFase : MonoBehaviour
 
         porNascer = leva.Length;
         instanteFimDaLeva = -1f;
+        pontosDaLeva = 0;
+        tubaroesNoInicioDaLeva = inimigos.Count;
+        AtualizarSaldo();
         AtualizarDica();
 
         for (int i = 0; i < leva.Length; i++)
@@ -128,6 +169,20 @@ public class GerenciadorFase : MonoBehaviour
             if (novo == EstadoFase.Derrota) StartCoroutine(Derrota());
             else if (novo == EstadoFase.Vitoria) yield break; // leva sobrevivida
         }
+    }
+
+    // Sobreviveu à leva: os pontos viram saldo, menos a penalidade pelos tubarões perdidos.
+    void ConcluirLeva()
+    {
+        int perdidos = tubaroesNoInicioDaLeva - inimigos.Count;
+        int ganho = Regras.PontosDaLeva(pontosDaLeva, perdidos, Regras.NivelDaLeva(numeroFase, LevaAtual));
+        Saldo += ganho;
+        Pontos += ganho;
+        pontosDaLeva = 0;
+        AtualizarSaldo();
+
+        mensagemDaLeva = $"Leva {LevaAtual} concluída: +{Regras.FormatarPontos(ganho)} pontos"
+                       + (perdidos > 0 ? $"  ·  tubarões perdidos: {perdidos}" : "") + "\n";
     }
 
     RaposaAtacante Prefab(TipoRaposa tipo)
@@ -172,6 +227,11 @@ public class GerenciadorFase : MonoBehaviour
         hud.MostrarDica($"Leva {LevaAtual} de {levas}   ·   Raposas: {RaposasRestantes}   ·   Tubarões: {inimigos.Count}");
     }
 
+    public void Mensagem(string texto)
+    {
+        if (hud != null) hud.MostrarDica(texto);
+    }
+
     bool MundoParado()
     {
         foreach (var corpo in FindObjectsByType<Rigidbody2D>())
@@ -197,13 +257,59 @@ public class GerenciadorFase : MonoBehaviour
             StartCoroutine(Derrota());
     }
 
+    // ---- pontos e loja ----
+
+    // Pontos de raposas derrotadas: ficam "pendentes" até o fim da leva (ver ConcluirLeva).
     public void AdicionarPontos(int pontos, Vector3 onde)
     {
         if (resultadoMostrado || pontos <= 0) return;
-        Pontos += pontos;
-        if (hud != null) hud.AtualizarPontos(Pontos);
+        pontosDaLeva += pontos;
+        AtualizarSaldo();
         Efeitos.Pontos(onde, pontos);
     }
+
+    void AtualizarSaldo()
+    {
+        if (hud != null) hud.AtualizarPontos(Saldo, pontosDaLeva);
+        if (Loja != null) Loja.Atualizar();
+    }
+
+    public bool TentarGastar(int valor)
+    {
+        if (valor > Saldo) return false;
+        Saldo -= valor;
+        AtualizarSaldo();
+        return true;
+    }
+
+    // A torre = tudo que quebra e não é raposa (blocos e tubarões).
+    IEnumerable<Destrutivel> PecasDaTorre()
+    {
+        foreach (var d in FindObjectsByType<Destrutivel>())
+            if (!(d is RaposaAtacante) && !d.Morto) yield return d;
+    }
+
+    public bool TorreDanificada()
+    {
+        foreach (var d in PecasDaTorre())
+            if (d.Danificado) return true;
+        return false;
+    }
+
+    // Devolve quantas peças foram reparadas.
+    public int RepararTorre()
+    {
+        int n = 0;
+        foreach (var d in PecasDaTorre())
+        {
+            if (!d.Danificado) continue;
+            d.RestaurarVida();
+            n++;
+        }
+        return n;
+    }
+
+    // ---- fim da fase ----
 
     IEnumerator Vitoria()
     {

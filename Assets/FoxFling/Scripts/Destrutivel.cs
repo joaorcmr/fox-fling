@@ -20,6 +20,7 @@ public abstract class Destrutivel : MonoBehaviour
 
     public float Vida { get; private set; }
     public bool Morto { get; private set; }
+    public bool Danificado => !Morto && Vida < vidaMaxima - 0.01f;
 
     protected Rigidbody2D rb;
     readonly ContactPoint2D[] contatos = new ContactPoint2D[8];
@@ -69,6 +70,16 @@ public abstract class Destrutivel : MonoBehaviour
     protected virtual void AoBater(float impulso) { }
 
     protected virtual void AoMudarVida() { }
+
+    // Reparo (loja): volta à vida cheia, e quem tem sprite "ferido" volta ao sprite inteiro.
+    public void RestaurarVida()
+    {
+        if (Morto) return;
+        Vida = vidaMaxima;
+        AoRestaurar();
+    }
+
+    protected virtual void AoRestaurar() { }
 
     // Quantos pontos o jogador ganha quando isto morre. Por padrão, o campo "pontos";
     // blocos e tubarões sobrescrevem para 0 (no tower defense só as raposas valem).

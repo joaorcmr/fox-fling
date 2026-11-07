@@ -76,6 +76,13 @@ public class Bloco : Destrutivel
         }
     }
 
+    protected override void AoRestaurar()
+    {
+        rachado = false;
+        sr.sprite = EscolherSprite(false);
+        sr.size = tamanho;
+    }
+
     // No tower defense a torre é do jogador: quebrar um bloco não rende pontos.
     protected override int PontosAoMorrer => 0;
 

@@ -141,6 +141,47 @@ public static class ConstrutorAssets
         return m;
     }
 
+    // ---- Loja (Assets/FoxFling/Loja) ----
+    // Cada item e o catálogo são assets. Como nos materiais de bloco, os NÚMEROS (preço etc.)
+    // só são escritos quando o asset é criado: depois você pode ajustá-los no Inspector e
+    // "Reconstruir tudo" não desfaz. A lista de itens do catálogo é sempre reescrita.
+    public const string PastaLoja = Raiz + "/Loja";
+
+    public static CatalogoLoja CriarCatalogo()
+    {
+        GarantirPasta(PastaLoja);
+
+        var reparo = Item("Reparo", "Reparar", "Recupera a vida de todos os blocos e tubarões da torre.", 250, TipoItem.Reparo);
+
+        string caminho = $"{PastaLoja}/Catalogo.asset";
+        var catalogo = AssetDatabase.LoadAssetAtPath<CatalogoLoja>(caminho);
+        if (catalogo == null)
+        {
+            catalogo = ScriptableObject.CreateInstance<CatalogoLoja>();
+            AssetDatabase.CreateAsset(catalogo, caminho);
+        }
+        catalogo.itens = new[] { reparo };
+        EditorUtility.SetDirty(catalogo);
+        AssetDatabase.SaveAssets();
+        return catalogo;
+    }
+
+    static ItemLoja Item(string arquivo, string nome, string descricao, int preco, TipoItem tipo)
+    {
+        string caminho = $"{PastaLoja}/Item_{arquivo}.asset";
+        var item = AssetDatabase.LoadAssetAtPath<ItemLoja>(caminho);
+        if (item == null)
+        {
+            item = ScriptableObject.CreateInstance<ItemLoja>();
+            item.nome = nome;
+            item.descricao = descricao;
+            item.preco = preco;
+            item.tipo = tipo;
+            AssetDatabase.CreateAsset(item, caminho);
+        }
+        return item;
+    }
+
     public static void GarantirPasta(string caminho)
     {
         if (AssetDatabase.IsValidFolder(caminho)) return;

@@ -48,9 +48,11 @@ public class Hud : MonoBehaviour
         textoFase.text = $"{nomeFase} · {dificuldade}";
     }
 
-    public void AtualizarPontos(int pontos)
+    // Saldo da loja; "pendentes" são os pontos da leva em andamento, que só entram no saldo no fim dela.
+    public void AtualizarPontos(int saldo, int pendentes = 0)
     {
-        textoPontos.text = "Pontos: " + Regras.FormatarPontos(pontos);
+        textoPontos.text = "Saldo: " + Regras.FormatarPontos(saldo)
+            + (pendentes > 0 ? "  (+" + Regras.FormatarPontos(pendentes) + ")" : "");
     }
 
     public void MostrarDica(string texto)

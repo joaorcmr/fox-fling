@@ -64,6 +64,7 @@ public static class ConstrutorCenas
         fase.atacanteBomba = ConstrutorPrefabs.AtacanteBomba;
         fase.atacanteGrande = ConstrutorPrefabs.AtacanteGrande;
         fase.hud = sistemas.GetComponentInChildren<Hud>();
+        fase.catalogo = CriarCatalogo();
 
         var estrutura = new GameObject("Estrutura").transform;
         foreach (var peca in def.pecas)

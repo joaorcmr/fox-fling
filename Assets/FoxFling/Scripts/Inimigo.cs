@@ -9,11 +9,18 @@ public class Inimigo : Destrutivel
     public Sprite spriteFerido;
 
     SpriteRenderer sr;
+    Sprite spriteSaudavel;
 
     protected override void Awake()
     {
         sr = GetComponent<SpriteRenderer>();
+        spriteSaudavel = sr.sprite;
         base.Awake();
+    }
+
+    protected override void AoRestaurar()
+    {
+        sr.sprite = spriteSaudavel;
     }
 
     void Start()
