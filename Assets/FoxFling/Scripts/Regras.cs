@@ -105,4 +105,55 @@ public static class Regras
         if (tubaroesVivos * 2 >= tubaroesNoInicio) return 2;
         return 1;
     }
+
+    // ---- Níveis e levas (issue #5) ----
+    // Cada fase tem LevasPorFase levas seguidas. O "nível" conta as levas de todas as
+    // fases (fase 1 leva 1 = nível 1; fase 5 leva 3 = nível 15): quanto maior, mais raposas
+    // e mais tipos fortes entre elas.
+    public const int LevasPorFase = 3;
+
+    public static int NivelDaLeva(int fase, int leva) => (fase - 1) * LevasPorFase + leva;
+
+    public static int QuantidadeDeRaposas(int nivel) => 1 + nivel;
+
+    // Nos níveis mais altos as raposas chegam mais seguidas.
+    public static float IntervaloEntreRaposas(int nivel) => Mathf.Max(0.7f, 1.6f - 0.06f * nivel);
+
+    // A leva em ordem de entrada: primeiro as normais, depois ninjas, grandes e bombas
+    // (a leva "cresce" até o fim). Cada tipo especial aparece a partir de um nível e sua
+    // fração sobe por nível até um teto; a fração das normais é o que sobra.
+    public static TipoRaposa[] ComporLeva(int fase, int leva)
+    {
+        int nivel = Mathf.Max(1, NivelDaLeva(fase, leva));
+        int total = QuantidadeDeRaposas(nivel);
+
+        int ninjas = QuantosDoTipo(total, nivel, 2, 0.04f, 0.30f);
+        int grandes = QuantosDoTipo(total, nivel, 6, 0.02f, 0.20f);
+        int bombas = QuantosDoTipo(total, nivel, 4, 0.025f, 0.20f);
+
+        // Sempre sobra pelo menos uma normal.
+        while (ninjas + grandes + bombas > total - 1)
+        {
+            if (ninjas >= grandes && ninjas >= bombas) ninjas--;
+            else if (bombas >= grandes) bombas--;
+            else grandes--;
+        }
+
+        var composicao = new TipoRaposa[total];
+        int i = 0;
+        int normais = total - ninjas - grandes - bombas;
+        for (int k = 0; k < normais; k++) composicao[i++] = TipoRaposa.Normal;
+        for (int k = 0; k < ninjas; k++) composicao[i++] = TipoRaposa.Ninja;
+        for (int k = 0; k < grandes; k++) composicao[i++] = TipoRaposa.Grande;
+        for (int k = 0; k < bombas; k++) composicao[i++] = TipoRaposa.Bomba;
+        return composicao;
+    }
+
+    // 0 antes do primeiro nível do tipo; depois, pelo menos 1 e a fração crescente (com teto).
+    static int QuantosDoTipo(int total, int nivel, int primeiroNivel, float fracaoPorNivel, float teto)
+    {
+        if (nivel < primeiroNivel) return 0;
+        float fracao = Mathf.Min(teto, fracaoPorNivel * (nivel - primeiroNivel + 1));
+        return Mathf.Max(1, Mathf.RoundToInt(total * fracao));
+    }
 }

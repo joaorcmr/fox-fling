@@ -1,3 +1,10 @@
+## 2026-11-07 · Composição das levas por nível (raposa grande e proporções)
+- **Issue:** #5
+- **O que mudou:** `Regras.ComporLeva(fase, leva)` monta cada leva a partir do "nível" (as levas de todas as fases em sequência: fase 1 leva 1 = nível 1; fase 5 leva 3 = nível 15). O número de raposas é `1 + nível` (de 2 a 16). Os tipos especiais aparecem a partir de certo nível e a fração deles sobe até um teto: **ninja** desde o nível 2 (até 30%), **bomba** desde o 4 (até 20%) e **grande** desde o 6 (até 20%); a normal é o que sobra, e sempre há pelo menos uma. A ordem de entrada é normais, ninjas, grandes e bombas. `Regras.IntervaloEntreRaposas` diminui com o nível (de 1,6 s até no mínimo 0,7 s). Novo tipo `TipoRaposa.Grande`.
+- **Arquivos:** `Assets/FoxFling/Scripts/Regras.cs`, `Assets/FoxFling/Scripts/Raposa.cs`, `Assets/FoxFling/Tests/EditMode/LevasTests.cs` (novo, com `.meta`).
+- **Por quê / como testar:** é a regra da issue #5 (mais raposas a cada nível e proporção de tipos que muda). No Test Runner (EditMode) rodam os 9 testes novos de `LevasTests`.
+- **Atenção:** neste commit as regras ainda não são usadas pelo jogo; o commit seguinte liga nas fases.
+
 ## 2026-11-07 · Fases e prefabs ligados ao tower defense (sem "Reconstruir tudo")
 - **Issue:** #6
 - **O que mudou:** criados os prefabs das raposas atacantes (`Atacante_Normal`, `Atacante_Ninja`, `Atacante_Bomba`) e um material físico sem atrito/quique para elas. O estilingue saiu do prefab `Sistemas`. O chão (collider) ficou mais largo, de 15 para 19, para as raposas entrarem andando de fora da tela (nascem em x = -8,3). As fases 1 a 5 foram ligadas aos novos prefabs e ganharam os campos da leva (`tempoAntesDaLeva`, `intervaloEntreRaposas`, `pontoDeEntrada`); os campos da fila e do estilingue saíram. O texto do menu agora diz "Defenda a torre das raposas".

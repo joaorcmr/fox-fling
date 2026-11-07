@@ -2,7 +2,8 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public enum TipoRaposa { Normal, Ninja, Bomba }
+// Grande: lenta e muito resistente, com golpe pesado contra a estrutura (só nas raposas atacantes).
+public enum TipoRaposa { Normal, Ninja, Bomba, Grande }
 
 public enum EstadoRaposa { Fila, IndoProEstilingue, NoEstilingue, Voando, Terminada }
 
