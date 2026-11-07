@@ -86,6 +86,26 @@ public static class Regras
         return pontos.ToString("#,0", System.Globalization.CultureInfo.InvariantCulture).Replace(',', '.');
     }
 
+    // Regra do tower defense: os tubarões são o jogador e as raposas atacam a torre.
+    //  - Derrota: o último tubarão morreu (mesmo com raposas ainda por vir).
+    //  - Vitória: a leva inteira acabou (ninguém por nascer nem em campo), o mundo parou
+    //    de se mexer (pedra caindo ainda pode matar alguém) e sobrou pelo menos 1 tubarão.
+    public static EstadoFase EstadoAposOnda(int tubaroesVivos, int raposasPorNascer, int raposasEmCampo, bool mundoParado)
+    {
+        if (tubaroesVivos <= 0) return EstadoFase.Derrota;
+        if (raposasPorNascer > 0 || raposasEmCampo > 0 || !mundoParado) return EstadoFase.Jogando;
+        return EstadoFase.Vitoria;
+    }
+
+    // Estrelas pelos tubarões que sobraram: todos = 3, metade ou mais = 2, algum = 1.
+    public static int EstrelasPorSobreviventes(int tubaroesVivos, int tubaroesNoInicio, bool venceu)
+    {
+        if (!venceu || tubaroesVivos <= 0) return 0;
+        if (tubaroesVivos >= tubaroesNoInicio) return 3;
+        if (tubaroesVivos * 2 >= tubaroesNoInicio) return 2;
+        return 1;
+    }
+
     public static EstadoFase EstadoAposRaposa(int inimigosVivos, int raposasRestantes, bool mundoParado)
     {
         if (inimigosVivos <= 0) return EstadoFase.Vitoria;

@@ -1,3 +1,10 @@
+## 2026-11-07 · Regras de vitória e derrota do tower defense
+- **Issue:** #2
+- **O que mudou:** novas regras puras em `Regras`. `EstadoAposOnda(tubaroesVivos, raposasPorNascer, raposasEmCampo, mundoParado)`: **derrota** quando morre o último tubarão (mesmo com raposas por vir); **vitória** quando a leva acabou (ninguém por nascer nem em campo), o mundo parou de se mexer (pedra caindo ainda pode matar alguém) e sobrou pelo menos 1 tubarão. `EstrelasPorSobreviventes`: todos os tubarões vivos = 3 estrelas, metade ou mais = 2, algum = 1, derrota = 0. A função antiga `EstadoAposRaposa` continua por enquanto, até o `GerenciadorFase` passar a usar a nova.
+- **Arquivos:** `Assets/FoxFling/Scripts/Regras.cs`, `Assets/FoxFling/Tests/EditMode/RegrasTests.cs`.
+- **Por quê / como testar:** a issue #2 inverte a regra de vitória (antes: derrubar todos os tubarões). No Test Runner (EditMode) rodam 3 testes novos de `EstadoAposOnda` e 3 de `EstrelasPorSobreviventes`.
+- **Atenção:** as funções ainda não são usadas pelo jogo; o commit seguinte liga.
+
 ## 2026-11-07 · Raposas atacantes que andam até a torre
 - **Issue:** #6 e #1
 - **O que mudou:** nova raposa "zumbi" (`RaposaAtacante`, herda de `Destrutivel`): nasce à esquerda, anda até a torre e, ao encostar de lado num bloco ou tubarão, para e golpeia a cada intervalo (`ReceberDano`); tem vida, pode morrer e dá pontos. Ela não depende de colisão para causar dano, e as raposas atravessam umas às outras (chegam juntas). A `AtacanteBomba` corre e explode no primeiro contato (mesma `Explosao` de antes), sem ferir as outras raposas. Valores por tipo (definidos no builder): **Normal** vida 30, velocidade 1,0, golpe 8 a cada 0,8 s; **Ninja** vida 20, velocidade 2,0, golpe 5 a cada 0,6 s; **Bomba** vida 25, velocidade 1,2, explosão de raio 2,2 com até 120 de dano. `Destrutivel` ganhou `PontosAoMorrer`; `Bloco` e `Inimigo` (tubarão) devolvem 0. `Explosao.Explodir` ganhou o parâmetro `poupaAtacantes`.
