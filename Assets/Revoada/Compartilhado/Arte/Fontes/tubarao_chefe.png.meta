@@ -1,0 +1,613 @@
+fileFormatVersion: 2
+guid: 18b2e32af2d4ed840b587a18671b3cb4
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2821303325827591130
+    second: tubarao_chefe_0
+  - first:
+      213: -5225456218212450677
+    second: tubarao_chefe_1
+  - first:
+      213: 3491378073925238409
+    second: tubarao_chefe_2
+  - first:
+      213: 7466528446060071471
+    second: tubarao_chefe_3
+  - first:
+      213: -3239085533267504855
+    second: tubarao_chefe_4
+  - first:
+      213: 8378029700662517625
+    second: tubarao_chefe_5
+  - first:
+      213: 3698271635788987534
+    second: tubarao_chefe_6
+  - first:
+      213: -7132011463420155795
+    second: tubarao_chefe_7
+  - first:
+      213: -7627088132855372618
+    second: tubarao_chefe_8
+  - first:
+      213: 6989885940639602018
+    second: tubarao_chefe_9
+  - first:
+      213: -5684231845679135331
+    second: tubarao_chefe_10
+  - first:
+      213: 5608568533041710452
+    second: tubarao_chefe_11
+  - first:
+      213: -227810824548690583
+    second: tubarao_chefe_12
+  - first:
+      213: -8349197418075667314
+    second: tubarao_chefe_13
+  - first:
+      213: -3816151038017067271
+    second: tubarao_chefe_14
+  - first:
+      213: -5601745280717098669
+    second: tubarao_chefe_15
+  - first:
+      213: -8819123034584219477
+    second: tubarao_chefe_16
+  - first:
+      213: -592742914158999843
+    second: tubarao_chefe_17
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationMethod: 0
+  spriteTessellationDetail: -1
+  spriteGeometrySubdivision: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: tubarao_chefe_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1254
+        height: 1230
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: adbe49b4d68472720800000000000000
+      internalID: 2821303325827591130
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tubarao_chefe_1
+      rect:
+        serializedVersion: 2
+        x: 603
+        y: 1211
+        width: 63
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b8e371451437b77b0800000000000000
+      internalID: -5225456218212450677
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tubarao_chefe_2
+      rect:
+        serializedVersion: 2
+        x: 699
+        y: 1199
+        width: 28
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 98eb6e03cddd37030800000000000000
+      internalID: 3491378073925238409
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tubarao_chefe_3
+      rect:
+        serializedVersion: 2
+        x: 758
+        y: 1221
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f2a82c4ff007e9760800000000000000
+      internalID: 7466528446060071471
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tubarao_chefe_4
+      rect:
+        serializedVersion: 2
+        x: 577
+        y: 1162
+        width: 25
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 921db707ed47c03d0800000000000000
+      internalID: -3239085533267504855
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tubarao_chefe_5
+      rect:
+        serializedVersion: 2
+        x: 633
+        y: 1165
+        width: 9
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 97f59a1cf9db44470800000000000000
+      internalID: 8378029700662517625
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tubarao_chefe_6
+      rect:
+        serializedVersion: 2
+        x: 587
+        y: 1153
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e8cfa1e5576e25330800000000000000
+      internalID: 3698271635788987534
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tubarao_chefe_7
+      rect:
+        serializedVersion: 2
+        x: 938
+        y: 27
+        width: 30
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d68e3dc6c51060d90800000000000000
+      internalID: -7132011463420155795
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tubarao_chefe_8
+      rect:
+        serializedVersion: 2
+        x: 975
+        y: 49
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6b4ee82d0c3272690800000000000000
+      internalID: -7627088132855372618
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tubarao_chefe_9
+      rect:
+        serializedVersion: 2
+        x: 233
+        y: 31
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2651250aa30110160800000000000000
+      internalID: 6989885940639602018
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tubarao_chefe_10
+      rect:
+        serializedVersion: 2
+        x: 430
+        y: 15
+        width: 33
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d950551b04d8d11b0800000000000000
+      internalID: -5684231845679135331
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tubarao_chefe_11
+      rect:
+        serializedVersion: 2
+        x: 743
+        y: 14
+        width: 46
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 47582668d53a5dd40800000000000000
+      internalID: 5608568533041710452
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tubarao_chefe_12
+      rect:
+        serializedVersion: 2
+        x: 914
+        y: 0
+        width: 32
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 96559c61347a6dcf0800000000000000
+      internalID: -227810824548690583
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tubarao_chefe_13
+      rect:
+        serializedVersion: 2
+        x: 321
+        y: 9
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e84cdf72f21b12c80800000000000000
+      internalID: -8349197418075667314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tubarao_chefe_14
+      rect:
+        serializedVersion: 2
+        x: 528
+        y: 13
+        width: 14
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f621c989de4a0bc0800000000000000
+      internalID: -3816151038017067271
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tubarao_chefe_15
+      rect:
+        serializedVersion: 2
+        x: 946
+        y: 13
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 351f2a4b85a9242b0800000000000000
+      internalID: -5601745280717098669
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tubarao_chefe_16
+      rect:
+        serializedVersion: 2
+        x: 953
+        y: 13
+        width: 13
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba08425635e2c9580800000000000000
+      internalID: -8819123034584219477
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tubarao_chefe_17
+      rect:
+        serializedVersion: 2
+        x: 615
+        y: 0
+        width: 31
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd64c66c57726c7f0800000000000000
+      internalID: -592742914158999843
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      tubarao_chefe_0: 2821303325827591130
+      tubarao_chefe_1: -5225456218212450677
+      tubarao_chefe_10: -5684231845679135331
+      tubarao_chefe_11: 5608568533041710452
+      tubarao_chefe_12: -227810824548690583
+      tubarao_chefe_13: -8349197418075667314
+      tubarao_chefe_14: -3816151038017067271
+      tubarao_chefe_15: -5601745280717098669
+      tubarao_chefe_16: -8819123034584219477
+      tubarao_chefe_17: -592742914158999843
+      tubarao_chefe_2: 3491378073925238409
+      tubarao_chefe_3: 7466528446060071471
+      tubarao_chefe_4: -3239085533267504855
+      tubarao_chefe_5: 8378029700662517625
+      tubarao_chefe_6: 3698271635788987534
+      tubarao_chefe_7: -7132011463420155795
+      tubarao_chefe_8: -7627088132855372618
+      tubarao_chefe_9: 6989885940639602018
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

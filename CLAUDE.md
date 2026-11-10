@@ -40,7 +40,7 @@ Com o Editor fechado (o Unity não abre o mesmo projeto duas vezes), use o modo 
 `Unity.exe -batchmode -projectPath . -runTests -testPlatform EditMode -testResults Temp/resultados.xml [-testFilter SelecaoTests]`.
 
 **Arte e sons** são gerados por código:
-- `python3 Tools/gerar_arte.py` precisa do Pillow e escreve em `Assets/Revoada/Compartilhado/Arte`. O urubu e a arara saem dos originais em `Compartilhado/Arte/Fontes`, que o importador do Unity ignora. O logo usa a Arial Rounded Bold (procura o caminho do macOS e o do Windows; sem ela, sai com a fonte padrão). Com `--so logo,icone_vida` o script grava só as imagens pedidas, sem regravar o resto.
+- `python3 Tools/gerar_arte.py` precisa do Pillow e escreve em `Assets/Revoada/Compartilhado/Arte`. Os pássaros e os porcos (raposas) saem dos originais do Iran em `Compartilhado/Arte/Fontes`, que o importador do Unity ignora (`da_arte`, em `Tools/gerar_arte.py`); o resto (cenário, interface, tiros) é desenhado por código. O logo usa a Arial Rounded Bold (procura o caminho do macOS e o do Windows; sem ela, sai com a fonte padrão). Com `--so logo,icone_vida` o script grava só as imagens pedidas, sem regravar o resto.
 - `python3 Tools/gerar_sons.py` usa só a biblioteca padrão e escreve em `Assets/Revoada/Sons/Clipes`.
 
 ## Arquitetura

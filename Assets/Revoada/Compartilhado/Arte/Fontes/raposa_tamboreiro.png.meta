@@ -1,0 +1,1055 @@
+fileFormatVersion: 2
+guid: c196656d6b151624bb2e7f93f32e7ff6
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -6055561359428974679
+    second: raposa_tamboreiro_0
+  - first:
+      213: 6832087660620011881
+    second: raposa_tamboreiro_1
+  - first:
+      213: 767428476495931092
+    second: raposa_tamboreiro_2
+  - first:
+      213: -1268774167341599377
+    second: raposa_tamboreiro_3
+  - first:
+      213: -2351029708858388498
+    second: raposa_tamboreiro_4
+  - first:
+      213: 1581592876550380287
+    second: raposa_tamboreiro_5
+  - first:
+      213: -5417793748471849515
+    second: raposa_tamboreiro_6
+  - first:
+      213: -6468311802734497658
+    second: raposa_tamboreiro_7
+  - first:
+      213: 3439240437174161104
+    second: raposa_tamboreiro_8
+  - first:
+      213: 3580335596296899557
+    second: raposa_tamboreiro_9
+  - first:
+      213: -1747777051358255505
+    second: raposa_tamboreiro_10
+  - first:
+      213: 4583514462867597019
+    second: raposa_tamboreiro_11
+  - first:
+      213: -7061687960554926822
+    second: raposa_tamboreiro_12
+  - first:
+      213: -4292726757326955209
+    second: raposa_tamboreiro_13
+  - first:
+      213: -1431595042286627213
+    second: raposa_tamboreiro_14
+  - first:
+      213: -7576672435761273552
+    second: raposa_tamboreiro_15
+  - first:
+      213: 1518224022784665412
+    second: raposa_tamboreiro_16
+  - first:
+      213: -9192501175608398486
+    second: raposa_tamboreiro_17
+  - first:
+      213: 4050329385626853002
+    second: raposa_tamboreiro_18
+  - first:
+      213: 3306255441770063478
+    second: raposa_tamboreiro_19
+  - first:
+      213: 8671714145434584981
+    second: raposa_tamboreiro_20
+  - first:
+      213: -2893740329966707956
+    second: raposa_tamboreiro_21
+  - first:
+      213: -4940628607908371958
+    second: raposa_tamboreiro_22
+  - first:
+      213: -2610102572563321464
+    second: raposa_tamboreiro_23
+  - first:
+      213: -9106290141877701180
+    second: raposa_tamboreiro_24
+  - first:
+      213: -8432087939550687215
+    second: raposa_tamboreiro_25
+  - first:
+      213: 3399347456947191728
+    second: raposa_tamboreiro_26
+  - first:
+      213: -7520973535848528004
+    second: raposa_tamboreiro_27
+  - first:
+      213: 4139871660092879103
+    second: raposa_tamboreiro_28
+  - first:
+      213: 8860010385551745189
+    second: raposa_tamboreiro_29
+  - first:
+      213: 3030518684746642246
+    second: raposa_tamboreiro_30
+  - first:
+      213: 5900946903351061091
+    second: raposa_tamboreiro_31
+  - first:
+      213: -203261697052372998
+    second: raposa_tamboreiro_32
+  - first:
+      213: -4544705940637225172
+    second: raposa_tamboreiro_33
+  - first:
+      213: -775404009433387586
+    second: raposa_tamboreiro_34
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationMethod: 0
+  spriteTessellationDetail: -1
+  spriteGeometrySubdivision: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: raposa_tamboreiro_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 16
+        width: 1249
+        height: 1218
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a787aff60356fba0800000000000000
+      internalID: -6055561359428974679
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_1
+      rect:
+        serializedVersion: 2
+        x: 619
+        y: 1232
+        width: 41
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 969d595878370de50800000000000000
+      internalID: 6832087660620011881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_2
+      rect:
+        serializedVersion: 2
+        x: 681
+        y: 1231
+        width: 27
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4d62f04222476aa00800000000000000
+      internalID: 767428476495931092
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_3
+      rect:
+        serializedVersion: 2
+        x: 1145
+        y: 1032
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f657967fd98646ee0800000000000000
+      internalID: -1268774167341599377
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_4
+      rect:
+        serializedVersion: 2
+        x: 1148
+        y: 1012
+        width: 25
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eef0b13afe67f5fd0800000000000000
+      internalID: -2351029708858388498
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_5
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 970
+        width: 23
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ffad2127752f2f510800000000000000
+      internalID: 1581592876550380287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_6
+      rect:
+        serializedVersion: 2
+        x: 1123
+        y: 986
+        width: 36
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ddd00c5a4120d4b0800000000000000
+      internalID: -5417793748471849515
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_7
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 947
+        width: 21
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6803b8d9fa0fb36a0800000000000000
+      internalID: -6468311802734497658
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_8
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 966
+        width: 6
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0decceaa4f2aabf20800000000000000
+      internalID: 3439240437174161104
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_9
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 954
+        width: 11
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5eb86f16148efa130800000000000000
+      internalID: 3580335596296899557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_10
+      rect:
+        serializedVersion: 2
+        x: 1124
+        y: 945
+        width: 21
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f66263b2806aeb7e0800000000000000
+      internalID: -1747777051358255505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_11
+      rect:
+        serializedVersion: 2
+        x: 1155
+        y: 962
+        width: 16
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bd6a6169e1aeb9f30800000000000000
+      internalID: 4583514462867597019
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_12
+      rect:
+        serializedVersion: 2
+        x: 1164
+        y: 951
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a1d887cd638dffd90800000000000000
+      internalID: -7061687960554926822
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_13
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 896
+        width: 11
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 73d56bf02cb2d64c0800000000000000
+      internalID: -4292726757326955209
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_14
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 933
+        width: 13
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3769b4ad4e3f12ce0800000000000000
+      internalID: -1431595042286627213
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_15
+      rect:
+        serializedVersion: 2
+        x: 1139
+        y: 907
+        width: 40
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 035a4f600904ad690800000000000000
+      internalID: -7576672435761273552
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_16
+      rect:
+        serializedVersion: 2
+        x: 1181
+        y: 923
+        width: 12
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4476b8f64b0d11510800000000000000
+      internalID: 1518224022784665412
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_17
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 873
+        width: 5
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a6d208e72ecad6080800000000000000
+      internalID: -9192501175608398486
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_18
+      rect:
+        serializedVersion: 2
+        x: 1186
+        y: 853
+        width: 29
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a8e5d9ddd19a53830800000000000000
+      internalID: 4050329385626853002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_19
+      rect:
+        serializedVersion: 2
+        x: 1238
+        y: 725
+        width: 14
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67628679ecd22ed20800000000000000
+      internalID: 3306255441770063478
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_20
+      rect:
+        serializedVersion: 2
+        x: 1170
+        y: 662
+        width: 17
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 597cb50121e185870800000000000000
+      internalID: 8671714145434584981
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_21
+      rect:
+        serializedVersion: 2
+        x: 1158
+        y: 608
+        width: 33
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c0bdc18608e57d7d0800000000000000
+      internalID: -2893740329966707956
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_22
+      rect:
+        serializedVersion: 2
+        x: 1200
+        y: 616
+        width: 12
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a022d7a257c5f6bb0800000000000000
+      internalID: -4940628607908371958
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_23
+      rect:
+        serializedVersion: 2
+        x: 1202
+        y: 624
+        width: 13
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88da7070a8d07cbd0800000000000000
+      internalID: -2610102572563321464
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_24
+      rect:
+        serializedVersion: 2
+        x: 1190
+        y: 594
+        width: 17
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c5fcb7fc55ff9180800000000000000
+      internalID: -9106290141877701180
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_25
+      rect:
+        serializedVersion: 2
+        x: 1147
+        y: 578
+        width: 10
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 110d930b1b43bfa80800000000000000
+      internalID: -8432087939550687215
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_26
+      rect:
+        serializedVersion: 2
+        x: 1165
+        y: 566
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0bff6776088ec2f20800000000000000
+      internalID: 3399347456947191728
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_27
+      rect:
+        serializedVersion: 2
+        x: 1178
+        y: 561
+        width: 21
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c7782aeba6220a790800000000000000
+      internalID: -7520973535848528004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_28
+      rect:
+        serializedVersion: 2
+        x: 1172
+        y: 540
+        width: 11
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff0fa834757c37930800000000000000
+      internalID: 4139871660092879103
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_29
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 111
+        width: 15
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a06519d08415fa70800000000000000
+      internalID: 8860010385551745189
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_30
+      rect:
+        serializedVersion: 2
+        x: 1228
+        y: 95
+        width: 9
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 643f189ffa09e0a20800000000000000
+      internalID: 3030518684746642246
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_31
+      rect:
+        serializedVersion: 2
+        x: 1155
+        y: 86
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 36a6eaca1ff54e150800000000000000
+      internalID: 5900946903351061091
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_32
+      rect:
+        serializedVersion: 2
+        x: 1159
+        y: 91
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aff00ce309edd2df0800000000000000
+      internalID: -203261697052372998
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_33
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 67
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2fe5bf9606fde0c0800000000000000
+      internalID: -4544705940637225172
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_tamboreiro_34
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 47
+        width: 17
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ebd2f4469263d35f0800000000000000
+      internalID: -775404009433387586
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      raposa_tamboreiro_0: -6055561359428974679
+      raposa_tamboreiro_1: 6832087660620011881
+      raposa_tamboreiro_10: -1747777051358255505
+      raposa_tamboreiro_11: 4583514462867597019
+      raposa_tamboreiro_12: -7061687960554926822
+      raposa_tamboreiro_13: -4292726757326955209
+      raposa_tamboreiro_14: -1431595042286627213
+      raposa_tamboreiro_15: -7576672435761273552
+      raposa_tamboreiro_16: 1518224022784665412
+      raposa_tamboreiro_17: -9192501175608398486
+      raposa_tamboreiro_18: 4050329385626853002
+      raposa_tamboreiro_19: 3306255441770063478
+      raposa_tamboreiro_2: 767428476495931092
+      raposa_tamboreiro_20: 8671714145434584981
+      raposa_tamboreiro_21: -2893740329966707956
+      raposa_tamboreiro_22: -4940628607908371958
+      raposa_tamboreiro_23: -2610102572563321464
+      raposa_tamboreiro_24: -9106290141877701180
+      raposa_tamboreiro_25: -8432087939550687215
+      raposa_tamboreiro_26: 3399347456947191728
+      raposa_tamboreiro_27: -7520973535848528004
+      raposa_tamboreiro_28: 4139871660092879103
+      raposa_tamboreiro_29: 8860010385551745189
+      raposa_tamboreiro_3: -1268774167341599377
+      raposa_tamboreiro_30: 3030518684746642246
+      raposa_tamboreiro_31: 5900946903351061091
+      raposa_tamboreiro_32: -203261697052372998
+      raposa_tamboreiro_33: -4544705940637225172
+      raposa_tamboreiro_34: -775404009433387586
+      raposa_tamboreiro_4: -2351029708858388498
+      raposa_tamboreiro_5: 1581592876550380287
+      raposa_tamboreiro_6: -5417793748471849515
+      raposa_tamboreiro_7: -6468311802734497658
+      raposa_tamboreiro_8: 3439240437174161104
+      raposa_tamboreiro_9: 3580335596296899557
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

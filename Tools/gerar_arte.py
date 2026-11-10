@@ -10,11 +10,12 @@ Escala: 64 pixels = 1 unidade do Unity (PPU 64). Na tela de 600×480 uma
 unidade ocupa 32 px, então tudo é desenhado com o dobro da resolução em que
 aparece e fica nítido mesmo com o jogo em tela cheia.
 
-Personagens são desenhados 4× maiores e reduzidos (antialias). O contorno
-marrom-escuro é feito "inflando" a silhueta inteira (filtro de máximo), como
-um adesivo: é o que dá o ar dos bichos do Iran (urubu e arara), que entram
-reduzidos a partir de Arte/Fontes. Ladrilhos (grama e terra) são desenhados
-pixel a pixel, para emendarem sem costura.
+Personagens de interface (ícones, logo) são desenhados 4× maiores e reduzidos
+(antialias), com o contorno marrom-escuro "inflando" a silhueta inteira
+(filtro de máximo), como um adesivo. Os pássaros e os porcos (raposas) são a
+arte do Iran, que entra reduzida a partir de Arte/Fontes (ver `da_arte`).
+Ladrilhos (grama e terra) são desenhados pixel a pixel, para emendarem sem
+costura.
 """
 import math
 import os
@@ -179,173 +180,6 @@ def bochechas(t, cx, cy, sep, r, cor=(255, 128, 140, 120)):
         t.elipse(cx + lado * sep, cy, r, r * 0.6, cor)
 
 
-def bico_frente(t, cx, cy, larg, alt, cor):
-    """Bico visto de frente: um losango apontando para baixo."""
-    t.poligono([(cx - larg, cy), (cx, cy - alt * 0.35), (cx + larg, cy), (cx, cy + alt)], cor)
-    t.poligono([(cx - larg, cy), (cx + larg, cy), (cx, cy + alt * 0.25)], mais_escuro(cor, 0.85))
-
-
-def pezinhos(t, cx, cy, sep, cor=hexc("#F0A23C")):
-    for lado in (-1, 1):
-        x = cx + lado * sep
-        for dx in (-1.6, 0, 1.6):
-            t.linha([(x, cy - 2), (x + dx, cy + 1.5)], cor, 1.4)
-
-
-# --------------------------------------------------------------------------
-# Pássaros
-# --------------------------------------------------------------------------
-def passaro_base(W, H, cx, cy, r, corpo, barriga, asa, bico, cauda=None, pes=True):
-    """Pássaro redondo de frente. Devolve a Tela já contornada (detalhes do rosto
-    ficam por conta de quem chama)."""
-    t = Tela(W, H)
-    if cauda:
-        t.poligono([(cx - r * 0.35, cy + r * 0.6), (cx + r * 0.35, cy + r * 0.6), (cx + r * 0.65, cy + r * 1.15),
-                    (cx - r * 0.65, cy + r * 1.15)], cauda)
-    for lado in (-1, 1):  # asas aparecendo dos lados
-        t.elipse(cx + lado * r * 0.86, cy + r * 0.2, r * 0.32, r * 0.5, asa)
-    bola_sombreada(t, cx, cy, r, r * 0.96, corpo)
-    if barriga:
-        b = t.camada()
-        b.elipse(cx, cy + r * 0.42, r * 0.62, r * 0.55, barriga)
-        t.colar(b, t.mascara_elipse(cx, cy, r, r * 0.96))
-    if pes:
-        pezinhos(t, cx, cy + r * 1.02, r * 0.32)
-    t.contornar(esp=max(2.0, r * 0.085))
-    return t
-
-
-def pardal():
-    W = H = 56
-    cx, cy, r = 28, 27, 21
-    t = passaro_base(W, H, cx, cy, r, hexc("#B98352"), hexc("#EBDDC3"), hexc("#7A4E2C"), None, cauda=hexc("#6E4526"))
-    # Boné marrom-escuro no alto da cabeça e babador preto embaixo do bico.
-    topo = t.camada()
-    topo.elipse(cx, cy - r * 0.95, r * 0.75, r * 0.42, hexc("#7A4E2C"))
-    t.colar(topo, t.mascara_elipse(cx, cy, r, r * 0.96))
-    t.elipse(cx, cy + r * 0.38, r * 0.3, r * 0.2, hexc("#3B2A20"))
-    # Listras das asas.
-    for lado in (-1, 1):
-        for k in range(2):
-            t.linha([(cx + lado * r * 0.8, cy + r * (0.05 + 0.25 * k)), (cx + lado * r * 1.05, cy + r * (0.18 + 0.25 * k))],
-                    hexc("#4E321C"), 1.3)
-    olhos(t, cx, cy - r * 0.15, r * 0.36, r * 0.22)
-    bochechas(t, cx, cy + r * 0.12, r * 0.6, r * 0.16)
-    bico_frente(t, cx, cy + r * 0.08, r * 0.16, r * 0.26, hexc("#F2B33D"))
-    return t.final()
-
-
-def sabia():
-    W = H = 60
-    cx, cy, r = 30, 29, 23
-    t = passaro_base(W, H, cx, cy, r, hexc("#8E7356"), hexc("#E07B37"), hexc("#6B533B"), None, cauda=hexc("#5C4630"))
-    # Garganta clara com risquinhos (o sabiá-laranjeira).
-    g = t.camada()
-    g.elipse(cx, cy + r * 0.05, r * 0.36, r * 0.22, hexc("#EEDFC8"))
-    t.colar(g)
-    for k in (-1, 0, 1):
-        t.linha([(cx + k * r * 0.15, cy - r * 0.02), (cx + k * r * 0.15, cy + r * 0.12)], hexc("#8E7356"), 1.0)
-    olhos(t, cx, cy - r * 0.2, r * 0.36, r * 0.22)
-    for lado in (-1, 1):  # anel amarelo em volta do olho
-        t.arco(cx + lado * r * 0.36, cy - r * 0.2, r * 0.3, 200 if lado < 0 else -20, 340 if lado < 0 else 160,
-               hexc("#E9B949"), 1.0)
-    bochechas(t, cx, cy + r * 0.12, r * 0.62, r * 0.15)
-    bico_frente(t, cx, cy + r * 0.02, r * 0.15, r * 0.28, hexc("#D9B44A"))
-    return t.final()
-
-
-def beija_flor():
-    W, H = 62, 56
-    cx, cy, r = 31, 28, 19
-    t = Tela(W, H)
-    # Asas batendo tão rápido que viram um borrão claro, abertas para cima.
-    for lado in (-1, 1):
-        t.elipse_girada(cx + lado * r * 1.05, cy - r * 0.55, r * 0.75, r * 0.3, -lado * 35, (190, 235, 250, 135))
-        t.elipse_girada(cx + lado * r * 1.05, cy - r * 0.55, r * 0.5, r * 0.14, -lado * 35, (240, 252, 255, 170))
-    t2 = passaro_base(W, H, cx, cy, r, hexc("#3FBF7A"), None, hexc("#2E8F5B"), None, cauda=hexc("#2A6E8F"), pes=False)
-    t.colar(t2)
-    garganta = t.camada()
-    garganta.elipse(cx, cy + r * 0.45, r * 0.55, r * 0.38, hexc("#5B4FD9"))
-    t.colar(garganta, t.mascara_elipse(cx, cy, r, r * 0.96))
-    olhos(t, cx, cy - r * 0.18, r * 0.36, r * 0.24)
-    # Bico comprido e fino, saindo na diagonal para ficar visível de frente.
-    t.linha([(cx + 1, cy + r * 0.08), (cx + r * 0.85, cy + r * 1.05)], CONTORNO, 3.6)
-    t.linha([(cx + 1, cy + r * 0.08), (cx + r * 0.83, cy + r * 1.02)], hexc("#3A3A3A"), 1.8)
-    bochechas(t, cx, cy + r * 0.12, r * 0.62, r * 0.15, (255, 140, 190, 120))
-    return t.final()
-
-
-def pata(filhote=False):
-    if filhote:
-        W = H = 44
-        cx, cy, r = 22, 22, 16
-        corpo, barriga = hexc("#F7D84A"), hexc("#FBE88A")
-    else:
-        W = H = 68
-        cx, cy, r = 34, 33, 26
-        corpo, barriga = hexc("#F4F1EA"), hexc("#FFFFFF")
-    t = passaro_base(W, H, cx, cy, r, corpo, barriga, mais_escuro(corpo, 0.88), None, cauda=mais_escuro(corpo, 0.8))
-    if filhote:
-        # Topete de penugem.
-        for dx, alt in ((-2, 6), (1, 8), (4, 5)):
-            t.linha([(cx + dx, cy - r * 0.9), (cx + dx * 1.4, cy - r * 0.9 - alt)], CONTORNO, 2.4)
-            t.linha([(cx + dx, cy - r * 0.9), (cx + dx * 1.4, cy - r * 0.9 - alt)], corpo, 1.2)
-    else:
-        # Lenço azul de mãe na cabeça, amarrado de lado.
-        lenco = t.camada()
-        lenco.elipse(cx, cy - r * 0.88, r * 0.85, r * 0.42, hexc("#3E78C9"))
-        t.colar(lenco, t.mascara_elipse(cx, cy, r, r * 0.96))
-        for k in range(3):
-            t.elipse(cx - r * 0.45 + k * r * 0.45, cy - r * 0.86, r * 0.07, r * 0.07, BRANCO)
-        t.poligono([(cx + r * 0.75, cy - r * 0.75), (cx + r * 1.18, cy - r * 0.95), (cx + r * 1.12, cy - r * 0.55)],
-                   hexc("#3E78C9"))
-    olhos(t, cx, cy - r * 0.16, r * 0.36, r * 0.22, bravo=not filhote)
-    bochechas(t, cx, cy + r * 0.14, r * 0.62, r * 0.16)
-    # Bico achatado de pato.
-    bico = hexc("#F29A2E")
-    t.retangulo(cx - r * 0.34 - 1, cy + r * 0.02 - 1, cx + r * 0.34 + 1, cy + r * 0.34 + 1, CONTORNO, raio=r * 0.18)
-    t.retangulo(cx - r * 0.34, cy + r * 0.02, cx + r * 0.34, cy + r * 0.34, bico, raio=r * 0.16)
-    t.linha([(cx - r * 0.28, cy + r * 0.18), (cx + r * 0.28, cy + r * 0.18)], mais_escuro(bico, 0.7), 0.9)
-    return t.final()
-
-
-def gaviao():
-    W = H = 124
-    cx, cy, r = 62, 66, 46
-    t = Tela(W, H)
-    # Asas grandes abertas atrás do corpo.
-    for lado in (-1, 1):
-        t.poligono([(cx + lado * r * 0.6, cy - r * 0.3), (cx + lado * r * 1.32, cy - r * 0.55),
-                    (cx + lado * r * 1.3, cy + r * 0.35), (cx + lado * r * 0.75, cy + r * 0.6)], hexc("#4A4F57"))
-        for k in range(3):
-            y = cy - r * 0.3 + k * r * 0.28
-            t.linha([(cx + lado * r * 0.95, y), (cx + lado * r * 1.25, y - r * 0.1)], hexc("#33373D"), 2.0)
-    # Penacho duplo do gavião-real.
-    for lado in (-1, 1):
-        t.poligono([(cx + lado * r * 0.15, cy - r * 0.85), (cx + lado * r * 0.62, cy - r * 1.32),
-                    (cx + lado * r * 0.45, cy - r * 0.72)], hexc("#3B3F45"))
-    bola_sombreada(t, cx, cy, r, r * 0.95, hexc("#9AA1A8"))
-    rosto = t.camada()
-    rosto.elipse(cx, cy - r * 0.1, r * 0.72, r * 0.6, hexc("#D9DDE1"))
-    rosto.elipse(cx, cy + r * 0.62, r * 0.7, r * 0.42, hexc("#F2F2F0"))
-    rosto.retangulo(cx - r, cy + r * 0.24, cx + r, cy + r * 0.4, hexc("#3B3F45"))
-    t.colar(rosto, t.mascara_elipse(cx, cy, r, r * 0.95))
-    # Garras amarelas.
-    for lado in (-1, 1):
-        x = cx + lado * r * 0.35
-        for dx in (-4, 0, 4):
-            t.linha([(x, cy + r * 0.9), (x + dx, cy + r * 1.1)], hexc("#E9B949"), 3.0)
-    t.contornar(esp=3.4)
-    olhos(t, cx, cy - r * 0.2, r * 0.34, r * 0.2, cor_iris=hexc("#2B1D14"))
-    # Bico grande e curvo, com a base amarela.
-    t.elipse(cx, cy + r * 0.0, r * 0.2, r * 0.12, hexc("#E9B949"))
-    t.poligono([(cx - r * 0.18, cy + r * 0.04), (cx + r * 0.18, cy + r * 0.04), (cx + r * 0.06, cy + r * 0.42),
-                (cx - r * 0.02, cy + r * 0.32)], CONTORNO)
-    t.poligono([(cx - r * 0.13, cy + r * 0.06), (cx + r * 0.13, cy + r * 0.06), (cx + r * 0.04, cy + r * 0.34),
-                (cx - r * 0.01, cy + r * 0.27)], hexc("#3A3D42"))
-    return t.final()
-
-
 def abrir_arte(caminho):
     """Abre a arte do Iran, limpa o alfa (ruído em volta) e recorta as bordas vazias."""
     img = Image.open(caminho).convert("RGBA")
@@ -374,78 +208,10 @@ def sombra():
 
 
 # --------------------------------------------------------------------------
-# Porcos (verdes, rabo enrolado, cada um com seu chapéu)
+# Porcos: agora raposas, a arte do Iran reduzida a partir de Arte/Fontes
+# (ver gerar(); o corpo inteiro já vem com a arma, então só a tela do
+# acessório de especialização continua desenhada por código).
 # --------------------------------------------------------------------------
-VERDE = hexc("#8CCB5E")
-VERDE_SOMBRA = hexc("#5E9E3F")
-FOCINHO = hexc("#B9E58F")
-PX, PY, PR = 40, 47, 25  # centro e raio do corpo dentro da tela 80×80
-
-
-def porco(chapeu):
-    t = Tela(80, 80)
-    # Rabo enrolado aparecendo à direita (atrás do corpo).
-    t.arco(PX + PR * 1.02, PY + PR * 0.25, 5, 110, 470, VERDE_SOMBRA, 2.6)
-    # Orelhas.
-    for lado in (-1, 1):
-        t.poligono([(PX + lado * PR * 0.45, PY - PR * 0.72), (PX + lado * PR * 0.95, PY - PR * 1.12),
-                    (PX + lado * PR * 0.9, PY - PR * 0.45)], VERDE_SOMBRA)
-    bola_sombreada(t, PX, PY, PR, PR * 0.92, VERDE, VERDE_SOMBRA)
-    for lado in (-1, 1):  # cascos
-        t.elipse(PX + lado * PR * 0.42, PY + PR * 0.92, PR * 0.2, PR * 0.13, hexc("#4C3A2A"))
-    chapeu("forma", t)
-    t.contornar(esp=2.3)
-    # Rosto.
-    olhos(t, PX, PY - PR * 0.12, PR * 0.36, PR * 0.2)
-    bochechas(t, PX, PY + PR * 0.22, PR * 0.66, PR * 0.15, (255, 150, 150, 90))
-    t.elipse(PX, PY + PR * 0.3, PR * 0.36 + 1.2, PR * 0.25 + 1.2, CONTORNO)
-    t.elipse(PX, PY + PR * 0.3, PR * 0.36, PR * 0.25, FOCINHO)
-    for lado in (-1, 1):
-        t.elipse(PX + lado * PR * 0.13, PY + PR * 0.3, PR * 0.06, PR * 0.1, hexc("#3D6B2A"))
-    chapeu("detalhe", t)
-    return t.final()
-
-
-def chapeu_palha(etapa, t):
-    if etapa == "forma":
-        t.elipse(PX, PY - PR * 0.78, PR * 1.05, PR * 0.26, hexc("#E8C35A"))
-        t.elipse(PX, PY - PR * 0.98, PR * 0.55, PR * 0.36, hexc("#E8C35A"))
-    else:
-        t.retangulo(PX - PR * 0.55, PY - PR * 0.86, PX + PR * 0.55, PY - PR * 0.74, hexc("#C8443A"))
-        for k in range(-2, 3):
-            t.linha([(PX + k * PR * 0.2, PY - PR * 1.25), (PX + k * PR * 0.22, PY - PR * 0.92)], hexc("#C9A243"), 0.8)
-
-
-def gorro_marinheiro(etapa, t):
-    if etapa == "forma":
-        t.elipse(PX, PY - PR * 0.78, PR * 0.74, PR * 0.48, hexc("#2F4F8F"))
-        t.elipse(PX, PY - PR * 1.28, PR * 0.2, PR * 0.2, BRANCO)
-    else:
-        t.retangulo(PX - PR * 0.74, PY - PR * 0.64, PX + PR * 0.74, PY - PR * 0.5, BRANCO, raio=1)
-        t.retangulo(PX - PR * 0.6, PY - PR * 1.0, PX + PR * 0.6, PY - PR * 0.9, hexc("#5A7FC2"))
-
-
-def capacete(etapa, t):
-    if etapa == "forma":
-        t.elipse(PX, PY - PR * 0.68, PR * 0.82, PR * 0.56, hexc("#6B7A5A"))
-        t.retangulo(PX - PR * 0.92, PY - PR * 0.66, PX + PR * 0.92, PY - PR * 0.52, hexc("#55623F"), raio=2)
-    else:
-        for lado in (-1, 1):  # óculos de proteção no capacete
-            t.elipse(PX + lado * PR * 0.3, PY - PR * 0.88, PR * 0.2 + 1, PR * 0.15 + 1, CONTORNO)
-            t.elipse(PX + lado * PR * 0.3, PY - PR * 0.88, PR * 0.2, PR * 0.15, hexc("#C9E7F5"))
-        t.linha([(PX - PR * 0.1, PY - PR * 0.88), (PX + PR * 0.1, PY - PR * 0.88)], CONTORNO, 1.2)
-
-
-def chapeu_banda(etapa, t):
-    if etapa == "forma":
-        t.retangulo(PX - PR * 0.55, PY - PR * 1.42, PX + PR * 0.55, PY - PR * 0.62, hexc("#C8443A"), raio=3)
-        t.elipse(PX, PY - PR * 0.62, PR * 0.7, PR * 0.14, hexc("#2B2B2B"))
-        t.elipse(PX + PR * 0.2, PY - PR * 1.62, PR * 0.18, PR * 0.32, hexc("#F4F1EA"))  # pluma
-    else:
-        t.retangulo(PX - PR * 0.55, PY - PR * 1.42, PX + PR * 0.55, PY - PR * 1.3, hexc("#E8C35A"))
-        t.linha([(PX - PR * 0.4, PY - PR * 1.12), (PX, PY - PR * 0.86), (PX + PR * 0.4, PY - PR * 1.12)],
-                hexc("#E8C35A"), 1.4)
-
 
 # Armas: desenhadas apontando para a direita. O pivô (onde o porco segura)
 # fica em (12, 20) numa tela 64×40; o ConstrutorAssets usa esse ponto.
@@ -753,6 +519,10 @@ def flor(tipo):
     return t.final()
 
 
+VERDE = hexc("#8CCB5E")
+FOCINHO = hexc("#B9E58F")
+
+
 def torre():
     """A Torre dos Porcos: base de pedra, torre de madeira, telhado vermelho e
     bandeira com um porco. Pivô embaixo (o ConstrutorAssets usa)."""
@@ -882,9 +652,9 @@ def logo():
         gd.line([(0, y), (W * S, y)], fill=cor)
     img.paste(grad, mask=letras)
     final = img.resize((W, H), Image.LANCZOS)
-    p = porco(chapeu_palha).resize((80, 80), Image.LANCZOS)
+    p = da_arte("raposa_estilingueiro.png", 80, 80, 74, 78).resize((80, 80), Image.LANCZOS)
     final.alpha_composite(p, (0, 50))
-    b = pardal().resize((64, 64), Image.LANCZOS)
+    b = da_arte("aranha.png", 56, 56, 50, 54).resize((64, 64), Image.LANCZOS)
     final.alpha_composite(b, (W - 64, 2))
     return final
 
@@ -903,21 +673,22 @@ def gerar():
     salvar(flor(1), "flor_1", feitos)
     salvar(flor(2), "flor_2", feitos)
     salvar(torre(), "torre", feitos)
-    # Pássaros
-    salvar(pardal(), "pardal", feitos)
-    salvar(sabia(), "sabia", feitos)
-    salvar(beija_flor(), "beija_flor", feitos)
-    salvar(pata(), "pata", feitos)
-    salvar(pata(filhote=True), "patinho", feitos)
-    salvar(gaviao(), "gaviao", feitos)
-    salvar(da_arte("arara_azul.png", 72, 72, 66, 70), "arara", feitos)
-    salvar(da_arte("urubu.png", 72, 72, 62, 71), "urubu", feitos)
+    # Pássaros (issue #15: viraram os bichos do Iran, reduzidos a partir de
+    # Arte/Fontes, do mesmo jeito que a arara e o urubu já eram)
+    salvar(da_arte("aranha.png", 56, 56, 50, 54), "pardal", feitos)
+    salvar(da_arte("touro.png", 60, 60, 54, 58), "sabia", feitos)
+    salvar(da_arte("tigre.png", 62, 56, 54, 54), "beija_flor", feitos)
+    salvar(da_arte("arara_azul.png", 68, 68, 62, 66), "pata", feitos)
+    salvar(da_arte("arara_azul_filhote.png", 44, 44, 40, 42), "patinho", feitos)
+    salvar(da_arte("tubarao_chefe.png", 124, 124, 112, 121), "gaviao", feitos)
+    salvar(da_arte("jacare.png", 72, 72, 66, 70), "arara", feitos)
+    salvar(da_arte("leao.png", 72, 72, 62, 71), "urubu", feitos)
     salvar(sombra(), "sombra", feitos)
-    # Porcos
-    salvar(porco(chapeu_palha), "porco_estilingueiro", feitos)
-    salvar(porco(gorro_marinheiro), "porco_arpoador", feitos)
-    salvar(porco(capacete), "porco_bombardeiro", feitos)
-    salvar(porco(chapeu_banda), "porco_tamboreiro", feitos)
+    # Porcos (idem: viraram as raposas do Iran; a arte já traz a arma embutida)
+    salvar(da_arte("raposa_estilingueiro.png", 80, 80, 74, 78), "porco_estilingueiro", feitos)
+    salvar(da_arte("raposa_ninja.png", 80, 80, 74, 78), "porco_arpoador", feitos)
+    salvar(da_arte("raposa_bombardeiro.png", 80, 80, 74, 78), "porco_bombardeiro", feitos)
+    salvar(da_arte("raposa_tamboreiro.png", 80, 80, 74, 78), "porco_tamboreiro", feitos)
     for tipo in ("estilingue", "arpao", "canhao"):
         salvar(arma(tipo), "arma_" + tipo, feitos)
     salvar(tambor(), "arma_tambor", feitos)

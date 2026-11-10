@@ -1,0 +1,1081 @@
+fileFormatVersion: 2
+guid: 9c475cb8567c80448a48141eec260af1
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4120011959888742894
+    second: aranha_0
+  - first:
+      213: -4075557640844735562
+    second: aranha_1
+  - first:
+      213: -5069470751860803361
+    second: aranha_2
+  - first:
+      213: -5173965684516669973
+    second: aranha_3
+  - first:
+      213: 2946571318319514572
+    second: aranha_4
+  - first:
+      213: 8667686336307600414
+    second: aranha_5
+  - first:
+      213: 4079705067664646103
+    second: aranha_6
+  - first:
+      213: -581376184631360018
+    second: aranha_7
+  - first:
+      213: -4658978116457107012
+    second: aranha_8
+  - first:
+      213: 8932953517541397386
+    second: aranha_9
+  - first:
+      213: 5004128223726680140
+    second: aranha_10
+  - first:
+      213: -6885225818025410549
+    second: aranha_11
+  - first:
+      213: 5888852159593108059
+    second: aranha_12
+  - first:
+      213: -8332773224868836602
+    second: aranha_13
+  - first:
+      213: -2085768398914598389
+    second: aranha_14
+  - first:
+      213: 3502567242844425757
+    second: aranha_15
+  - first:
+      213: 4785178958703756165
+    second: aranha_16
+  - first:
+      213: -3085689492305943460
+    second: aranha_17
+  - first:
+      213: -1331455269186953960
+    second: aranha_18
+  - first:
+      213: -7064078576359656559
+    second: aranha_19
+  - first:
+      213: 5399722875879893276
+    second: aranha_20
+  - first:
+      213: -2876160692771109876
+    second: aranha_21
+  - first:
+      213: 4889321485630600969
+    second: aranha_22
+  - first:
+      213: 5509432379051251174
+    second: aranha_23
+  - first:
+      213: 7219911249110389889
+    second: aranha_24
+  - first:
+      213: -4591640389198903441
+    second: aranha_25
+  - first:
+      213: 6047244221279055592
+    second: aranha_26
+  - first:
+      213: -9043621511163425928
+    second: aranha_27
+  - first:
+      213: -5795978267607376407
+    second: aranha_28
+  - first:
+      213: 5974252953976809148
+    second: aranha_29
+  - first:
+      213: -5946226105944952595
+    second: aranha_30
+  - first:
+      213: -6164840964433981309
+    second: aranha_31
+  - first:
+      213: -3940651877768455463
+    second: aranha_32
+  - first:
+      213: -3640689325673768117
+    second: aranha_33
+  - first:
+      213: 1440109375022719540
+    second: aranha_34
+  - first:
+      213: -2694712660985773747
+    second: aranha_35
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationMethod: 0
+  spriteTessellationDetail: -1
+  spriteGeometrySubdivision: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: aranha_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1254
+        height: 1221
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee9878b7c093d2930800000000000000
+      internalID: 4120011959888742894
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_1
+      rect:
+        serializedVersion: 2
+        x: 645
+        y: 1209
+        width: 21
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6bb02db3be5b077c0800000000000000
+      internalID: -4075557640844735562
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_2
+      rect:
+        serializedVersion: 2
+        x: 714
+        y: 1195
+        width: 24
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fd8ba1cd53f95a9b0800000000000000
+      internalID: -5069470751860803361
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_3
+      rect:
+        serializedVersion: 2
+        x: 847
+        y: 1189
+        width: 26
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: be5b25e6f916238b0800000000000000
+      internalID: -5173965684516669973
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_4
+      rect:
+        serializedVersion: 2
+        x: 627
+        y: 1189
+        width: 15
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc30acd900354e820800000000000000
+      internalID: 2946571318319514572
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_5
+      rect:
+        serializedVersion: 2
+        x: 851
+        y: 1173
+        width: 16
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e1c1f1caccec94870800000000000000
+      internalID: 8667686336307600414
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_6
+      rect:
+        serializedVersion: 2
+        x: 908
+        y: 1177
+        width: 7
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7df1382d4260e9830800000000000000
+      internalID: 4079705067664646103
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_7
+      rect:
+        serializedVersion: 2
+        x: 922
+        y: 1169
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee50d2ab0798ee7f0800000000000000
+      internalID: -581376184631360018
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_8
+      rect:
+        serializedVersion: 2
+        x: 922
+        y: 1162
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb17140661cf75fb0800000000000000
+      internalID: -4658978116457107012
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_9
+      rect:
+        serializedVersion: 2
+        x: 928
+        y: 1163
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a83912835e938fb70800000000000000
+      internalID: 8932953517541397386
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_10
+      rect:
+        serializedVersion: 2
+        x: 932
+        y: 1158
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c483cb14b1c327540800000000000000
+      internalID: 5004128223726680140
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_11
+      rect:
+        serializedVersion: 2
+        x: 946
+        y: 1159
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b004f361993c270a0800000000000000
+      internalID: -6885225818025410549
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_12
+      rect:
+        serializedVersion: 2
+        x: 951
+        y: 1157
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b52d653b6d769b150800000000000000
+      internalID: 5888852159593108059
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_13
+      rect:
+        serializedVersion: 2
+        x: 957
+        y: 1157
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 60b8ec1a6ea0c5c80800000000000000
+      internalID: -8332773224868836602
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_14
+      rect:
+        serializedVersion: 2
+        x: 679
+        y: 1128
+        width: 13
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b0ac5fa21bcdd03e0800000000000000
+      internalID: -2085768398914598389
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_15
+      rect:
+        serializedVersion: 2
+        x: 577
+        y: 1094
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d1e49a7995e9b9030800000000000000
+      internalID: 3502567242844425757
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_16
+      rect:
+        serializedVersion: 2
+        x: 1221
+        y: 513
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5830634f8ee586240800000000000000
+      internalID: 4785178958703756165
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_17
+      rect:
+        serializedVersion: 2
+        x: 1188
+        y: 455
+        width: 25
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c54e2f361cd6d25d0800000000000000
+      internalID: -3085689492305943460
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_18
+      rect:
+        serializedVersion: 2
+        x: 1214
+        y: 421
+        width: 38
+        height: 77
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 81d1acdac78b58de0800000000000000
+      internalID: -1331455269186953960
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_19
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 95
+        width: 16
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 193b2ae36f957fd90800000000000000
+      internalID: -7064078576359656559
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_20
+      rect:
+        serializedVersion: 2
+        x: 410
+        y: 101
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c192f5eb85bafea40800000000000000
+      internalID: 5399722875879893276
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_21
+      rect:
+        serializedVersion: 2
+        x: 641
+        y: 69
+        width: 25
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c04cf66a613d518d0800000000000000
+      internalID: -2876160692771109876
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_22
+      rect:
+        serializedVersion: 2
+        x: 675
+        y: 69
+        width: 13
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90772b78cfb5ad340800000000000000
+      internalID: 4889321485630600969
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_23
+      rect:
+        serializedVersion: 2
+        x: 877
+        y: 83
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e5926bfe8f657c40800000000000000
+      internalID: 5509432379051251174
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_24
+      rect:
+        serializedVersion: 2
+        x: 233
+        y: 73
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 18452114707423460800000000000000
+      internalID: 7219911249110389889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_25
+      rect:
+        serializedVersion: 2
+        x: 643
+        y: 63
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f678671c4673740c0800000000000000
+      internalID: -4591640389198903441
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_26
+      rect:
+        serializedVersion: 2
+        x: 673
+        y: 53
+        width: 17
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8ee2f5f54902ce350800000000000000
+      internalID: 6047244221279055592
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_27
+      rect:
+        serializedVersion: 2
+        x: 932
+        y: 55
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 87bc508962a9e7280800000000000000
+      internalID: -9043621511163425928
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_28
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 31
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9edd069597c809fa0800000000000000
+      internalID: -5795978267607376407
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_29
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 31
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb6ad10a86fc8e250800000000000000
+      internalID: 5974252953976809148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_30
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 35
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de03ff07cd2ca7da0800000000000000
+      internalID: -5946226105944952595
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_31
+      rect:
+        serializedVersion: 2
+        x: 205
+        y: 19
+        width: 19
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 380d22a3ec5127aa0800000000000000
+      internalID: -6164840964433981309
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_32
+      rect:
+        serializedVersion: 2
+        x: 713
+        y: 29
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9da9222eefdff49c0800000000000000
+      internalID: -3940651877768455463
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_33
+      rect:
+        serializedVersion: 2
+        x: 239
+        y: 15
+        width: 21
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b4b98a5f85ca97dc0800000000000000
+      internalID: -3640689325673768117
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_34
+      rect:
+        serializedVersion: 2
+        x: 707
+        y: 15
+        width: 18
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 43260f7b8db4cf310800000000000000
+      internalID: 1440109375022719540
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aranha_35
+      rect:
+        serializedVersion: 2
+        x: 723
+        y: 0
+        width: 67
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d41023eac157a9ad0800000000000000
+      internalID: -2694712660985773747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      aranha_0: 4120011959888742894
+      aranha_1: -4075557640844735562
+      aranha_10: 5004128223726680140
+      aranha_11: -6885225818025410549
+      aranha_12: 5888852159593108059
+      aranha_13: -8332773224868836602
+      aranha_14: -2085768398914598389
+      aranha_15: 3502567242844425757
+      aranha_16: 4785178958703756165
+      aranha_17: -3085689492305943460
+      aranha_18: -1331455269186953960
+      aranha_19: -7064078576359656559
+      aranha_2: -5069470751860803361
+      aranha_20: 5399722875879893276
+      aranha_21: -2876160692771109876
+      aranha_22: 4889321485630600969
+      aranha_23: 5509432379051251174
+      aranha_24: 7219911249110389889
+      aranha_25: -4591640389198903441
+      aranha_26: 6047244221279055592
+      aranha_27: -9043621511163425928
+      aranha_28: -5795978267607376407
+      aranha_29: 5974252953976809148
+      aranha_3: -5173965684516669973
+      aranha_30: -5946226105944952595
+      aranha_31: -6164840964433981309
+      aranha_32: -3940651877768455463
+      aranha_33: -3640689325673768117
+      aranha_34: 1440109375022719540
+      aranha_35: -2694712660985773747
+      aranha_4: 2946571318319514572
+      aranha_5: 8667686336307600414
+      aranha_6: 4079705067664646103
+      aranha_7: -581376184631360018
+      aranha_8: -4658978116457107012
+      aranha_9: 8932953517541397386
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

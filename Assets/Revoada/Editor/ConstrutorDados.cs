@@ -61,7 +61,9 @@ public static class ConstrutorDados
             var tipo = Unico<TipoPorco>($"{PastaPorcos}/{padrao.especie}.asset", t => t.dados = padrao, sobrescrever);
             var s = VisualPorco[padrao.especie];
             tipo.corpo = ConstrutorAssets.Sprite(s[0]);
-            tipo.arma = ConstrutorAssets.Sprite(s[1]);
+            // A arte do corpo (raposa) já vem com a arma desenhada nela: sem
+            // sprite de arma avulso, senão apareceria duas vezes.
+            tipo.arma = null;
             tipo.projetil = s[2] != null ? ConstrutorAssets.Sprite(s[2]) : null;
             tipo.acessorioA = ConstrutorAssets.Sprite(s[3]);
             tipo.acessorioB = ConstrutorAssets.Sprite(s[4]);

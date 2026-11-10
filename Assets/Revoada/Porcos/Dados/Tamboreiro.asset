@@ -135,7 +135,7 @@ MonoBehaviour:
         bonusAlcance: 0.2
         bonusMoedas: 0.5
   corpo: {fileID: 21300000, guid: 48d98c810e83141f9a9655b7a33f94e6, type: 3}
-  arma: {fileID: 21300000, guid: e572867324e62447095b733a4501acf5, type: 3}
+  arma: {fileID: 0}
   projetil: {fileID: 0}
   acessorioA: {fileID: 21300000, guid: 86decf48f496a41bf814a8d37db6182c, type: 3}
   acessorioB: {fileID: 21300000, guid: c3eb482694c20484598f5a863e6651ce, type: 3}

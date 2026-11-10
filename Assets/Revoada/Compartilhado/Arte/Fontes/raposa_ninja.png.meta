@@ -1,10 +1,19 @@
 fileFormatVersion: 2
-guid: 2d9e67de920f6614199ce46c1d351e80
+guid: e291e270fa5c5d743b081545271cc33d
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5600835410026875137
-    second: urubu_0
+      213: -6045070088247428472
+    second: raposa_ninja_0
+  - first:
+      213: -468583076477825647
+    second: raposa_ninja_1
+  - first:
+      213: -7598007968496146255
+    second: raposa_ninja_2
+  - first:
+      213: 2771068730960462951
+    second: raposa_ninja_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -128,13 +137,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: urubu_0
+      name: raposa_ninja_0
       rect:
         serializedVersion: 2
-        x: 78
-        y: 62
-        width: 339
-        height: 372
+        x: 18
+        y: 0
+        width: 1211
+        height: 1211
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -143,8 +152,74 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 109c414812a2abd40800000000000000
-      internalID: 5600835410026875137
+      spriteID: 88a3cab68c89b1ca0800000000000000
+      internalID: -6045070088247428472
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_ninja_1
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 1209
+        width: 19
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19d87c2bc224f79f0800000000000000
+      internalID: -468583076477825647
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_ninja_2
+      rect:
+        serializedVersion: 2
+        x: 325
+        y: 35
+        width: 100
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b8233532047e8690800000000000000
+      internalID: -7598007968496146255
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raposa_ninja_3
+      rect:
+        serializedVersion: 2
+        x: 572
+        y: 10
+        width: 16
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 764471d3450d47620800000000000000
+      internalID: 2771068730960462951
       vertices: []
       indices: 
       edges: []
@@ -163,7 +238,10 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      urubu_0: 5600835410026875137
+      raposa_ninja_0: -6045070088247428472
+      raposa_ninja_1: -468583076477825647
+      raposa_ninja_2: -7598007968496146255
+      raposa_ninja_3: 2771068730960462951
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
