@@ -1,0 +1,35 @@
+/* Fox Tower: a página ao redor do jogo usa a mesma paleta do jogo (verde da
+   grama, marrom da terra) em vez do branco padrão do Unity, pra não parecer
+   que faltou terminar a tela. */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: radial-gradient(ellipse at center, #5e9e3f 0%, #2b1d14 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Arial, Helvetica, sans-serif;
+}
+#unity-container { position: relative }
+#unity-container.unity-mobile { position: fixed; width: 100%; height: 100% }
+.unity-mobile #unity-fullscreen-container { width: 100%; height: 100% }
+#unity-fullscreen-container {
+  position: relative;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 4px solid #6b4a2e;
+}
+#unity-canvas { position: absolute; width: 100%; height: 100%; background: #1f1f20 }
+#unity-loading-container { position: absolute; width: 100%; height: 100%; backdrop-filter: blur(5px); display: none; }
+#unity-loading-bar { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+#unity-logo { width: 154px; height: 130px; background: url('unity-logo-dark.png') no-repeat center }
+#unity-progress-bar-empty { width: 141px; height: 18px; margin-top: 10px; margin-left: 6.5px; background: url('progress-bar-empty-dark.png') no-repeat center }
+#unity-progress-bar-full { width: 0%; height: 18px; margin-top: 10px; background: url('progress-bar-full-dark.png') no-repeat center }
+#unity-footer { position: relative; width: 100%; padding: 6px 0 0; box-sizing: border-box }
+.unity-mobile #unity-footer { display: none }
+#unity-logo-title-footer { float: left; width: 102px; height: 38px; background: url('unity-logo-title-footer.png') no-repeat center; opacity: 0.85 }
+#unity-build-title { float: right; margin-right: 10px; line-height: 38px; font-family: Arial, Helvetica, sans-serif; font-size: 16px; font-weight: bold; color: #fff6e0; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6) }
+#unity-fullscreen-button { cursor: pointer; float: right; width: 38px; height: 38px; background: url('fullscreen-button.png') no-repeat center }
+#unity-warning { position: absolute; left: 50%; top: 5%; transform: translate(-50%); background: #fff6e0; color: #2b1d14; border-radius: 6px; padding: 10px; display: none }

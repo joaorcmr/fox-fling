@@ -22,6 +22,17 @@ public class IdentidadeTests
         Assert.AreEqual(Identidade.NomeDoJogo, PlayerSettings.productName);
     }
 
+    // A página do build WebGL usa a arte do jogo (Assets/WebGLTemplates/FoxTower)
+    // em vez do template padrão do Unity, que deixa a página em branco ao
+    // redor do jogo no itch.io.
+    [Test]
+    public void BuildWebGL_UsaOTemplateDoJogo()
+    {
+        Assert.AreEqual("PROJECT:FoxTower", PlayerSettings.WebGL.template);
+        Assert.IsTrue(File.Exists("Assets/WebGLTemplates/FoxTower/index.html"));
+        Assert.IsTrue(File.Exists("Assets/WebGLTemplates/FoxTower/TemplateData/style.css"));
+    }
+
     // Os textos da interface ficam gravados nas cenas. Nenhum deles pode citar o
     // nome antigo (nem "soltar a revoada": agora é "soltar a onda").
     [TestCase(ConstrutorCenas.CenaMenu)]

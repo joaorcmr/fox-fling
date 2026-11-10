@@ -109,8 +109,8 @@ ver [Estrutura](#estrutura)) chamadas pelos componentes do Unity a cada passo. R
 | **Input Manager** e `EventSystem.IsPointerOverGameObject` (clique na loja não vaza para o mapa) | `Partida/Entrada/Controles.cs` |
 | **PlayerPrefs** (recorde, vitórias, dicas vistas, volumes) | `Progresso/`, `Sons/Preferencias.cs` |
 | **Editor scripting**: menu Fox Tower (`MenuItem`), `AssetDatabase`, `PrefabUtility`, `EditorSceneManager`, `TextureImporter`, `SerializedObject` | `Editor/` |
-| **Unity Test Framework**: 137 testes EditMode (incluindo os robôs de balanceamento) e 10 testes PlayMode, que carregam a cena Jogo (ou o Menu) de verdade (pausa, escurecer entre cenas, fim de jogo, menu principal, troca de fase) | `Testes/`, `TestesPlay/` |
-| **Build WebGL** (`BuildPipeline`) | `ConstrutorRevoada.BuildWebGL` |
+| **Unity Test Framework**: 139 testes EditMode (incluindo os robôs de balanceamento) e 12 testes PlayMode, que carregam a cena Jogo (ou o Menu) de verdade (pausa, escurecer entre cenas, fim de jogo, menu principal, troca de fase) | `Testes/`, `TestesPlay/` |
+| **Build WebGL** (`BuildPipeline`) com uma página própria (`WebGLTemplate`) em vez da página em branco padrão do Unity | `ConstrutorRevoada.BuildWebGL`, `Assets/WebGLTemplates/FoxTower` |
 
 Durante o Play, selecione um pássaro ou um porco na Hierarchy: o Inspector mostra o estado dele ao vivo
 (vida, distância na trilha, nível, alcance).

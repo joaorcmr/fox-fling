@@ -119,6 +119,10 @@ public static class ConstrutorRevoada
         PlayerSettings.defaultWebScreenHeight = Altura;
         PlayerSettings.fullScreenMode = FullScreenMode.Windowed;
         PlayerSettings.resizableWindow = false;
+        // A página do WebGL (Assets/WebGLTemplates/FoxTower): sem isto, o
+        // Unity usa o template padrão, com a página em branco ao redor do
+        // jogo (é o que o itch.io mostra).
+        PlayerSettings.WebGL.template = "PROJECT:FoxTower";
         EditorSettings.defaultBehaviorMode = EditorBehaviorMode.Mode2D;
 
         // A simulação anda em passos de 1/60 s; o FixedUpdate do Unity no mesmo
