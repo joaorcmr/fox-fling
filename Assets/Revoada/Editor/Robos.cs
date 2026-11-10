@@ -5,8 +5,8 @@ using UnityEngine;
 
 // Robôs que jogam o Fox Tower inteiro sem desenhar nada, para medir o
 // balanceamento. Os três "mistos" (DefesaPura, Ganancioso, Equilibrado) seguem
-// a MESMA ordem de construção; só muda o que fazem com o Ninho de Penas. Assim,
-// se um vence e outro perde, a diferença é a decisão de investir em penas.
+// a MESMA ordem de construção; só muda o que fazem com o Cofrinho. Assim,
+// se um vence e outro perde, a diferença é a decisão de investir em moedas.
 public enum Estrategia { Parado, SoEstilingue, DefesaPura, Ganancioso, Equilibrado }
 
 public class ResultadoPartida
@@ -16,8 +16,8 @@ public class ResultadoPartida
     public int ondaAlcancada;
     public int vidaFinal;
     public List<int> danoPorOnda = new List<int>();
-    public List<int> penasPorOnda = new List<int>();
-    public List<int> ninhoNaOnda = new List<int>(); // em que onda comprou cada nível do Ninho
+    public List<int> moedasPorOnda = new List<int>();
+    public List<int> cofrinhoNaOnda = new List<int>(); // em que onda comprou cada nível do Cofrinho
 
     public override string ToString() =>
         $"{estrategia}: {(venceu ? "venceu" : "perdeu")} na onda {ondaAlcancada}, vida {vidaFinal}, " +
@@ -34,7 +34,7 @@ public class EstadoRobo
 
 public static class Robos
 {
-    // O Equilibrado compra o próximo Ninho quando ele se paga em até tantas ondas.
+    // O Equilibrado compra o próximo Cofrinho quando ele se paga em até tantas ondas.
     public static int OndasParaPagarEquilibrado = 6;
     const int PassosEntreDecisoes = 15; // 4 decisões por segundo de jogo
 
@@ -95,16 +95,16 @@ public static class Robos
         var sim = new Simulacao(dados) { Auto = true };
         var estado = new EstadoRobo();
         var r = new ResultadoPartida { estrategia = estrategia };
-        int vidaNoInicio = sim.Vida, penasNaOnda = 0;
+        int vidaNoInicio = sim.Vida, moedasNaOnda = 0;
 
         sim.PassaroChegou += p => estado.vazouNestaOnda++;
-        sim.PassaroEstourou += (p, penas) => penasNaOnda += penas;
+        sim.PassaroEstourou += (p, moedas) => moedasNaOnda += moedas;
         sim.OndaTerminou += (onda, bonus) =>
         {
             r.danoPorOnda.Add(vidaNoInicio - sim.Vida);
-            r.penasPorOnda.Add(penasNaOnda + bonus);
+            r.moedasPorOnda.Add(moedasNaOnda + bonus);
             vidaNoInicio = sim.Vida;
-            penasNaOnda = 0;
+            moedasNaOnda = 0;
             estado.vazouNaUltimaOnda = estado.vazouNestaOnda;
             estado.vazouNestaOnda = 0;
         };
@@ -118,9 +118,9 @@ public static class Robos
         {
             if (passo % PassosEntreDecisoes == 0)
             {
-                int nivelAntes = sim.Economia.NivelNinho;
+                int nivelAntes = sim.Economia.NivelCofrinho;
                 Decidir(sim, estrategia, estado);
-                if (sim.Economia.NivelNinho > nivelAntes) r.ninhoNaOnda.Add(sim.Onda);
+                if (sim.Economia.NivelCofrinho > nivelAntes) r.cofrinhoNaOnda.Add(sim.Onda);
             }
             if (sim.Estado == EstadoJogo.Preparando) sim.SoltarOnda(); // o Auto não solta a primeira
             sim.Passo();
@@ -135,7 +135,7 @@ public static class Robos
     static bool Acabou(Simulacao s) => s.Estado == EstadoJogo.Vitoria || s.Estado == EstadoJogo.Derrota;
 
     // Uma decisão: o que comprar ou melhorar agora (pode fazer várias coisas
-    // seguidas se tiver penas para todas).
+    // seguidas se tiver moedas para todas).
     public static void Decidir(Simulacao sim, Estrategia estrategia, EstadoRobo estado)
     {
         if (estrategia == Estrategia.Parado || Acabou(sim)) return;
@@ -145,23 +145,23 @@ public static class Robos
             return;
         }
 
-        var ninho = sim.Economia.ProximoNinho;
-        if (ninho != null)
+        var cofrinho = sim.Economia.ProximoCofrinho;
+        if (cofrinho != null)
         {
-            // Ganancioso: depois dos 2 primeiros Estilingueiros, guarda tudo para o Ninho.
+            // Ganancioso: depois dos 2 primeiros Estilingueiros, guarda tudo para o Cofrinho.
             if (estrategia == Estrategia.Ganancioso && estado.proximaAcao >= 2)
             {
-                if (sim.Penas >= ninho.custo) sim.ComprarNinho();
+                if (sim.Moedas >= cofrinho.custo) sim.ComprarCofrinho();
                 return;
             }
-            // Equilibrado: compra (e guarda penas para) o Ninho só quando ele se paga
+            // Equilibrado: compra (e guarda moedas para) o Cofrinho só quando ele se paga
             // rápido e a defesa está segurando (ninguém chegou na Torre na última onda).
             if (estrategia == Estrategia.Equilibrado && estado.vazouNaUltimaOnda == 0)
             {
-                int? ondas = sim.OndasParaPagarNinho();
+                int? ondas = sim.OndasParaPagarCofrinho();
                 if (ondas.HasValue && ondas.Value <= OndasParaPagarEquilibrado)
                 {
-                    if (sim.Penas >= ninho.custo) sim.ComprarNinho();
+                    if (sim.Moedas >= cofrinho.custo) sim.ComprarCofrinho();
                     return;
                 }
             }
@@ -170,7 +170,7 @@ public static class Robos
         for (int tentativa = 0; tentativa < Ordem.Length; tentativa++)
         {
             var r = Executar(sim, Ordem[estado.proximaAcao % Ordem.Length]);
-            if (r == Resultado.SemPenas) return; // espera juntar
+            if (r == Resultado.SemMoedas) return; // espera juntar
             estado.proximaAcao++;                 // fez, ou não dá para fazer: segue a ordem
         }
     }
@@ -201,7 +201,7 @@ public static class Robos
         switch (acao.tipo)
         {
             case TipoAcao.Comprar:
-                if (sim.Penas < dados.custo) return Resultado.SemPenas;
+                if (sim.Moedas < dados.custo) return Resultado.SemMoedas;
                 foreach (var lugar in LugaresBons(sim, acao.especie))
                     return sim.Comprar(acao.especie, lugar, out _);
                 return Resultado.Indisponivel; // mapa cheio
@@ -289,8 +289,8 @@ public static class Robos
             var r = Jogar(dados, e);
             texto.AppendLine(r.ToString());
             texto.AppendLine("   dano por onda: " + string.Join(" ", r.danoPorOnda));
-            texto.AppendLine("   penas por onda: " + string.Join(" ", r.penasPorOnda));
-            if (r.ninhoNaOnda.Count > 0) texto.AppendLine("   Ninho comprado nas ondas: " + string.Join(" ", r.ninhoNaOnda));
+            texto.AppendLine("   moedas por onda: " + string.Join(" ", r.moedasPorOnda));
+            if (r.cofrinhoNaOnda.Count > 0) texto.AppendLine("   Cofrinho comprado nas ondas: " + string.Join(" ", r.cofrinhoNaOnda));
         }
         return texto.ToString();
     }

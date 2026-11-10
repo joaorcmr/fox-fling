@@ -13,7 +13,7 @@ public class BalaoLoja : MonoBehaviour
 
     public void Mostrar(TipoPorco tipo, RectTransform cartao)
     {
-        titulo.text = $"{tipo.dados.nome} · {tipo.dados.custo} penas";
+        titulo.text = $"{tipo.dados.nome} · {tipo.dados.custo} moedas";
         texto.text = tipo.dados.papel;
         gameObject.SetActive(true);
         var p = caixa.position;

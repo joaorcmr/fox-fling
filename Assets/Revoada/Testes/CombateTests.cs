@@ -11,7 +11,7 @@ public class CombateTests
     static DadosJogo ComPorco(EspeciePorco e, Atributos a, float vidaPardal = 5f)
     {
         var d = Basico();
-        d.economia.penasIniciais = 10000;
+        d.economia.moedasIniciais = 10000;
         d.passaros[EspeciePassaro.Pardal] = Passaro(EspeciePassaro.Pardal, vida: vidaPardal);
         d.porcos[e] = Porco(e, 100, a);
         return d;
@@ -228,7 +228,7 @@ public class CombateTests
     public void Pata_SoltaQuatroPatinhos()
     {
         var d = Basico();
-        d.passaros[EspeciePassaro.Pata] = Passaro(EspeciePassaro.Pata, vida: 8f, penas: 4f);
+        d.passaros[EspeciePassaro.Pata] = Passaro(EspeciePassaro.Pata, vida: 8f, moedas: 4f);
         d.passaros[EspeciePassaro.Pata].filho = EspeciePassaro.Patinho;
         d.passaros[EspeciePassaro.Pata].quantidadeFilhos = 4;
         d.passaros[EspeciePassaro.Patinho] = Passaro(EspeciePassaro.Patinho, velocidade: 3f);

@@ -12,17 +12,17 @@ public static class DefinicoesPadrao
     {
         return new[]
         {
-            // Penas: o dobro do ponto de partida do design (os robôs mostraram que,
-            // com 1 pena por pardal, o Ninho nunca se pagava). Chefe: 90 de vida
+            // Moedas: o dobro do ponto de partida do design (os robôs mostraram que,
+            // com 1 moeda por pardal, o Cofrinho nunca se pagava). Chefe: 90 de vida
             // base (250 era mais do que qualquer defesa da onda 10 aguenta).
-            P(Pardal, "Pardal", vida: 1, vel: 2.5f, dano: 1, penas: 2, raio: 0.35f),
-            P(Sabia, "Sabiá", vida: 3, vel: 2.8f, dano: 2, penas: 4, raio: 0.35f),
-            P(BeijaFlor, "Beija-flor", vida: 2, vel: 5f, dano: 2, penas: 6, raio: 0.35f),
-            P(Arara, "Arara-azul", vida: 10, vel: 2f, dano: 4, penas: 12, raio: 0.45f),
-            Com(P(Pata, "Pata", vida: 8, vel: 1.8f, dano: 3, penas: 8, raio: 0.45f), p => { p.filho = Patinho; p.quantidadeFilhos = 4; }),
-            P(Patinho, "Patinho", vida: 1, vel: 3f, dano: 1, penas: 2, raio: 0.3f),
-            Com(P(Urubu, "Urubu", vida: 28, vel: 1.4f, dano: 6, penas: 24, raio: 0.45f), p => p.couraca = true),
-            Com(P(Gaviao, "Gavião-real", vida: 90, vel: 0.9f, dano: 30, penas: 200, raio: 0.8f), p => p.chefe = true),
+            P(Pardal, "Pardal", vida: 1, vel: 2.5f, dano: 1, moedas: 2, raio: 0.35f),
+            P(Sabia, "Sabiá", vida: 3, vel: 2.8f, dano: 2, moedas: 4, raio: 0.35f),
+            P(BeijaFlor, "Beija-flor", vida: 2, vel: 5f, dano: 2, moedas: 6, raio: 0.35f),
+            P(Arara, "Arara-azul", vida: 10, vel: 2f, dano: 4, moedas: 12, raio: 0.45f),
+            Com(P(Pata, "Pata", vida: 8, vel: 1.8f, dano: 3, moedas: 8, raio: 0.45f), p => { p.filho = Patinho; p.quantidadeFilhos = 4; }),
+            P(Patinho, "Patinho", vida: 1, vel: 3f, dano: 1, moedas: 2, raio: 0.3f),
+            Com(P(Urubu, "Urubu", vida: 28, vel: 1.4f, dano: 6, moedas: 24, raio: 0.45f), p => p.couraca = true),
+            Com(P(Gaviao, "Gavião-real", vida: 90, vel: 0.9f, dano: 30, moedas: 200, raio: 0.8f), p => p.chefe = true),
         };
     }
 
@@ -99,8 +99,8 @@ public static class DefinicoesPadrao
                 nivel3 = M("Grito de Guerra", "Vizinhos com +20% de alcance.", 320, tambor3),
                 especializacaoA = M("Fanfarra", "Aura +60% e raio 3,5.", 650,
                     Mais(tambor3, a => { a.bonusCadencia = 0.6f; a.raioAura = 3.5f; a.alcance = 3.5f; })),
-                especializacaoB = M("Tambor das Penas", "Pássaros estourados na aura rendem +50% de penas.", 550,
-                    Mais(tambor3, a => a.bonusPenas = 0.5f)),
+                especializacaoB = M("Tambor das Moedas", "Pássaros estourados na aura rendem +50% de moedas.", 550,
+                    Mais(tambor3, a => a.bonusMoedas = 0.5f)),
             },
         };
     }
@@ -160,7 +160,7 @@ public static class DefinicoesPadrao
             O(G(Pata, 8, 1.6f), G(Arara, 10, 1.2f, 2f)),
             // 15–19: urubus (couraça); a 18 é uma revoada densa. As ondas 16 e 19
             // são a virada do jogo: quem só tem pedrinha (meia força na couraça)
-            // ou não investiu em penas costuma cair aqui ou logo depois.
+            // ou não investiu em moedas costuma cair aqui ou logo depois.
             O(G(Urubu, 3, 4f), G(Sabia, 20, 0.5f, 1f)),
             O(G(Urubu, 8, 2.5f), G(BeijaFlor, 25, 0.45f, 2f)),
             O(G(Pata, 12, 1.2f), G(Arara, 12, 1f, 3f)),
@@ -187,21 +187,21 @@ public static class DefinicoesPadrao
     {
         return new DadosEconomia
         {
-            penasIniciais = 300,
+            moedasIniciais = 300,
             vidaInicial = 100,
             bonusOndaBase = 25,
             bonusOndaPorOnda = 5,
             fracaoVenda = 0.7f,
             esperaAuto = 2f,
-            ninho = new List<NivelNinho>
+            cofrinho = new List<NivelCofrinho>
             {
                 // Mais barato que o ponto de partida do design (250 … 2500): com os
-                // preços antigos o Ninho não se pagava nunca e a escolha não existia.
-                new NivelNinho { multiplicador = 1.25f, custo = 120 },
-                new NivelNinho { multiplicador = 1.5f, custo = 250 },
-                new NivelNinho { multiplicador = 1.75f, custo = 450 },
-                new NivelNinho { multiplicador = 2f, custo = 750 },
-                new NivelNinho { multiplicador = 2.5f, custo = 1200 },
+                // preços antigos o Cofrinho não se pagava nunca e a escolha não existia.
+                new NivelCofrinho { multiplicador = 1.25f, custo = 120 },
+                new NivelCofrinho { multiplicador = 1.5f, custo = 250 },
+                new NivelCofrinho { multiplicador = 1.75f, custo = 450 },
+                new NivelCofrinho { multiplicador = 2f, custo = 750 },
+                new NivelCofrinho { multiplicador = 2.5f, custo = 1200 },
             },
         };
     }
@@ -247,9 +247,9 @@ public static class DefinicoesPadrao
     }
 
     // ------------------------------------------------------------------
-    static DadosPassaro P(EspeciePassaro e, string nome, float vida, float vel, int dano, float penas, float raio)
+    static DadosPassaro P(EspeciePassaro e, string nome, float vida, float vel, int dano, float moedas, float raio)
     {
-        return new DadosPassaro { especie = e, nome = nome, vida = vida, velocidade = vel, danoTorre = dano, penas = penas, raio = raio };
+        return new DadosPassaro { especie = e, nome = nome, vida = vida, velocidade = vel, danoTorre = dano, moedas = moedas, raio = raio };
     }
 
     static DadosPassaro Com(DadosPassaro p, System.Action<DadosPassaro> ajuste)

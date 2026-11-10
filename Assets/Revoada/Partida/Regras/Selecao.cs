@@ -56,7 +56,7 @@ public class Selecao
         return r;
     }
 
-    // Para a interface avisar quando um comando não deu certo (sem penas etc.).
+    // Para a interface avisar quando um comando não deu certo (sem moedas etc.).
     public void Avisar(Resultado r)
     {
         if (r != Resultado.Ok) Falhou?.Invoke(r);

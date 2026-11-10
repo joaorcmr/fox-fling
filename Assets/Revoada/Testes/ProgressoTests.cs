@@ -59,7 +59,7 @@ public class ProgressoTests
         Progresso.MarcarDica("arpao");
 
         Assert.IsTrue(Progresso.DicaVista("arpao"));
-        Assert.IsFalse(Progresso.DicaVista("ninho"));
+        Assert.IsFalse(Progresso.DicaVista("cofrinho"));
     }
 
     [Test]

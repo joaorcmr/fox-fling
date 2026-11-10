@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 // Um porco da loja na barra lateral: ícone e preço. Fica apagado quando faltam
-// penas; clicar começa a colocação (o fantasma aparece no mapa). Passar o
+// moedas; clicar começa a colocação (o fantasma aparece no mapa). Passar o
 // mouse mostra o balão com o nome e o papel do porco.
 public class CartaoPorcoLoja : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -26,8 +26,8 @@ public class CartaoPorcoLoja : MonoBehaviour, IPointerEnterHandler, IPointerExit
     void Update()
     {
         if (jogo == null) return;
-        bool temPenas = jogo.Sim.Penas >= tipo.dados.custo;
-        grupo.alpha = temPenas ? 1f : 0.45f;
+        bool temMoedas = jogo.Sim.Moedas >= tipo.dados.custo;
+        grupo.alpha = temMoedas ? 1f : 0.45f;
         var naMao = jogo.Selecao.Colocando;
         bool escolhido = naMao.HasValue && naMao.Value == tipo.dados.especie;
         fundo.color = escolhido ? new Color(1f, 0.92f, 0.55f) : Color.white;

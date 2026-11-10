@@ -1,8 +1,8 @@
 # Fox Tower
 
 Tower defense 2D com visão de cima, feito em **Unity 6**. Bandos de pássaros voam por uma trilha até a
-**Torre dos Porcos**. Você compra **porcos verdes** com **penas**, que caem dos pássaros estourados, e
-decide a toda hora: gastar em mais defesa agora ou no **Ninho de Penas**, que faz cada pássaro render mais
+**Torre dos Porcos**. Você compra **porcos verdes** com **moedas**, que caem dos pássaros estourados, e
+decide a toda hora: gastar em mais defesa agora ou no **Cofrinho**, que faz cada pássaro render mais
 depois?
 
 - **Disciplina:** Jogos Digitais, Insper
@@ -30,14 +30,14 @@ pouco. Há chefes (gavião-real) nas ondas 10, 20 e 30.
 | **Estilingueiro** | 120 | Pedrinha rápida, barato: segura o começo | Rajada (3 pedrinhas em leque) · Mira Certeira (longe e forte) |
 | **Arpoador** | 220 | O arpão **atravessa** a fila: rende no fim das retas longas | Arpão Gigante (atravessa 20) · Arpão Ligeiro (muito rápido) |
 | **Bombardeiro** | 350 | Bomba de lama em **área**; dano cheio na couraça | Chuva de Lama (o dobro de bombas) · Barril de Estrume (empurra para trás) |
-| **Tamboreiro** | 300 | Não ataca: porcos no círculo dele atiram mais rápido (**agrupar**) | Fanfarra (aura maior) · Tambor das Penas (+50% de penas na aura) |
+| **Tamboreiro** | 300 | Não ataca: porcos no círculo dele atiram mais rápido (**agrupar**) | Fanfarra (aura maior) · Tambor das Moedas (+50% de moedas na aura) |
 
 Cada porco tem 2 upgrades em sequência e, no nível 3, a escolha de uma especialização. Vender devolve 70%
 do que foi gasto nele. As auras de Tamboreiros diferentes **não se somam**: vale a maior.
 
 ### Os pássaros
 
-| Pássaro | Vida | Velocidade | Dano na Torre | Penas | Especial |
+| Pássaro | Vida | Velocidade | Dano na Torre | Moedas | Especial |
 |---|---|---|---|---|---|
 | Pardal | 1 | 2,5 | 1 | 2 | vem em bando |
 | Sabiá | 3 | 2,8 | 2 | 4 | |
@@ -49,10 +49,10 @@ do que foi gasto nele. As auras de Tamboreiros diferentes **não se somam**: val
 
 A partir da onda 11, os pássaros ganham **8% de vida por onda** (onda 20 = ×1,8; onda 30 = ×2,6).
 
-### Penas e o Ninho
+### Moedas e o Cofrinho
 
-Você começa com 300 penas. Cada pássaro estourado rende as penas dele × o multiplicador do Ninho, e cada onda
-vencida dá um bônus pequeno (25 + 5 × a onda). O **Ninho de Penas** sobe o multiplicador: ×1,25 (120) →
+Você começa com 300 moedas. Cada pássaro estourado rende as moedas dele × o multiplicador do Cofrinho, e cada onda
+vencida dá um bônus pequeno (25 + 5 × a onda). O **Cofrinho** sobe o multiplicador: ×1,25 (120) →
 ×1,5 (250) → ×1,75 (450) → ×2 (750) → ×2,5 (1.200). O cartão dele mostra **em quantas ondas o investimento se
 paga**: income comprado cedo rende muito, e comprado tarde não rende nada.
 
@@ -86,17 +86,17 @@ Durante o Play, selecione um pássaro ou um porco na Hierarchy: o Inspector most
 
 "Difícil na medida certa" é medido. Robôs jogam partidas inteiras com os números de verdade, sem desenhar
 nada (menu **Fox Tower > Balanceamento (robôs)**, ou os testes de `BalanceamentoTests`). Três deles seguem a
-mesma ordem de construção e só mudam o que fazem com o Ninho:
+mesma ordem de construção e só mudam o que fazem com o Cofrinho:
 
 | Robô | O que faz | Resultado |
 |---|---|---|
 | Parado | não compra nada | perde na onda 5 |
 | Só Estilingue | só Estilingueiros e os upgrades deles | perde na onda 19 |
-| Defesa pura | porcos e upgrades, **nunca** o Ninho | perde na onda 22 |
-| Ganancioso | guarda tudo para o Ninho | perde na onda 8 |
-| **Equilibrado** | mistura defesa e Ninho (compra quando ele se paga em até 6 ondas) | **vence** a onda 30 com 46 de vida |
+| Defesa pura | porcos e upgrades, **nunca** o Cofrinho | perde na onda 22 |
+| Ganancioso | guarda tudo para o Cofrinho | perde na onda 8 |
+| **Equilibrado** | mistura defesa e Cofrinho (compra quando ele se paga em até 6 ondas) | **vence** a onda 30 com 46 de vida |
 
-A virada do jogo são as ondas 16 e 19, com urubus de couraça: quem só tem pedrinha, ou não investiu em penas,
+A virada do jogo são as ondas 16 e 19, com urubus de couraça: quem só tem pedrinha, ou não investiu em moedas,
 cai ali ou logo depois. Se alguém mexer num número e quebrar esse equilíbrio, os testes avisam. As metas estão
 com pouca folga, então depois de mexer em qualquer número rode os robôs (ou os testes) antes de jogar.
 
@@ -104,7 +104,7 @@ com pouca folga, então depois de mexer em qualquer número rode os robôs (ou o
 
 - **No Inspector:** a pasta `Dados/` de cada assunto tem os assets: um para cada pássaro (`Passaros/Dados`) e
   cada porco, com os upgrades (`Porcos/Dados`), as ondas (`Ondas/Dados/Ondas.asset`), a economia
-  (`Penas/Dados/Economia.asset`) e o mapa (`Mapa/Dados/Fazenda.asset`). Mude e dê Play.
+  (`Moedas/Dados/Economia.asset`) e o mapa (`Mapa/Dados/Fazenda.asset`). Mude e dê Play.
 - **Menu Fox Tower:**
   - *Reconstruir tudo*: gera de novo prefabs e cenas a partir do código. Os números dos assets são mantidos.
   - *Restaurar números padrão*: volta os assets para os números de `Editor/DefinicoesPadrao.cs`.
@@ -124,7 +124,7 @@ creme contornado.
 
 ## Estrutura
 
-As pastas têm o nome do que o jogo **é** (pássaros, porcos, ondas, penas, Torre), e não do tipo de arquivo
+As pastas têm o nome do que o jogo **é** (pássaros, porcos, ondas, moedas, Torre), e não do tipo de arquivo
 (*Screaming Architecture*): quem abre `Assets/Revoada` vê de cara que é um tower defense de pássaros contra
 porcos, e tudo sobre um assunto (regra, números, desenho, tela) fica junto.
 
@@ -134,7 +134,7 @@ Assets/Revoada/
 ├── Porcos/        o porco, onde pode ficar, upgrades e auras; a loja, o painel e o porco fantasma
 ├── Combate/       tiros, mira e golpes (lentidão, empurrão, explosão)
 ├── Ondas/         o gerador de ondas, as 30 ondas e a prévia da próxima
-├── Penas/         a economia e o Ninho de Penas
+├── Moedas/        a economia e o Cofrinho
 ├── Mapa/          a trilha, os obstáculos e o desenho do mapa
 ├── Torre/         a vida da Torre e a Torre apanhando
 ├── Partida/       a simulação (estado e ordem do passo), o Jogo que monta a partida, relógio, seleção do

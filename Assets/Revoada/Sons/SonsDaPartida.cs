@@ -17,7 +17,7 @@ public class SonsDaPartida : MonoBehaviour
         {
             if (p.Dados.chefe && S != null) Sons.Tocar(S.chefe, 1f, 0f);
         };
-        sim.PassaroEstourou += (p, penas) => Sons.TocarEstouro(p.Dados.chefe ? 1f : 0.55f);
+        sim.PassaroEstourou += (p, moedas) => Sons.TocarEstouro(p.Dados.chefe ? 1f : 0.55f);
         sim.TorreAtingida += dano =>
         {
             if (S != null) Sons.Tocar(S.torre, 0.9f);

@@ -2,15 +2,15 @@ using System;
 using System.Collections.Generic;
 
 // As ondas na simulação: soltar a próxima, ir soltando os pássaros na hora
-// certa, o fim de onda com o bônus de penas e o Auto. Também as consultas que
+// certa, o fim de onda com o bônus de moedas e o Auto. Também as consultas que
 // a interface mostra antes de cada onda (resumo e estreias).
 public partial class Simulacao
 {
     public int Onda { get; private set; }     // em andamento, ou a última concluída (0 antes da primeira)
     public int TotalOndas => Dados.ondas.Count;
 
-    readonly List<float> penasBasePorOnda = new List<float>();
-    public IReadOnlyList<float> PenasBasePorOnda => penasBasePorOnda;
+    readonly List<float> moedasBasePorOnda = new List<float>();
+    public IReadOnlyList<float> MoedasBasePorOnda => moedasBasePorOnda;
 
     readonly GeradorOnda gerador = new GeradorOnda();
     readonly List<GrupoOnda> nascidos = new List<GrupoOnda>();
@@ -92,28 +92,28 @@ public partial class Simulacao
     }
 
     // ------------------------------------------------------------------
-    // Penas-base de cada onda (sem o Ninho), para o cartão do Ninho calcular
+    // Moedas-base de cada onda (sem o Cofrinho), para o cartão do Cofrinho calcular
     // em quantas ondas o investimento se paga
     // ------------------------------------------------------------------
-    void CalcularPenasDasOndas()
+    void CalcularMoedasDasOndas()
     {
-        foreach (var onda in Dados.ondas) penasBasePorOnda.Add(PenasDaOnda(onda));
+        foreach (var onda in Dados.ondas) moedasBasePorOnda.Add(MoedasDaOnda(onda));
     }
 
-    float PenasDaOnda(DadosOnda onda)
+    float MoedasDaOnda(DadosOnda onda)
     {
         float total = 0f;
-        foreach (var g in onda.grupos) total += g.quantidade * PenasDe(g.especie, 0);
+        foreach (var g in onda.grupos) total += g.quantidade * MoedasDe(g.especie, 0);
         return total;
     }
 
-    // Penas de um pássaro mais as dos filhos que ele solta (a pata e os patinhos).
-    float PenasDe(EspeciePassaro especie, int profundidade)
+    // Moedas de um pássaro mais as dos filhos que ele solta (a pata e os patinhos).
+    float MoedasDe(EspeciePassaro especie, int profundidade)
     {
         if (!Dados.passaros.TryGetValue(especie, out var dados)) return 0f;
-        float total = dados.penas;
+        float total = dados.moedas;
         if (dados.quantidadeFilhos > 0 && profundidade < 3)
-            total += dados.quantidadeFilhos * PenasDe(dados.filho, profundidade + 1);
+            total += dados.quantidadeFilhos * MoedasDe(dados.filho, profundidade + 1);
         return total;
     }
 }

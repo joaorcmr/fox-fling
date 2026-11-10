@@ -26,7 +26,7 @@ public partial class Simulacao
         porco = null;
         if (Acabou || !Dados.porcos.TryGetValue(especie, out var dados)) return Resultado.Indisponivel;
         if (!Colocacao.Valida(posicao, dados.raio, Dados.mapa, Trilha, porcos)) return Resultado.LugarInvalido;
-        if (!Economia.Gastar(dados.custo)) return Resultado.SemPenas;
+        if (!Economia.Gastar(dados.custo)) return Resultado.SemMoedas;
 
         porco = new Porco(proximoIdPorco++, dados, posicao) { Gasto = dados.custo };
         porcos.Add(porco);
@@ -51,7 +51,7 @@ public partial class Simulacao
         if (Acabou || p == null || !porcos.Contains(p)) return Resultado.Indisponivel;
         var m = ProximaMelhoria(p);
         if (m == null) return Resultado.Indisponivel;
-        if (!Economia.Gastar(m.custo)) return Resultado.SemPenas;
+        if (!Economia.Gastar(m.custo)) return Resultado.SemMoedas;
         p.Nivel++;
         Aplicar(p, m);
         return Resultado.Ok;
@@ -62,7 +62,7 @@ public partial class Simulacao
         if (Acabou || p == null || !porcos.Contains(p) || p.Nivel != 3 || (escolha != 0 && escolha != 1))
             return Resultado.Indisponivel;
         var m = escolha == 0 ? p.Dados.especializacaoA : p.Dados.especializacaoB;
-        if (!Economia.Gastar(m.custo)) return Resultado.SemPenas;
+        if (!Economia.Gastar(m.custo)) return Resultado.SemMoedas;
         p.Nivel = 4;
         p.Especializacao = escolha;
         Aplicar(p, m);
@@ -107,22 +107,22 @@ public partial class Simulacao
         }
     }
 
-    // Quanto a mais rendem as penas de um pássaro estourado neste ponto (o
-    // Tambor das Penas transforma um bom ponto de abate numa fazenda de penas).
-    public float BonusPenas(Vector2 posicao)
+    // Quanto a mais rendem as moedas de um pássaro estourado neste ponto (o
+    // Tambor das Moedas transforma um bom ponto de abate numa fazenda de moedas).
+    public float BonusMoedas(Vector2 posicao)
     {
         float bonus = 0f;
         foreach (var t in porcos)
         {
-            if (t.Ataca || t.Atributos.bonusPenas <= 0f) continue;
-            if (Vector2.Distance(posicao, t.Posicao) <= t.Atributos.raioAura) bonus = Mathf.Max(bonus, t.Atributos.bonusPenas);
+            if (t.Ataca || t.Atributos.bonusMoedas <= 0f) continue;
+            if (Vector2.Distance(posicao, t.Posicao) <= t.Atributos.raioAura) bonus = Mathf.Max(bonus, t.Atributos.bonusMoedas);
         }
         return 1f + bonus;
     }
 
     public int ValorVenda(Porco p) => p == null ? 0 : Economia.ValorVenda(p.Gasto);
 
-    // Devolve as penas que voltaram (0 se o porco já não está no jogo).
+    // Devolve as moedas que voltaram (0 se o porco já não está no jogo).
     public int Vender(Porco p)
     {
         if (Acabou || p == null || !porcos.Remove(p)) return 0;

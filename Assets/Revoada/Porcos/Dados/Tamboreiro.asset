@@ -37,7 +37,7 @@ MonoBehaviour:
       raioAura: 2.5
       bonusCadencia: 0.2
       bonusAlcance: 0
-      bonusPenas: 0
+      bonusMoedas: 0
     nivel2:
       nome: Batuque
       descricao: Aura +35% e raio 3,0.
@@ -61,7 +61,7 @@ MonoBehaviour:
         raioAura: 3
         bonusCadencia: 0.35
         bonusAlcance: 0
-        bonusPenas: 0
+        bonusMoedas: 0
     nivel3:
       nome: Grito de Guerra
       descricao: Vizinhos com +20% de alcance.
@@ -85,7 +85,7 @@ MonoBehaviour:
         raioAura: 3
         bonusCadencia: 0.35
         bonusAlcance: 0.2
-        bonusPenas: 0
+        bonusMoedas: 0
     especializacaoA:
       nome: Fanfarra
       descricao: Aura +60% e raio 3,5.
@@ -109,10 +109,10 @@ MonoBehaviour:
         raioAura: 3.5
         bonusCadencia: 0.6
         bonusAlcance: 0.2
-        bonusPenas: 0
+        bonusMoedas: 0
     especializacaoB:
-      nome: Tambor das Penas
-      descricao: "P\xE1ssaros estourados na aura rendem +50% de penas."
+      nome: Tambor das Moedas
+      descricao: "P\xE1ssaros estourados na aura rendem +50% de moedas."
       custo: 550
       atributos:
         tiro: 0
@@ -133,7 +133,7 @@ MonoBehaviour:
         raioAura: 3
         bonusCadencia: 0.35
         bonusAlcance: 0.2
-        bonusPenas: 0.5
+        bonusMoedas: 0.5
   corpo: {fileID: 21300000, guid: 48d98c810e83141f9a9655b7a33f94e6, type: 3}
   arma: {fileID: 21300000, guid: e572867324e62447095b733a4501acf5, type: 3}
   projetil: {fileID: 0}

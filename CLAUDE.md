@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## O projeto
 
-**Fox Tower** é um tower defense 2D com visão de cima, feito em Unity **6000.6.4f1**. A raiz do repositório é o próprio projeto Unity. Pássaros voam por uma trilha até a Torre dos Porcos. O jogador compra porcos com penas e decide entre defesa e o Ninho de Penas (income). É um trabalho de Jogos Digitais do Insper: a resolução é fixa em **600×480** (regra da disciplina) e o build é WebGL para o itch.io. As regras, os números, os porcos e os pássaros estão descritos no `README.md`.
+**Fox Tower** é um tower defense 2D com visão de cima, feito em Unity **6000.6.4f1**. A raiz do repositório é o próprio projeto Unity. Pássaros voam por uma trilha até a Torre dos Porcos. O jogador compra porcos com moedas e decide entre defesa e o Cofrinho (income). É um trabalho de Jogos Digitais do Insper: a resolução é fixa em **600×480** (regra da disciplina) e o build é WebGL para o itch.io. As regras, os números, os porcos e os pássaros estão descritos no `README.md`.
 
 Código, comentários, interface e commits são em **português**, e os identificadores também (sem acento: `Passaro`, `Simulacao`). Não há namespaces: todas as classes ficam no namespace global. Os arquivos são UTF-8 sem BOM, com quebra de linha CRLF. Os commits seguem o padrão `feat: ...`, `fix: ...`, `docs: ...`, `chore: ...`.
 
@@ -64,14 +64,14 @@ No `FixedUpdate`, o `Jogo` chama `Sim.Passo()`. Os outros componentes chegam a t
 
 ### Pastas por assunto (Screaming Architecture) e uma responsabilidade por pasta (SoC)
 
-`Assets/Revoada/` tem uma pasta por assunto do jogo: `Passaros`, `Porcos`, `Combate`, `Ondas`, `Penas`, `Mapa`, `Torre`, `Partida`, `Menu`, `Dicas`, `Sons`, `Progresso` e `Compartilhado`. Dentro de cada uma, as subpastas são sempre as mesmas:
+`Assets/Revoada/` tem uma pasta por assunto do jogo: `Passaros`, `Porcos`, `Combate`, `Ondas`, `Moedas`, `Mapa`, `Torre`, `Partida`, `Menu`, `Dicas`, `Sons`, `Progresso` e `Compartilhado`. Dentro de cada uma, as subpastas são sempre as mesmas:
 
 - `Regras/`: C# puro, com o estado e as regras. Compila no assembly **`Revoada.Nucleo`**, definido em `Partida/Regras/Revoada.Nucleo.asmdef`. As outras pastas `Regras/` entram nele por um `Revoada.Nucleo.asmref`, então uma pasta `Regras/` nova também precisa de um. Esse assembly não referencia o resto do jogo, e assim uma regra não consegue depender de visual, som ou interface.
 - `Dados/`: os ScriptableObjects, com a classe e os `.asset`. Os números em si são classes `[Serializable]` (`DadosPassaro`, `DadosPorco`...) que ficam em `Regras/`. O asset só os embrulha junto com o que é de desenho (sprites, cor).
 - `Visual/`, `Interface/` (uGUI) e `Prefabs/`, além de `Partida/Entrada/` para teclado e mouse.
 - Todo o resto compila no assembly `Revoada` (`Assets/Revoada/Revoada.asmdef`). `Editor/`, `Testes/` e `TestesPlay/` têm assemblies próprios. `Revoada.Testes` referencia `Revoada.Editor`, então os testes podem usar `ConstrutorDados`, `DefinicoesPadrao` e `Robos`.
 
-`Simulacao` é `partial`: cada assunto guarda a sua parte em `<Assunto>/Regras/Simulacao.<Assunto>.cs` (ondas, pássaros, Torre, penas, porcos, combate). `Partida/Regras/Simulacao.cs` tem o estado geral e a ordem do `Passo()`. Uma regra nova vai no arquivo parcial do assunto dela.
+`Simulacao` é `partial`: cada assunto guarda a sua parte em `<Assunto>/Regras/Simulacao.<Assunto>.cs` (ondas, pássaros, Torre, moedas, porcos, combate). `Partida/Regras/Simulacao.cs` tem o estado geral e a ordem do `Passo()`. Uma regra nova vai no arquivo parcial do assunto dela.
 
 As responsabilidades estão separadas de propósito; não junte de volta:
 - `Controles` só lê a entrada.
@@ -96,7 +96,7 @@ Para mudar uma cena, um prefab ou uma ligação entre componentes, altere o cons
 
 ### Dados e balanceamento
 
-Os números padrão ficam em `Editor/DefinicoesPadrao.cs`. Os que valem no jogo ficam nos `.asset`, editáveis no Inspector: `Passaros/Dados`, `Porcos/Dados`, `Ondas/Dados/Ondas.asset`, `Penas/Dados/Economia.asset` e `Mapa/Dados/Fazenda.asset`.
+Os números padrão ficam em `Editor/DefinicoesPadrao.cs`. Os que valem no jogo ficam nos `.asset`, editáveis no Inspector: `Passaros/Dados`, `Porcos/Dados`, `Ondas/Dados/Ondas.asset`, `Moedas/Dados/Economia.asset` e `Mapa/Dados/Fazenda.asset`.
 
 `BalanceamentoTests` roda os robôs de `Editor/Robos.cs` com os números reais e falha se alguma meta de design quebrar (por exemplo, o Equilibrado tem que vencer e o Defesa pura tem que perder por volta da onda 22). As metas têm pouca folga, então qualquer mudança de número precisa passar pelos robôs ou pelos testes. Os testes de regra usam `Testes/CenarioTeste.cs`, com cenários pequenos que não dependem dos números de balanceamento.
 

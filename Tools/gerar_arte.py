@@ -526,12 +526,17 @@ def acessorio(nome):
         t.elipse(40, 61, 5, 5, hexc("#F2C14E"))
         t.contornar(1.6)
         t.elipse(40, 61, 2.4, 2.4, mais_claro(hexc("#F2C14E"), 0.5))
-    elif nome == "penas":  # coroa de penas atrás do chapéu
-        for ang, cor in ((-35, "#C8443A"), (-12, "#F7D84A"), (12, "#3FBF7A"), (35, "#3E78C9")):
+    elif nome == "moedas":  # leque de moedas de ouro atrás do chapéu
+        centros = []
+        for ang in (-38, -13, 13, 38):
             a = math.radians(ang - 90)
-            x, y = 40 + math.cos(a) * 20, 34 + math.sin(a) * 20
-            t.linha([(40, 30), (x, y)], hexc(cor), 4.2)
+            centros.append((40 + math.cos(a) * 19, 33 + math.sin(a) * 19))
+        for x, y in centros:
+            t.elipse(x, y, 5.2, 5.2, hexc("#F2C14E"))
         t.contornar(1.6)
+        for x, y in centros:
+            t.elipse(x, y, 3.1, 3.1, hexc("#D9A235"))
+            t.elipse(x - 0.9, y - 0.9, 1.5, 1.5, hexc("#FBE08A"))
     return t.final()
 
 
@@ -796,9 +801,12 @@ def icone(tipo):
         t.elipse(31, 19, 10, 10, hexc("#E04B4B"))
         t.poligono([(7.5, 22), (40.5, 22), (24, 41)], hexc("#E04B4B"))
         t.elipse(15, 16, 3.4, 2.6, (255, 200, 200, 255))
-    elif tipo == "pena":
-        t.poligono([(10, 40), (14, 22), (26, 8), (38, 6), (36, 18), (26, 32)], hexc("#F7E7B4"))
-        t.linha([(9, 41), (34, 10)], hexc("#C9A243"), 1.6)
+    elif tipo == "moeda":  # moeda de ouro com a borda mais escura e um brilho
+        t.elipse(24, 25, 17, 17, hexc("#D9A235"))
+        t.elipse(24, 24, 17, 16, hexc("#F2C14E"))
+        t.elipse(24, 24, 11.5, 11, hexc("#D9A235"))
+        t.elipse(24, 24.8, 10, 9.6, hexc("#F7D774"))
+        t.elipse(19.5, 19.5, 3.4, 2.4, hexc("#FFF3C4"))
     elif tipo == "play":
         t.poligono([(15, 9), (39, 24), (15, 39)], creme)
     elif tipo == "pausa":
@@ -810,13 +818,22 @@ def icone(tipo):
     elif tipo == "menu":
         for y in (13, 23, 33):
             t.retangulo(10, y - 3, 38, y + 3, creme, raio=2)
-    elif tipo == "ninho":
-        t.elipse(24, 32, 18, 9, hexc("#9B6A3C"))
-        t.elipse(18, 25, 6, 7, hexc("#F4F1EA"))
-        t.elipse(29, 24, 6, 7, hexc("#BFE3F2"))
-        t.elipse(24, 34, 16, 6, hexc("#B9834F"))
-        for x in range(10, 40, 6):
-            t.linha([(x, 31), (x + 5, 37)], hexc("#7A4E2C"), 1.2)
+    elif tipo == "cofrinho":  # porquinho de louça com uma moeda entrando
+        rosa, rosa_escuro = hexc("#F4A6B8"), hexc("#DB7F97")
+        t.elipse(22, 9, 6, 6, hexc("#F2C14E"))                      # a moeda
+        for x in (14, 30):                                          # patas
+            t.retangulo(x - 3, 36, x + 3, 43, rosa_escuro, raio=1.5)
+        t.poligono([(12, 20), (15, 11), (21, 19)], rosa_escuro)     # orelha
+        t.elipse(23, 29, 16, 12, rosa)                              # corpo
+        t.elipse(39, 29, 5, 6, rosa_escuro)                         # focinho
+        t.contornar(2.2)
+        t.elipse(22, 9, 3.2, 3.2, hexc("#D9A235"))
+        t.retangulo(16, 18.2, 28, 20.4, CONTORNO, raio=1)           # a fenda
+        t.elipse(31, 25, 1.6, 1.9, CONTORNO)                        # olho
+        t.elipse(38, 28, 0.9, 1.4, hexc("#8E4A5E"))
+        t.elipse(40.6, 28, 0.9, 1.4, hexc("#8E4A5E"))
+        t.elipse(16, 25, 4.5, 2.8, mais_claro(rosa, 0.45))
+        return t.final()
     elif tipo == "reiniciar":
         t.arco(24, 25, 13, 40, 330, creme, 5)
         t.poligono([(32, 6), (41, 16), (29, 18)], creme)
@@ -901,7 +918,7 @@ def gerar():
     for tipo in ("estilingue", "arpao", "canhao"):
         salvar(arma(tipo), "arma_" + tipo, feitos)
     salvar(tambor(), "arma_tambor", feitos)
-    for nome in ("rajada", "mira", "gigante", "ligeiro", "chuva", "estrume", "fanfarra", "penas"):
+    for nome in ("rajada", "mira", "gigante", "ligeiro", "chuva", "estrume", "fanfarra", "moedas"):
         salvar(acessorio(nome), "acc_" + nome, feitos)
     # Tiros e efeitos
     salvar(pedrinha(), "pedrinha", feitos)
@@ -919,7 +936,7 @@ def gerar():
     # Interface
     salvar(caixa(96, 96, 18, hexc("#FFF6E0"), hexc("#F6E7C4"), hexc("#6B4A2E"), 4), "painel", feitos)
     salvar(caixa(64, 64, 14, hexc("#9BD36F"), hexc("#6FAE4A"), hexc("#3D5E28"), 3), "botao", feitos)
-    for tipo in ("vida", "pena", "play", "pausa", "rapido", "menu", "ninho", "reiniciar"):
+    for tipo in ("vida", "moeda", "play", "pausa", "rapido", "menu", "cofrinho", "reiniciar"):
         salvar(icone(tipo), "icone_" + tipo, feitos)
     salvar(logo(), "logo", feitos)
     for nome, cor in (("bronze", "#CD7F32"), ("prata", "#C3C7CF"), ("ouro", "#F2C14E")):

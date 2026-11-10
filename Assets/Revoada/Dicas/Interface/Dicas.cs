@@ -27,7 +27,7 @@ public class Dicas : MonoBehaviour
         };
         s.OndaTerminou += (onda, bonus) =>
         {
-            if (onda == 3) Mostrar(CatalogoDicas.Ninho);
+            if (onda == 3) Mostrar(CatalogoDicas.Cofrinho);
             foreach (var e in s.Estreias(onda + 1))
                 if (s.Dados.passaros[e].couraca) Mostrar(CatalogoDicas.Couraca);
         };

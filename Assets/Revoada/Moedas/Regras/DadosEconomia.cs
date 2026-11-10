@@ -2,20 +2,20 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-// Um nível do Ninho de Penas: quanto multiplica as penas e quanto custa.
+// Um nível do Cofrinho: quanto multiplica as moedas e quanto custa.
 [Serializable]
-public class NivelNinho
+public class NivelCofrinho
 {
     public float multiplicador;
     public int custo;
 }
 
-// Penas iniciais, vida da Torre, bônus de onda, venda e os níveis do Ninho
+// Moedas iniciais, vida da Torre, bônus de onda, venda e os níveis do Cofrinho
 // (editados no Inspector, no asset ConfigEconomia).
 [Serializable]
 public class DadosEconomia
 {
-    public int penasIniciais = 300;
+    public int moedasIniciais = 300;
     public int vidaInicial = 100;
     [Tooltip("Bônus de fim de onda = base + porOnda × número da onda.")]
     public int bonusOndaBase = 25;
@@ -24,5 +24,5 @@ public class DadosEconomia
     public float fracaoVenda = 0.7f;
     [Tooltip("Segundos entre uma onda e a próxima com o Auto ligado.")]
     public float esperaAuto = 2f;
-    public List<NivelNinho> ninho = new List<NivelNinho>();
+    public List<NivelCofrinho> cofrinho = new List<NivelCofrinho>();
 }

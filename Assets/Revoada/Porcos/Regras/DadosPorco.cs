@@ -41,8 +41,8 @@ public class Atributos
     [Tooltip("0,2 = os vizinhos atiram 20% mais rápido.")]
     public float bonusCadencia;
     public float bonusAlcance;
-    [Tooltip("0,5 = pássaros estourados dentro da aura rendem 50% mais penas.")]
-    public float bonusPenas;
+    [Tooltip("0,5 = pássaros estourados dentro da aura rendem 50% mais moedas.")]
+    public float bonusMoedas;
 
     public Atributos Copia() => (Atributos)MemberwiseClone();
 }

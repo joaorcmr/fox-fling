@@ -6,23 +6,23 @@ using static CenarioTeste;
 // com o jogo pausado (sem nenhum Passo) e param depois do fim de jogo.
 public class SimulacaoTests
 {
-    static DadosJogo ComEstilingueiro(int penas = 300)
+    static DadosJogo ComEstilingueiro(int moedas = 300)
     {
         var d = Basico();
-        d.economia.penasIniciais = penas;
+        d.economia.moedasIniciais = moedas;
         d.porcos[EspeciePorco.Estilingueiro] = Porco(EspeciePorco.Estilingueiro, 120, Tiro(TipoTiro.Pedrinha, recarga: 0.8f));
         return d;
     }
 
     [Test]
-    public void Comprar_SemPenas()
+    public void Comprar_SemMoedas()
     {
-        var s = new Simulacao(ComEstilingueiro(penas: 100));
+        var s = new Simulacao(ComEstilingueiro(moedas: 100));
 
-        Assert.AreEqual(Resultado.SemPenas, s.Comprar(EspeciePorco.Estilingueiro, new Vector2(7f, 10f), out var porco));
+        Assert.AreEqual(Resultado.SemMoedas, s.Comprar(EspeciePorco.Estilingueiro, new Vector2(7f, 10f), out var porco));
         Assert.IsNull(porco);
         Assert.AreEqual(0, s.Porcos.Count);
-        Assert.AreEqual(100, s.Penas);
+        Assert.AreEqual(100, s.Moedas);
     }
 
     [Test]
@@ -31,7 +31,7 @@ public class SimulacaoTests
         var s = new Simulacao(ComEstilingueiro());
 
         Assert.AreEqual(Resultado.LugarInvalido, s.Comprar(EspeciePorco.Estilingueiro, new Vector2(7f, 7.5f), out _));
-        Assert.AreEqual(300, s.Penas);
+        Assert.AreEqual(300, s.Moedas);
     }
 
     [Test]
@@ -43,7 +43,7 @@ public class SimulacaoTests
 
         Assert.AreEqual(Resultado.Ok, s.Comprar(EspeciePorco.Estilingueiro, new Vector2(7f, 10f), out var porco));
 
-        Assert.AreEqual(180, s.Penas);
+        Assert.AreEqual(180, s.Moedas);
         Assert.AreSame(porco, criado);
         Assert.AreEqual(120, porco.Gasto);
         Assert.AreEqual(new Vector2(7f, 10f), porco.Posicao);
@@ -60,7 +60,7 @@ public class SimulacaoTests
 
         Assert.AreEqual(84, s.ValorVenda(porco));
         Assert.AreEqual(84, s.Vender(porco));
-        Assert.AreEqual(180 + 84, s.Penas);
+        Assert.AreEqual(180 + 84, s.Moedas);
         Assert.AreSame(porco, vendido);
         Assert.AreEqual(0, s.Porcos.Count);
         Assert.AreEqual(0, s.Vender(porco)); // já foi vendido
@@ -110,6 +110,6 @@ public class SimulacaoTests
 
         Assert.AreEqual(Resultado.Indisponivel, s.Comprar(EspeciePorco.Estilingueiro, new Vector2(7f, 10f), out _));
         Assert.AreEqual(0, s.Vender(porco));
-        Assert.AreEqual(Resultado.Indisponivel, s.ComprarNinho());
+        Assert.AreEqual(Resultado.Indisponivel, s.ComprarCofrinho());
     }
 }

@@ -11,10 +11,10 @@ public class SelecaoTests
     static readonly Vector2 LugarBom = new Vector2(7f, 10f);
     static readonly Vector2 NaTrilha = new Vector2(7f, 7.5f);
 
-    static Simulacao Partida(int penas = 1000)
+    static Simulacao Partida(int moedas = 1000)
     {
         var d = Basico();
-        d.economia.penasIniciais = penas;
+        d.economia.moedasIniciais = moedas;
         d.economia.vidaInicial = 1;
         d.porcos[EspeciePorco.Estilingueiro] = Porco(EspeciePorco.Estilingueiro, 120, Tiro(TipoTiro.Pedrinha, alcance: 0.1f));
         d.ondas.Add(Onda(Grupo(EspeciePassaro.Pardal, 5)));

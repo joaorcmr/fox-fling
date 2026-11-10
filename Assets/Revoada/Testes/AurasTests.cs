@@ -3,18 +3,18 @@ using UnityEngine;
 using static CenarioTeste;
 
 // O Tamboreiro e o "agrupar": porcos dentro da aura atiram mais rápido (ou
-// alcançam mais longe, ou rendem mais penas). Auras não se somam: vale a maior.
+// alcançam mais longe, ou rendem mais moedas). Auras não se somam: vale a maior.
 public class AurasTests
 {
-    static DadosJogo ComTambor(float bonusCadencia = 0.2f, float raio = 2.5f, float bonusAlcance = 0f, float bonusPenas = 0f)
+    static DadosJogo ComTambor(float bonusCadencia = 0.2f, float raio = 2.5f, float bonusAlcance = 0f, float bonusMoedas = 0f)
     {
         var d = Basico();
-        d.economia.penasIniciais = 5000;
+        d.economia.moedasIniciais = 5000;
         d.porcos[EspeciePorco.Estilingueiro] = Porco(EspeciePorco.Estilingueiro, 120, Tiro(TipoTiro.Pedrinha, alcance: 3f, recarga: 1f));
         d.porcos[EspeciePorco.Tamboreiro] = Porco(EspeciePorco.Tamboreiro, 300, new Atributos
         {
             tiro = TipoTiro.Nenhum, alcance = raio, raioAura = raio,
-            bonusCadencia = bonusCadencia, bonusAlcance = bonusAlcance, bonusPenas = bonusPenas,
+            bonusCadencia = bonusCadencia, bonusAlcance = bonusAlcance, bonusMoedas = bonusMoedas,
         });
         return d;
     }
@@ -63,17 +63,17 @@ public class AurasTests
     }
 
     [Test]
-    public void TamborDasPenas_RendeMaisNaAura()
+    public void TamborDasMoedas_RendeMaisNaAura()
     {
-        var d = ComTambor(bonusCadencia: 0f, bonusPenas: 0.5f);
-        d.passaros[EspeciePassaro.Pardal] = Passaro(EspeciePassaro.Pardal, penas: 2f);
+        var d = ComTambor(bonusCadencia: 0f, bonusMoedas: 0.5f);
+        d.passaros[EspeciePassaro.Pardal] = Passaro(EspeciePassaro.Pardal, moedas: 2f);
         var s = ComPassarosParados(d, EspeciePassaro.Pardal, 7f); // em (7; 7,5)
         Comprar(s, EspeciePorco.Tamboreiro, 7f, 9.5f);             // a aura chega no pardal
-        int antes = s.Penas;
+        int antes = s.Moedas;
 
         s.Atingir(s.Passaros[0], 10f, false);
 
-        Assert.AreEqual(antes + 3, s.Penas); // 2 × 1,5
+        Assert.AreEqual(antes + 3, s.Moedas); // 2 × 1,5
     }
 
     [Test]

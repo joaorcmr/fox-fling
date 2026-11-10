@@ -37,7 +37,7 @@ MonoBehaviour:
       raioAura: 0
       bonusCadencia: 0
       bonusAlcance: 0
-      bonusPenas: 0
+      bonusMoedas: 0
     nivel2:
       nome: "El\xE1stico Refor\xE7ado"
       descricao: "Atira mais r\xE1pido (recarga 0,55 s)."
@@ -61,7 +61,7 @@ MonoBehaviour:
         raioAura: 0
         bonusCadencia: 0
         bonusAlcance: 0
-        bonusPenas: 0
+        bonusMoedas: 0
     nivel3:
       nome: Pedra Afiada
       descricao: Dano 2 e alcance 3,5.
@@ -85,7 +85,7 @@ MonoBehaviour:
         raioAura: 0
         bonusCadencia: 0
         bonusAlcance: 0
-        bonusPenas: 0
+        bonusMoedas: 0
     especializacaoA:
       nome: Rajada
       descricao: Solta 3 pedrinhas em leque.
@@ -109,7 +109,7 @@ MonoBehaviour:
         raioAura: 0
         bonusCadencia: 0
         bonusAlcance: 0
-        bonusPenas: 0
+        bonusMoedas: 0
     especializacaoB:
       nome: Mira Certeira
       descricao: Alcance 5,5, dano 4, atravessa 2.
@@ -133,7 +133,7 @@ MonoBehaviour:
         raioAura: 0
         bonusCadencia: 0
         bonusAlcance: 0
-        bonusPenas: 0
+        bonusMoedas: 0
   corpo: {fileID: 21300000, guid: d8d419705c224430b86b7dc361f0596e, type: 3}
   arma: {fileID: 21300000, guid: 377ae6b4f4320498895aff12e569f6b7, type: 3}
   projetil: {fileID: 21300000, guid: c93d2740c50194225bbc1a34e683a5bb, type: 3}

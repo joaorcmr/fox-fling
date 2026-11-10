@@ -37,7 +37,7 @@ MonoBehaviour:
       raioAura: 0
       bonusCadencia: 0
       bonusAlcance: 0
-      bonusPenas: 0
+      bonusMoedas: 0
     nivel2:
       nome: "Arp\xE3o Comprido"
       descricao: "Atravessa 7 e voa at\xE9 2\xD7 o alcance."
@@ -61,7 +61,7 @@ MonoBehaviour:
         raioAura: 0
         bonusCadencia: 0
         bonusAlcance: 0
-        bonusPenas: 0
+        bonusMoedas: 0
     nivel3:
       nome: Ponta de Ferro
       descricao: "Dano 3 e ignora a coura\xE7a."
@@ -85,7 +85,7 @@ MonoBehaviour:
         raioAura: 0
         bonusCadencia: 0
         bonusAlcance: 0
-        bonusPenas: 0
+        bonusMoedas: 0
     especializacaoA:
       nome: "Arp\xE3o Gigante"
       descricao: "Atravessa 20, dano 6, arp\xE3o mais largo."
@@ -109,7 +109,7 @@ MonoBehaviour:
         raioAura: 0
         bonusCadencia: 0
         bonusAlcance: 0
-        bonusPenas: 0
+        bonusMoedas: 0
     especializacaoB:
       nome: "Arp\xE3o Ligeiro"
       descricao: "Atira muito mais r\xE1pido (recarga 0,6 s)."
@@ -133,7 +133,7 @@ MonoBehaviour:
         raioAura: 0
         bonusCadencia: 0
         bonusAlcance: 0
-        bonusPenas: 0
+        bonusMoedas: 0
   corpo: {fileID: 21300000, guid: 5d71f9361d9f74fbb8b34410edec8f82, type: 3}
   arma: {fileID: 21300000, guid: 3f3bbde96fc604217b93e9a93f4ce8c9, type: 3}
   projetil: {fileID: 21300000, guid: 7fead58ea35194cfba0282ee047684d9, type: 3}

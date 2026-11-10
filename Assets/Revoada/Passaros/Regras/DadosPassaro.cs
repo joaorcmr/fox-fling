@@ -17,8 +17,8 @@ public class DadosPassaro
     public float raio = 0.35f;
     [Tooltip("Quanto de vida tira da Torre dos Porcos se chegar até ela.")]
     public int danoTorre = 1;
-    [Tooltip("Penas que deixa ao estourar (antes do multiplicador do Ninho).")]
-    public float penas = 1f;
+    [Tooltip("Moedas que deixa ao estourar (antes do multiplicador do Cofrinho).")]
+    public float moedas = 1f;
     [Tooltip("Couraça: pedrinha e arpão causam só metade do dano.")]
     public bool couraca;
     public bool chefe;

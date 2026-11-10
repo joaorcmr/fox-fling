@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: Economia
   m_EditorClassIdentifier: Revoada::ConfigEconomia
   dados:
-    penasIniciais: 300
+    moedasIniciais: 300
     vidaInicial: 100
     bonusOndaBase: 25
     bonusOndaPorOnda: 5
     fracaoVenda: 0.7
     esperaAuto: 2
-    ninho:
+    cofrinho:
     - multiplicador: 1.25
       custo: 120
     - multiplicador: 1.5

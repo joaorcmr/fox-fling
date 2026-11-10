@@ -77,7 +77,7 @@ public class OndasTests
 
         Assert.AreEqual(1, ondaFim);
         Assert.AreEqual(30, bonus);
-        Assert.AreEqual(300 + 1 + 30, s.Penas);
+        Assert.AreEqual(300 + 1 + 30, s.Moedas);
         Assert.AreEqual(EstadoJogo.Intervalo, s.Estado);
     }
 
@@ -180,32 +180,32 @@ public class OndasTests
     }
 
     [Test]
-    public void Estouro_UsaMultiplicadorDoNinho()
+    public void Estouro_UsaMultiplicadorDoCofrinho()
     {
         var s = Sim(Onda(Grupo(EspeciePassaro.Pardal, 4, 0.01f)), Onda(Grupo(EspeciePassaro.Pardal, 1)));
-        Assert.AreEqual(Resultado.Ok, s.ComprarNinho()); // ×1,25
+        Assert.AreEqual(Resultado.Ok, s.ComprarCofrinho()); // ×1,25
 
         s.SoltarOnda();
         Avancar(s, 0.1f);
-        int antes = s.Penas;
+        int antes = s.Moedas;
         foreach (var p in s.Passaros.ToArray()) s.Atingir(p, 5f, false);
 
-        Assert.AreEqual(antes + 5, s.Penas); // 4 × 1 × 1,25
+        Assert.AreEqual(antes + 5, s.Moedas); // 4 × 1 × 1,25
     }
 
     [Test]
-    public void PenasBasePorOnda_ContaFilhos()
+    public void MoedasBasePorOnda_ContaFilhos()
     {
         var d = Basico();
-        d.passaros[EspeciePassaro.Pata] = Passaro(EspeciePassaro.Pata, penas: 4f);
+        d.passaros[EspeciePassaro.Pata] = Passaro(EspeciePassaro.Pata, moedas: 4f);
         d.passaros[EspeciePassaro.Pata].filho = EspeciePassaro.Patinho;
         d.passaros[EspeciePassaro.Pata].quantidadeFilhos = 4;
-        d.passaros[EspeciePassaro.Patinho] = Passaro(EspeciePassaro.Patinho, penas: 1f);
+        d.passaros[EspeciePassaro.Patinho] = Passaro(EspeciePassaro.Patinho, moedas: 1f);
         d.ondas.Add(Onda(Grupo(EspeciePassaro.Pata, 2)));
 
         var s = new Simulacao(d);
 
-        Assert.AreEqual(16f, s.PenasBasePorOnda[0], 1e-4f); // 2 × (4 + 4 × 1)
+        Assert.AreEqual(16f, s.MoedasBasePorOnda[0], 1e-4f); // 2 × (4 + 4 × 1)
     }
 
     [Test]

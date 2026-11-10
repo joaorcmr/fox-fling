@@ -87,7 +87,7 @@ public class PainelPorco : MonoBehaviour
             nomeMelhoria.text = m.nome + "  (U)";
             descricaoMelhoria.text = m.descricao;
             custoMelhoria.text = m.custo.ToString();
-            botaoMelhoria.interactable = s.Penas >= m.custo;
+            botaoMelhoria.interactable = s.Moedas >= m.custo;
         }
 
         bool escolher = p.Nivel == 3;
@@ -99,7 +99,7 @@ public class PainelPorco : MonoBehaviour
             nomesEspecializacao[i].text = e.nome;
             descricoesEspecializacao[i].text = e.descricao;
             custosEspecializacao[i].text = e.custo.ToString();
-            botoesEspecializacao[i].interactable = s.Penas >= e.custo;
+            botoesEspecializacao[i].interactable = s.Moedas >= e.custo;
         }
 
         textoEspecializado.gameObject.SetActive(p.Nivel >= 4);
@@ -121,7 +121,7 @@ public class PainelPorco : MonoBehaviour
         {
             string texto = $"Aura {Num(a.raioAura, "0.#")} · {Porcento(a.bonusCadencia)} mais rápido";
             if (a.bonusAlcance > 0f) texto += $"\n+{Porcento(a.bonusAlcance)} de alcance";
-            if (a.bonusPenas > 0f) texto += $"\n+{Porcento(a.bonusPenas)} de penas";
+            if (a.bonusMoedas > 0f) texto += $"\n+{Porcento(a.bonusMoedas)} de moedas";
             return texto;
         }
         string extra = a.tiro == TipoTiro.Bomba ? $"Área {Num(a.raioArea, "0.#")}" : $"Atravessa {a.perfura}";

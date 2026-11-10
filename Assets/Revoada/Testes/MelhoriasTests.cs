@@ -3,13 +3,13 @@ using UnityEngine;
 using static CenarioTeste;
 
 // Upgrades: dois níveis em sequência e, no nível 3, a escolha de uma de duas
-// especializações. Tudo cobra penas e entra no que a venda devolve.
+// especializações. Tudo cobra moedas e entra no que a venda devolve.
 public class MelhoriasTests
 {
-    static DadosJogo Dados(int penas = 3000)
+    static DadosJogo Dados(int moedas = 3000)
     {
         var d = Basico();
-        d.economia.penasIniciais = penas;
+        d.economia.moedasIniciais = moedas;
         var porco = Porco(EspeciePorco.Estilingueiro, 120, Tiro(TipoTiro.Pedrinha, recarga: 0.8f));
         porco.nivel2.atributos.recarga = 0.55f;
         porco.nivel3.atributos.dano = 2f;
@@ -30,7 +30,7 @@ public class MelhoriasTests
     {
         var s = new Simulacao(Dados());
         var p = Comprado(s);
-        int antes = s.Penas;
+        int antes = s.Moedas;
         Porco melhorado = null;
         s.PorcoMelhorado += x => melhorado = x;
 
@@ -38,21 +38,21 @@ public class MelhoriasTests
         Assert.AreEqual(Resultado.Ok, s.Melhorar(p));
 
         Assert.AreEqual(2, p.Nivel);
-        Assert.AreEqual(antes - 100, s.Penas);
+        Assert.AreEqual(antes - 100, s.Moedas);
         Assert.AreEqual(220, p.Gasto);
         Assert.AreEqual(0.55f, p.Atributos.recarga, 1e-5f);
         Assert.AreSame(p, melhorado);
     }
 
     [Test]
-    public void Melhorar_SemPenas()
+    public void Melhorar_SemMoedas()
     {
-        var s = new Simulacao(Dados(penas: 170));
+        var s = new Simulacao(Dados(moedas: 170));
         var p = Comprado(s); // sobram 50
 
-        Assert.AreEqual(Resultado.SemPenas, s.Melhorar(p));
+        Assert.AreEqual(Resultado.SemMoedas, s.Melhorar(p));
         Assert.AreEqual(1, p.Nivel);
-        Assert.AreEqual(50, s.Penas);
+        Assert.AreEqual(50, s.Moedas);
     }
 
     [Test]

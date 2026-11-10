@@ -127,12 +127,12 @@ public static class ConstrutorUI
         var barra = Imagem(t, "BarraLateral", Sprite("painel"), TopoDir, Vector2.zero,
             new Vector2(LarguraBarra, ConstrutorRevoada.Altura), true).transform;
 
-        // Topo: vida, penas e onda à esquerda; pausa, velocidade e menu à direita.
+        // Topo: vida, moedas e onda à esquerda; pausa, velocidade e menu à direita.
         hud.iconeVida = Imagem(barra, "IconeVida", Sprite("icone_vida"), TopoEsq, new Vector2(10f, -8f), new Vector2(26f, 26f));
         hud.iconeVida.raycastTarget = false;
         hud.textoVida = Texto(barra, "Vida", "100", 22, TextAnchor.MiddleLeft, TopoEsq, new Vector2(40f, -8f), new Vector2(72f, 26f), Marrom);
-        Imagem(barra, "IconePena", Sprite("icone_pena"), TopoEsq, new Vector2(10f, -38f), new Vector2(26f, 26f)).raycastTarget = false;
-        hud.textoPenas = Texto(barra, "Penas", "300", 22, TextAnchor.MiddleLeft, TopoEsq, new Vector2(40f, -38f), new Vector2(72f, 26f), Marrom);
+        Imagem(barra, "IconeMoeda", Sprite("icone_moeda"), TopoEsq, new Vector2(10f, -38f), new Vector2(26f, 26f)).raycastTarget = false;
+        hud.textoMoedas = Texto(barra, "Moedas", "300", 22, TextAnchor.MiddleLeft, TopoEsq, new Vector2(40f, -38f), new Vector2(72f, 26f), Marrom);
         hud.textoOnda = Texto(barra, "Onda", "Onda 1/30", 14, TextAnchor.MiddleLeft, TopoEsq, new Vector2(10f, -68f), new Vector2(104f, 22f), Marrom);
 
         hud.spritePausa = Sprite("icone_pausa");
@@ -145,7 +145,7 @@ public static class ConstrutorUI
             new Vector2(0f, 1f), new Vector2(28f, 28f), Creme, contorno: true);
         hud.botaoMenu = Botao(barra, "BotaoMenu", Sprite("icone_menu"), TopoEsq, new Vector2(114f, -68f), new Vector2(28f, 28f));
 
-        // A loja (porcos, Ninho e prévia) e, no mesmo lugar, o painel do porco selecionado.
+        // A loja (porcos, Cofrinho e prévia) e, no mesmo lugar, o painel do porco selecionado.
         var loja = Retangulo(barra, "Loja", TopoEsq, new Vector2(0f, -98f), new Vector2(LarguraBarra, 304f));
         hud.grupoLoja = loja.gameObject;
         var balao = CriarBalao(t);
@@ -156,7 +156,7 @@ public static class ConstrutorUI
             hud.cartoes[i] = CriarCartao(loja, porcos[i], posicao, new Vector2(64f, 68f));
             hud.cartoes[i].balao = balao;
         }
-        hud.cartaoNinho = CriarNinho(loja, jogo, new Vector2(8f, -144f));
+        hud.cartaoCofrinho = CriarCofrinho(loja, jogo, new Vector2(8f, -144f));
         hud.previa = CriarPrevia(loja, jogo, new Vector2(8f, -206f));
         hud.painelPorco = CriarPainelPorco(barra, jogo, new Vector2(8f, -98f));
 
@@ -190,7 +190,7 @@ public static class ConstrutorUI
         d.jogo = jogo;
         d.grupo = fundo.gameObject.AddComponent<CanvasGroup>();
         d.grupo.blocksRaycasts = false;
-        Imagem(fundo.transform, "Icone", Sprite("icone_pena"), Esq, new Vector2(8f, 0f), new Vector2(22f, 22f)).raycastTarget = false;
+        Imagem(fundo.transform, "Icone", Sprite("icone_moeda"), Esq, new Vector2(8f, 0f), new Vector2(22f, 22f)).raycastTarget = false;
         d.texto = Texto(fundo.transform, "Texto", "", 12, TextAnchor.MiddleLeft, Esq, new Vector2(36f, 0f), new Vector2(286f, 44f), Marrom, negrito: false);
         return d;
     }
@@ -256,19 +256,19 @@ public static class ConstrutorUI
         return slider;
     }
 
-    static CartaoNinho CriarNinho(Transform pai, Jogo jogo, Vector2 posicao)
+    static CartaoCofrinho CriarCofrinho(Transform pai, Jogo jogo, Vector2 posicao)
     {
-        var fundo = Imagem(pai, "Ninho", Sprite("botao"), TopoEsq, posicao, new Vector2(136f, 58f), true);
-        var c = fundo.gameObject.AddComponent<CartaoNinho>();
+        var fundo = Imagem(pai, "Cofrinho", Sprite("botao"), TopoEsq, posicao, new Vector2(136f, 58f), true);
+        var c = fundo.gameObject.AddComponent<CartaoCofrinho>();
         c.jogo = jogo;
         c.botao = fundo.gameObject.AddComponent<Button>();
         c.botao.targetGraphic = fundo;
         c.grupo = fundo.gameObject.AddComponent<CanvasGroup>();
-        Imagem(fundo.transform, "Icone", Sprite("icone_ninho"), TopoEsq, new Vector2(4f, -4f), new Vector2(26f, 26f)).raycastTarget = false;
+        Imagem(fundo.transform, "Icone", Sprite("icone_cofrinho"), TopoEsq, new Vector2(4f, -4f), new Vector2(26f, 26f)).raycastTarget = false;
         c.multiplicador = Texto(fundo.transform, "Multiplicador", "×1 → ×1,25", 13, TextAnchor.MiddleLeft, TopoEsq,
             new Vector2(32f, -4f), new Vector2(102f, 16f), Creme, contorno: true);
         c.multiplicador.horizontalOverflow = HorizontalWrapMode.Overflow;
-        Imagem(fundo.transform, "IconePena", Sprite("icone_pena"), TopoEsq, new Vector2(34f, -22f), new Vector2(14f, 14f)).raycastTarget = false;
+        Imagem(fundo.transform, "IconeMoeda", Sprite("icone_moeda"), TopoEsq, new Vector2(34f, -22f), new Vector2(14f, 14f)).raycastTarget = false;
         c.custo = Texto(fundo.transform, "Custo", "250", 13, TextAnchor.MiddleLeft, TopoEsq, new Vector2(50f, -21f), new Vector2(80f, 16f), Creme, contorno: true);
         c.retorno = Texto(fundo.transform, "Retorno", "se paga em ~3 ondas", 12, TextAnchor.MiddleLeft, TopoEsq,
             new Vector2(6f, -38f), new Vector2(128f, 16f), Creme, contorno: true);
@@ -331,7 +331,7 @@ public static class ConstrutorUI
         p.nomeMelhoria = Texto(m, "Nome", "", 13, TextAnchor.UpperLeft, TopoEsq, new Vector2(6f, -4f), new Vector2(124f, 16f), Creme, contorno: true);
         p.descricaoMelhoria = Texto(m, "Descricao", "", 12, TextAnchor.UpperLeft, TopoEsq, new Vector2(6f, -21f), new Vector2(124f, 30f),
             Creme, contorno: true, negrito: false);
-        Imagem(m, "IconePena", Sprite("icone_pena"), BaixoEsq, new Vector2(6f, 4f), new Vector2(14f, 14f)).raycastTarget = false;
+        Imagem(m, "IconeMoeda", Sprite("icone_moeda"), BaixoEsq, new Vector2(6f, 4f), new Vector2(14f, 14f)).raycastTarget = false;
         p.custoMelhoria = Texto(m, "Custo", "", 13, TextAnchor.MiddleLeft, BaixoEsq, new Vector2(22f, 3f), new Vector2(60f, 16f), Creme, contorno: true);
 
         // As duas especializações (no nível 3), uma em cima da outra.
@@ -344,7 +344,7 @@ public static class ConstrutorUI
             var b = Botao(r, "Especializacao" + (i == 0 ? "A" : "B"), null, TopoEsq, new Vector2(0f, -84f - i * 64f), new Vector2(136f, 60f));
             p.botoesEspecializacao[i] = b;
             p.nomesEspecializacao[i] = Texto(b.transform, "Nome", "", 13, TextAnchor.UpperLeft, TopoEsq, new Vector2(6f, -4f), new Vector2(84f, 16f), Creme, contorno: true);
-            Imagem(b.transform, "IconePena", Sprite("icone_pena"), TopoDir, new Vector2(-40f, -5f), new Vector2(13f, 13f)).raycastTarget = false;
+            Imagem(b.transform, "IconeMoeda", Sprite("icone_moeda"), TopoDir, new Vector2(-40f, -5f), new Vector2(13f, 13f)).raycastTarget = false;
             p.custosEspecializacao[i] = Texto(b.transform, "Custo", "", 13, TextAnchor.UpperLeft, TopoDir, new Vector2(-4f, -4f), new Vector2(36f, 16f), Creme, contorno: true);
             p.descricoesEspecializacao[i] = Texto(b.transform, "Descricao", "", 12, TextAnchor.UpperLeft, TopoEsq, new Vector2(6f, -21f),
                 new Vector2(124f, 36f), Creme, contorno: true, negrito: false);
@@ -465,7 +465,7 @@ public static class ConstrutorUI
         Texto(quadro, "Regras",
             "• Clique num porco da loja (ou aperte 1 a 4) e depois no mapa para colocá-lo.\n" +
             "• Solte a onda no botão ▶ (ou Espaço). Com Auto ligado, as ondas seguem sozinhas.\n" +
-            "• Pássaros estourados deixam penas. Gaste em porcos, em upgrades ou no Ninho de Penas, que faz cada pássaro render mais.\n" +
+            "• Pássaros estourados deixam moedas. Gaste em porcos, em upgrades ou no Cofrinho, que faz cada pássaro render mais.\n" +
             "• O arpão atravessa a fila: ponha o Arpoador no fim de uma reta. A bomba de lama pega bandos e ignora a couraça do urubu.\n" +
             "• Porcos dentro do círculo do Tamboreiro atiram mais rápido. Clique num porco para melhorar (U), mudar a mira ou vender (Delete).\n" +
             "• P pausa, F acelera (1×, 2×, 3×), Esc abre o menu. Os 100 de vida da Torre são a sua margem de erro.",
@@ -494,7 +494,7 @@ public static class ConstrutorUI
         cartao.icone = Imagem(fundo.transform, "Icone", tipo.corpo, Topo, new Vector2(0f, -2f), new Vector2(46f, 46f));
         cartao.icone.raycastTarget = false;
         cartao.icone.preserveAspect = true;
-        Imagem(fundo.transform, "IconePena", Sprite("icone_pena"), Baixo, new Vector2(-17f, 4f), new Vector2(16f, 16f)).raycastTarget = false;
+        Imagem(fundo.transform, "IconeMoeda", Sprite("icone_moeda"), Baixo, new Vector2(-17f, 4f), new Vector2(16f, 16f)).raycastTarget = false;
         cartao.preco = Texto(fundo.transform, "Preco", tipo.dados.custo.ToString(), 13, TextAnchor.MiddleLeft, Baixo,
             new Vector2(8f, 3f), new Vector2(36f, 18f), Creme, contorno: true);
         return cartao;

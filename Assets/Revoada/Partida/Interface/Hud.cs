@@ -14,7 +14,7 @@ public class Hud : MonoBehaviour
     [Header("Topo")]
     public Image iconeVida;
     public Text textoVida;
-    public Text textoPenas;
+    public Text textoMoedas;
     public Text textoOnda;
     public Button botaoPausa;
     public Image iconePausa;
@@ -27,7 +27,7 @@ public class Hud : MonoBehaviour
     [Header("Loja (some quando um porco está selecionado)")]
     public GameObject grupoLoja;
     public CartaoPorcoLoja[] cartoes;
-    public CartaoNinho cartaoNinho;
+    public CartaoCofrinho cartaoCofrinho;
     public PreviaOnda previa;
     public PainelPorco painelPorco;
 
@@ -44,7 +44,7 @@ public class Hud : MonoBehaviour
     public MenuPausa menuPausa;
 
     float fimAviso;
-    float penasNaTela;   // conta até o valor de verdade em vez de pular (número que anima)
+    float moedasNaTela;   // conta até o valor de verdade em vez de pular (número que anima)
     float pulsoVida;     // 1 logo depois de a Torre apanhar, cai até 0
     Color corTexto;
 
@@ -66,18 +66,18 @@ public class Hud : MonoBehaviour
         };
         jogo.Selecao.Falhou += r =>
         {
-            if (r == Resultado.SemPenas) Avisar("Faltam penas");
+            if (r == Resultado.SemMoedas) Avisar("Faltam moedas");
             else if (r == Resultado.LugarInvalido) Avisar("Não dá para colocar aqui");
             if (Sons.Instancia != null) Sons.Tocar(Sons.Instancia.erro, 0.6f, 0f);
         };
         s.TorreAtingida += dano => pulsoVida = 1f;
         // Jogo acabado: pausar, acelerar e abrir o menu de pausa não fazem mais sentido.
         s.FimDeJogo += venceu => botaoPausa.interactable = botaoVelocidade.interactable = botaoMenu.interactable = false;
-        penasNaTela = s.Penas;
+        moedasNaTela = s.Moedas;
         corTexto = textoVida.color;
 
         s.OndaComecou += n => faixa.Mostrar("Onda " + n, CorOnda, 1.6f);
-        s.OndaTerminou += (n, bonus) => Avisar($"Onda {n} vencida! +{bonus} penas de bônus");
+        s.OndaTerminou += (n, bonus) => Avisar($"Onda {n} vencida! +{bonus} moedas de bônus");
         s.PassaroNasceu += p =>
         {
             if (!p.Dados.chefe) return;
@@ -108,9 +108,9 @@ public class Hud : MonoBehaviour
         textoVida.color = Color.Lerp(corTexto, new Color(0.8f, 0.15f, 0.1f), Mathf.Max(pulsoVida, perigo ? 1f : 0f));
         iconeVida.transform.localScale = Vector3.one * (perigo ? 1f + 0.15f * Mathf.Abs(Mathf.Sin(Time.unscaledTime * 6f)) : 1f);
 
-        // Penas: o contador corre até o valor novo.
-        penasNaTela = Mathf.Abs(s.Penas - penasNaTela) < 0.5f ? s.Penas : Mathf.Lerp(penasNaTela, s.Penas, 1f - Mathf.Exp(-12f * dt));
-        textoPenas.text = Mathf.RoundToInt(penasNaTela).ToString();
+        // Moedas: o contador corre até o valor novo.
+        moedasNaTela = Mathf.Abs(s.Moedas - moedasNaTela) < 0.5f ? s.Moedas : Mathf.Lerp(moedasNaTela, s.Moedas, 1f - Mathf.Exp(-12f * dt));
+        textoMoedas.text = Mathf.RoundToInt(moedasNaTela).ToString();
         // Entre ondas mostra a próxima; durante a onda e na derrota, a atual (a
         // mesma que a tela de fim diz que derrubou a Torre).
         bool ondaAtual = s.Estado == EstadoJogo.EmOnda || s.Estado == EstadoJogo.Derrota;

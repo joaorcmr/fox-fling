@@ -4,4 +4,4 @@ public enum EstadoJogo { Preparando, EmOnda, Intervalo, Vitoria, Derrota }
 
 // Resposta dos comandos do jogador (comprar, melhorar...), para a interface
 // saber o que mostrar quando algo não deu certo.
-public enum Resultado { Ok, SemPenas, LugarInvalido, Indisponivel }
+public enum Resultado { Ok, SemMoedas, LugarInvalido, Indisponivel }

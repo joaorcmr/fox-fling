@@ -11,7 +11,7 @@ using UnityEngine;
 // Só desenho: os sons ficam com SonsDaPartida e a Torre apanhando, com VisualTorre.
 public class GerenteVisuais : MonoBehaviour
 {
-    static readonly Color CorTextoPenas = new Color(1f, 0.86f, 0.35f);
+    static readonly Color CorTextoMoedas = new Color(1f, 0.86f, 0.35f);
 
     public Jogo jogo;
     public VisualPassaro prefabPassaro;
@@ -43,10 +43,10 @@ public class GerenteVisuais : MonoBehaviour
             if (passaros.TryGetValue(p, out var v)) v.Piscar();
             efeitos.Penas(p.Posicao, CorDe(p), 2);
         };
-        sim.PassaroEstourou += (p, penas) =>
+        sim.PassaroEstourou += (p, moedas) =>
         {
             efeitos.Penas(p.Posicao, CorDe(p), p.Dados.chefe ? 40 : 10);
-            if (penas > 0) efeitos.Texto(p.Posicao, "+" + penas, CorTextoPenas);
+            if (moedas > 0) efeitos.Texto(p.Posicao, "+" + moedas, CorTextoMoedas);
             if (p.Dados.chefe) TremorCamera.Tremer(0.2f, 0.4f);
             RemoverPassaro(p);
         };

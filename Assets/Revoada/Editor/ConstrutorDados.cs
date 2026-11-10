@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 
 // Cria e lê os assets de dados, cada um na pasta Dados do seu assunto
-// (Passaros, Porcos, Ondas, Penas, Mapa). Com sobrescrever =
+// (Passaros, Porcos, Ondas, Moedas, Mapa). Com sobrescrever =
 // false, um asset que já existe não é tocado: os números que o João ajustou no
 // Inspector ficam. Os sprites são sempre religados (vêm da pasta de arte).
 public static class ConstrutorDados
@@ -14,7 +14,7 @@ public static class ConstrutorDados
     const string PastaPassaros = Raiz + "/Passaros/Dados";
     const string PastaPorcos = Raiz + "/Porcos/Dados";
     const string CaminhoOndas = Raiz + "/Ondas/Dados/Ondas.asset";
-    const string CaminhoEconomia = Raiz + "/Penas/Dados/Economia.asset";
+    const string CaminhoEconomia = Raiz + "/Moedas/Dados/Economia.asset";
     const string CaminhoFazenda = Raiz + "/Mapa/Dados/Fazenda.asset";
 
     // Sprite e cor das penas de cada pássaro.
@@ -36,7 +36,7 @@ public static class ConstrutorDados
         { EspeciePorco.Estilingueiro, new[] { "porco_estilingueiro", "arma_estilingue", "pedrinha", "acc_rajada", "acc_mira" } },
         { EspeciePorco.Arpoador, new[] { "porco_arpoador", "arma_arpao", "arpao", "acc_gigante", "acc_ligeiro" } },
         { EspeciePorco.Bombardeiro, new[] { "porco_bombardeiro", "arma_canhao", "bomba", "acc_chuva", "acc_estrume" } },
-        { EspeciePorco.Tamboreiro, new[] { "porco_tamboreiro", "arma_tambor", null, "acc_fanfarra", "acc_penas" } },
+        { EspeciePorco.Tamboreiro, new[] { "porco_tamboreiro", "arma_tambor", null, "acc_fanfarra", "acc_moedas" } },
     };
 
     public static void GarantirDados(bool sobrescrever)

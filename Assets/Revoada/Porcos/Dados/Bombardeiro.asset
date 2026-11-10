@@ -37,7 +37,7 @@ MonoBehaviour:
       raioAura: 0
       bonusCadencia: 0
       bonusAlcance: 0
-      bonusPenas: 0
+      bonusMoedas: 0
     nivel2:
       nome: Barril Maior
       descricao: "Explos\xE3o maior (raio 1,4)."
@@ -61,7 +61,7 @@ MonoBehaviour:
         raioAura: 0
         bonusCadencia: 0
         bonusAlcance: 0
-        bonusPenas: 0
+        bonusMoedas: 0
     nivel3:
       nome: Lama Grudenta
       descricao: Atingidos ficam 40% mais lentos por 1,5 s.
@@ -85,7 +85,7 @@ MonoBehaviour:
         raioAura: 0
         bonusCadencia: 0
         bonusAlcance: 0
-        bonusPenas: 0
+        bonusMoedas: 0
     especializacaoA:
       nome: Chuva de Lama
       descricao: Atira o dobro (recarga 0,7 s).
@@ -109,7 +109,7 @@ MonoBehaviour:
         raioAura: 0
         bonusCadencia: 0
         bonusAlcance: 0
-        bonusPenas: 0
+        bonusMoedas: 0
     especializacaoB:
       nome: Barril de Estrume
       descricao: "Dano 7, raio 1,8 e empurra os p\xE1ssaros para tr\xE1s."
@@ -133,7 +133,7 @@ MonoBehaviour:
         raioAura: 0
         bonusCadencia: 0
         bonusAlcance: 0
-        bonusPenas: 0
+        bonusMoedas: 0
   corpo: {fileID: 21300000, guid: 2d4803f77113e4b0d9618cf1a82f1933, type: 3}
   arma: {fileID: 21300000, guid: 2b6fb73c9103d427b9053fe0945221ef, type: 3}
   projetil: {fileID: 21300000, guid: 03e6e10185f174af1b19a90cd7dde67b, type: 3}

@@ -6,7 +6,7 @@ using UnityEngine;
 // "Difícil na medida certa", medido. Robôs jogam partidas inteiras com os
 // números de verdade (os .asset), sem desenhar nada, e cada um precisa terminar
 // onde o design manda: quem não faz nada perde logo; quem só defende ou só
-// investe em penas perde no meio; quem mistura as duas coisas vence. Se alguém
+// investe em moedas perde no meio; quem mistura as duas coisas vence. Se alguém
 // mexer num número e quebrar esse equilíbrio, o teste acusa.
 public class BalanceamentoTests
 {
@@ -77,7 +77,7 @@ public class BalanceamentoTests
         var b = Jogar(Estrategia.Equilibrado);
         Assert.AreEqual(a.ToString(), b.ToString());
         CollectionAssert.AreEqual(a.danoPorOnda, b.danoPorOnda);
-        CollectionAssert.AreEqual(a.penasPorOnda, b.penasPorOnda);
+        CollectionAssert.AreEqual(a.moedasPorOnda, b.moedasPorOnda);
     }
 
     [Test]
@@ -85,7 +85,7 @@ public class BalanceamentoTests
     {
         // 200 pássaros e 30 porcos: 600 passos precisam caber folgados em 1,5 s.
         var d = DefinicoesPadrao.Jogo();
-        d.economia.penasIniciais = 100000;
+        d.economia.moedasIniciais = 100000;
         d.ondas.Clear();
         d.ondas.Add(new DadosOnda { grupos = { new GrupoOnda { especie = EspeciePassaro.Arara, quantidade = 200, intervalo = 0.01f, multiplicadorVida = 50f } } });
         var s = new Simulacao(d);

@@ -115,7 +115,7 @@ public class DadosTests
         {
             Assert.Greater(p.vida, 0f, p.nome);
             Assert.Greater(p.velocidade, 0f, p.nome);
-            Assert.Greater(p.penas, 0f, p.nome);
+            Assert.Greater(p.moedas, 0f, p.nome);
             Assert.Greater(p.danoTorre, 0, p.nome);
         }
     }

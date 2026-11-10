@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Os pássaros na simulação: nascer, andar pela trilha, levar golpes e estourar
-// (deixando penas e, no caso da pata, os patinhos).
+// (deixando moedas e, no caso da pata, os patinhos).
 public partial class Simulacao
 {
     readonly List<Passaro> passaros = new List<Passaro>();
@@ -13,7 +13,7 @@ public partial class Simulacao
 
     public event Action<Passaro> PassaroNasceu;
     public event Action<Passaro, float> PassaroAtingido;  // dano causado
-    public event Action<Passaro, int> PassaroEstourou;    // penas que entraram
+    public event Action<Passaro, int> PassaroEstourou;    // moedas que entraram
 
     // Causa dano direto num pássaro. É por aqui que todo tiro machuca. A
     // couraça (urubu) corta pela metade, a não ser que o golpe a ignore (bomba,
@@ -67,7 +67,7 @@ public partial class Simulacao
     void Estourar(Passaro p)
     {
         p.Vivo = false;
-        int ganhas = Economia.Creditar(p.Dados.penas * Economia.Multiplicador * BonusPenas(p.Posicao));
+        int ganhas = Economia.Creditar(p.Dados.moedas * Economia.Multiplicador * BonusMoedas(p.Posicao));
         PassaroEstourou?.Invoke(p, ganhas);
 
         // A pata solta os patinhos onde estourou, um pouco espalhados para trás

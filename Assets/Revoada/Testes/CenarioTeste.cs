@@ -22,17 +22,17 @@ public static class CenarioTeste
         };
         d.economia = new DadosEconomia
         {
-            ninho = new List<NivelNinho>
+            cofrinho = new List<NivelCofrinho>
             {
-                new NivelNinho { multiplicador = 1.25f, custo = 250 },
-                new NivelNinho { multiplicador = 1.5f, custo = 500 },
+                new NivelCofrinho { multiplicador = 1.25f, custo = 250 },
+                new NivelCofrinho { multiplicador = 1.5f, custo = 500 },
             },
         };
         d.passaros[EspeciePassaro.Pardal] = Passaro(EspeciePassaro.Pardal);
         return d;
     }
 
-    public static DadosPassaro Passaro(EspeciePassaro e, float vida = 1f, float velocidade = 2f, float penas = 1f, int dano = 1)
+    public static DadosPassaro Passaro(EspeciePassaro e, float vida = 1f, float velocidade = 2f, float moedas = 1f, int dano = 1)
     {
         return new DadosPassaro
         {
@@ -40,7 +40,7 @@ public static class CenarioTeste
             nome = e.ToString(),
             vida = vida,
             velocidade = velocidade,
-            penas = penas,
+            moedas = moedas,
             danoTorre = dano,
             raio = 0.35f,
         };

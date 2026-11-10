@@ -19,7 +19,7 @@ MonoBehaviour:
     velocidade: 2
     raio: 0.45
     danoTorre: 4
-    penas: 12
+    moedas: 12
     couraca: 0
     chefe: 0
     filho: 0

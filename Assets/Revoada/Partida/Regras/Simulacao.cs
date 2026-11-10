@@ -8,7 +8,7 @@ using System;
 //
 // A classe é "partial" e cada assunto do jogo guarda a sua parte na própria
 // pasta: aqui ficam o estado da partida e a ordem do passo; os pássaros, as
-// ondas, a Torre, as penas, os porcos e o combate ficam em Simulacao.*.cs, na
+// ondas, a Torre, as moedas, os porcos e o combate ficam em Simulacao.*.cs, na
 // pasta Regras de cada assunto.
 public partial class Simulacao
 {
@@ -29,7 +29,7 @@ public partial class Simulacao
         Trilha = new Trilha(dados.mapa.pontos, dados.mapa.raioCanto);
         Economia = new Economia(dados.economia);
         Vida = dados.economia.vidaInicial;
-        CalcularPenasDasOndas();
+        CalcularMoedasDasOndas();
     }
 
     bool Acabou => Estado == EstadoJogo.Vitoria || Estado == EstadoJogo.Derrota;
