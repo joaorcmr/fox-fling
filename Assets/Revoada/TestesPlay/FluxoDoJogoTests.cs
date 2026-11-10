@@ -291,4 +291,47 @@ public class FluxoDoJogoTests
         soltar.GetWorldCorners(soltarCantos);
         Assert.That(linhaBase, Is.GreaterThan(soltarCantos[1].y), "o texto do aviso encosta no botão de soltar a onda");
     }
+
+    // Não ficava claro que dava para soltar a onda fora da troca de fase: o
+    // botão só pulsava (chamava atenção) logo depois de um mapa novo. Agora
+    // pulsa sempre que a ação está disponível.
+    [UnityTest]
+    public IEnumerator Hud_BotaoSoltarPulsaMesmoSemTrocaDeFase()
+    {
+        yield return CarregarJogo();
+        var hud = Object.FindAnyObjectByType<Hud>();
+        var s = Jogo.Atual.Sim;
+        Assert.AreEqual(EstadoJogo.Preparando, s.Estado);
+
+        bool pulsou = false;
+        for (int i = 0; i < 60 && !pulsou; i++)
+        {
+            yield return null;
+            pulsou = hud.botaoSoltar.transform.localScale.x > 1.001f;
+        }
+        Assert.IsTrue(pulsou, "o botão devia pulsar mesmo numa onda comum (sem troca de fase)");
+    }
+
+    // Um pássaro novo (a estreia de uma espécie) agora ganha um anúncio na
+    // faixa do topo do mapa, não só o texto discreto da prévia.
+    [UnityTest]
+    public IEnumerator Hud_PassaroNovoApareceNaFaixaDoTopo()
+    {
+        yield return CarregarJogo();
+        var hud = Object.FindAnyObjectByType<Hud>();
+        var s = Jogo.Atual.Sim;
+        var textoFaixa = hud.faixa.GetComponentInChildren<UnityEngine.UI.Text>(true);
+
+        Robos.AvancarAteOnda(s, 6);
+        Assert.AreEqual(6, s.Onda, "a onda 6 (estreia do Beija-flor) não chegou");
+
+        bool anunciou = false;
+        float fim = Time.realtimeSinceStartup + 4f; // o anúncio espera a faixa "Onda 6" sumir (1,9 s) antes de aparecer
+        while (Time.realtimeSinceStartup < fim && !anunciou)
+        {
+            yield return null;
+            anunciou = textoFaixa.text == "Novo: Beija-flor";
+        }
+        Assert.IsTrue(anunciou, "a faixa não anunciou o Beija-flor estreando na onda 6");
+    }
 }

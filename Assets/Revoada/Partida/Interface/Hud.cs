@@ -1,15 +1,19 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 // A barra lateral e os avisos por cima do mapa. Ela só LÊ a simulação a cada
 // quadro (é barato e a tela nunca fica fora de sincronia com o jogo) e escuta
-// alguns eventos para anunciar coisas (onda começou, chefe chegou). Depois de
-// uma troca de fase, o "Soltar a onda" pulsa até a próxima onda começar: é o
-// próximo passo do jogador no mapa novo.
+// alguns eventos para anunciar coisas (onda começou, chefe chegou, pássaro
+// novo). O "Soltar a onda" pulsa sempre que dá para soltar a onda — não só
+// depois de uma troca de fase —, pra ficar óbvio que é a vez do jogador agir;
+// o pulso fica mais forte logo depois de uma troca de fase, quando o mapa é
+// novo e vale a pena olhar antes de soltar.
 public class Hud : MonoBehaviour
 {
     static readonly Color CorOnda = new Color(0.32f, 0.55f, 0.25f, 0.95f);
     static readonly Color CorChefe = new Color(0.72f, 0.2f, 0.16f, 0.95f);
+    static readonly Color CorNovo = new Color(0.27f, 0.42f, 0.74f, 0.95f);
 
     public Jogo jogo;
 
@@ -79,6 +83,8 @@ public class Hud : MonoBehaviour
         {
             faixa.Mostrar("Onda " + n, CorOnda, 1.6f);
             chamarSoltar = false;
+            var novos = s.Estreias(n);
+            if (novos.Count > 0 && n > 1) StartCoroutine(AnunciarNovo(novos[0])); // na onda 1 tudo é novo
         };
         s.FaseComecou += fase => chamarSoltar = true;
         s.OndaTerminou += (n, bonus) => Avisar($"Onda {n} vencida! +{bonus} moedas de bônus");
@@ -91,6 +97,14 @@ public class Hud : MonoBehaviour
 
         painelPorco.Esconder();
         textoAviso.text = "";
+    }
+
+    // Espera a faixa "Onda N" sumir (1,6 s + a saída) antes de anunciar o
+    // pássaro novo, senão uma troca por cima da outra e ninguém lê nenhuma.
+    IEnumerator AnunciarNovo(EspeciePassaro especie)
+    {
+        yield return new WaitForSecondsRealtime(1.9f);
+        faixa.Mostrar("Novo: " + jogo.Sim.Dados.passaros[especie].nome, CorNovo, 2.2f);
     }
 
     public void Avisar(string texto, float duracao = 1.8f)
@@ -127,7 +141,8 @@ public class Hud : MonoBehaviour
         bool podeSoltar = s.Estado == EstadoJogo.Preparando || s.Estado == EstadoJogo.Intervalo;
         botaoSoltar.interactable = podeSoltar;
         textoSoltar.text = podeSoltar ? "Soltar a onda" : s.Estado == EstadoJogo.EmOnda ? "Onda em andamento" : "Fim de jogo";
-        float pulso = chamarSoltar && podeSoltar ? 0.05f * Mathf.Abs(Mathf.Sin(Time.unscaledTime * 3.5f)) : 0f;
+        float amplitude = podeSoltar ? (chamarSoltar ? 0.08f : 0.035f) : 0f;
+        float pulso = amplitude * Mathf.Abs(Mathf.Sin(Time.unscaledTime * 3.5f));
         botaoSoltar.transform.localScale = Vector3.one * (1f + pulso);
 
         if (textoAviso.text.Length > 0 && Time.unscaledTime > fimAviso) textoAviso.text = "";

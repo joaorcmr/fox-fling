@@ -378,13 +378,18 @@ public static class ConstrutorUI
         c.grupo = grupo;
         c.custo = preco;
         c.multiplicador = Selo(fundo.transform, "×1,25", new Color(1f, 0.9f, 0.45f));
-        // Logo embaixo do cartão, em duas linhas: em quantas ondas o próximo nível se paga.
-        // Caixa com folga (34, não só as 2 linhas justas) e um pouco mais de
-        // distância do cartão de baixo (a prévia da onda): sem isso, a
-        // descida de uma letra como o "g" de "paga" encostava no painel da
-        // prévia, que é desenhado por cima (cartão seguinte) e cobria o texto.
-        c.retorno = Texto(pai, "Retorno", "se paga em ~3 ondas", 12, TextAnchor.UpperCenter, TopoEsq,
-            new Vector2(posicao.x - 4f, posicao.y - TamanhoCartao.y - 2f), new Vector2(TamanhoCartao.x + 8f, 32f), Marrom, negrito: false);
+        // Logo embaixo do cartão, em quantas ondas o próximo nível se paga.
+        // Um fundo próprio (do mesmo tom da prévia) faz o texto parecer parte
+        // da interface, e não uma legenda solta flutuando sobre o mapa; a
+        // caixa tem folga (32, não só as 2 linhas justas) e fica um pouco
+        // afastada do cartão de baixo (a prévia da onda) para a descida de
+        // uma letra como o "g" de "paga" não encostar nela.
+        var retornoFundo = Imagem(pai, "Retorno", Sprite("painel"), TopoEsq,
+            new Vector2(posicao.x - 4f, posicao.y - TamanhoCartao.y - 2f), new Vector2(TamanhoCartao.x + 8f, 32f), true);
+        retornoFundo.color = new Color(0.93f, 0.86f, 0.7f);
+        retornoFundo.raycastTarget = false;
+        c.retorno = Texto(retornoFundo.transform, "Texto", "se paga em ~3 ondas", 12, TextAnchor.MiddleCenter, Centro,
+            Vector2.zero, new Vector2(TamanhoCartao.x, 30f), Marrom, negrito: false);
         return c;
     }
 
@@ -512,7 +517,7 @@ public static class ConstrutorUI
         var b = caixa.gameObject.AddComponent<BarraChefe>();
         b.grupo = caixa.gameObject.AddComponent<CanvasGroup>();
         b.grupo.blocksRaycasts = false;
-        b.nome = Texto(caixa, "Nome", "Gavião-real", 13, TextAnchor.MiddleLeft, TopoEsq, Vector2.zero, new Vector2(300f, 14f), Creme, contorno: true);
+        b.nome = Texto(caixa, "Nome", "Tubarão-rei", 13, TextAnchor.MiddleLeft, TopoEsq, Vector2.zero, new Vector2(300f, 14f), Creme, contorno: true);
         var fundo = Imagem(caixa, "Fundo", Sprite("barra"), TopoEsq, new Vector2(0f, -16f), new Vector2(300f, 12f));
         fundo.color = new Color(0.17f, 0.11f, 0.08f, 0.9f);
         fundo.raycastTarget = false;
@@ -616,7 +621,7 @@ public static class ConstrutorUI
         return Topico("Objetivo") +
             $"• Proteja a Torre dos Porcos por {d.ondas.Count} ondas.\n" +
             "• Cada pássaro que chega na Torre tira vida. Com 0, ela cai.\n" +
-            $"• Chefes (gavião-real) nas ondas {OndasDeChefe(d)}.\n\n" +
+            $"• Chefes (tubarão-rei) nas ondas {OndasDeChefe(d)}.\n\n" +
             Topico("Ondas") +
             "• Nenhuma onda começa sozinha: aperte Soltar a onda (ou Espaço).\n" +
             "• A prévia, na barra, mostra quem vem na próxima.\n\n" +

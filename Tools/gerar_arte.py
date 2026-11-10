@@ -519,20 +519,21 @@ def flor(tipo):
     return t.final()
 
 
-VERDE = hexc("#8CCB5E")
-FOCINHO = hexc("#B9E58F")
+LARANJA = hexc("#E8803C")       # pelagem da raposa da Torre
+LARANJA_SOMBRA = hexc("#C66A2E")
+FOCINHO = hexc("#FFF3DC")
 
 
 def torre():
     """A Torre dos Porcos: base de pedra, torre de madeira, telhado vermelho e
-    bandeira com um porco. Pivô embaixo (o ConstrutorAssets usa)."""
+    bandeira com uma raposa. Pivô embaixo (o ConstrutorAssets usa)."""
     W, H = 168, 192
     t = Tela(W, H)
     t.retangulo(30, 128, 138, 186, hexc("#9A9A92"), raio=6)  # base de pedra
     t.retangulo(40, 62, 128, 134, hexc("#B07A45"), raio=4)  # torre de madeira
     t.poligono([(26, 70), (84, 18), (142, 70)], hexc("#C8443A"))  # telhado
     t.linha([(84, 22), (84, 2)], hexc("#5C4630"), 2.4)  # mastro
-    t.poligono([(85, 3), (110, 9), (85, 16)], hexc("#8CCB5E"))  # bandeira
+    t.poligono([(85, 3), (110, 9), (85, 16)], LARANJA)  # bandeira
     t.contornar(2.6)
     for y in range(136, 186, 12):  # pedras da base
         off = 0 if (y // 12) % 2 == 0 else 9
@@ -541,14 +542,16 @@ def torre():
     for x in range(48, 128, 11):  # tábuas
         t.linha([(x, 70), (x, 130)], hexc("#93633A"), 1.2)
     t.linha([(32, 70), (136, 70)], hexc("#9C3A31"), 3)
-    t.retangulo(64, 82, 104, 114, CONTORNO, raio=4)  # janela com um porco espiando
+    t.retangulo(64, 82, 104, 114, CONTORNO, raio=4)  # janela com uma raposa espiando
     t.retangulo(67, 85, 101, 111, hexc("#3B2A20"), raio=3)
-    t.elipse(84, 102, 12, 10, VERDE)
+    for lado in (-1, 1):  # orelhas triangulares, só a ponta aparecendo por cima da janela
+        t.poligono([(84 + lado * 7, 92), (84 + lado * 13, 80), (84 + lado * 3, 88)], LARANJA_SOMBRA)
+    t.elipse(84, 102, 12, 10, LARANJA)
     olhos(t, 84, 99, 4.4, 2.6)
     t.elipse(84, 106, 4.4, 3, FOCINHO)
     t.retangulo(70, 150, 98, 186, hexc("#6B4A2E"), raio=4)  # porta
     t.elipse(92, 168, 2, 2, hexc("#E8C35A"))
-    t.elipse(96, 9, 3.4, 3, hexc("#5E9E3F"))  # carinha na bandeira
+    t.elipse(96, 9, 3.4, 3, LARANJA_SOMBRA)  # carinha na bandeira
     return t.final()
 
 
@@ -680,7 +683,7 @@ def gerar():
     salvar(da_arte("tigre.png", 62, 56, 54, 54), "beija_flor", feitos)
     salvar(da_arte("arara_azul.png", 68, 68, 62, 66), "pata", feitos)
     salvar(da_arte("arara_azul_filhote.png", 44, 44, 40, 42), "patinho", feitos)
-    salvar(da_arte("tubarao_chefe.png", 124, 124, 112, 121), "gaviao", feitos)
+    salvar(da_arte("tubarao_chefe.png", 88, 88, 78, 86), "gaviao", feitos)
     salvar(da_arte("jacare.png", 72, 72, 66, 70), "arara", feitos)
     salvar(da_arte("leao.png", 72, 72, 62, 71), "urubu", feitos)
     salvar(sombra(), "sombra", feitos)

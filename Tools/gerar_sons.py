@@ -244,14 +244,14 @@ def musica():
         for tempo in (0, 2):
             n = envelope(seno(freq(nota), 0.45, vol=0.3, harmonicos=(1, 0.5, 0.25)), ataque=0.01, queda=0.35)
             faixas.append(atrasar(n, (compasso * 4 + tempo) * batida))
-    for b in range(32):  # bumbo nos tempos 1 e 3, chimbal nos contratempos
+    for b in range(32):  # bumbo nos tempos 1 e 3, "tique" nos contratempos
         if b % 2 == 0:
             faixas.append(atrasar(envelope(seno(110, 0.12, 45, vol=0.35), queda=0.07), b * batida))
-        # O chimbal toca o tempo todo que a música toca (32× por volta do
-        # loop): com pouco filtro (corte perto de 1) e alto, vira um chiado de
-        # fundo constante. Mais abafado e mais baixo continua marcando o
-        # contratempo sem incomodar.
-        faixas.append(atrasar(envelope(ruido(0.04, vol=0.035, corte=0.55, semente=200 + b), queda=0.015), b * batida + batida / 2))
+        # Era ruído filtrado (um chimbal): como toca o jogo inteiro (32× por
+        # volta do loop), mesmo bem filtrado ainda chiava. Um "tique" tonal
+        # (só seno, sem ruído nenhum) marca o contratempo do mesmo jeito, sem
+        # ter de onde vir chiado.
+        faixas.append(atrasar(envelope(seno(2800, 0.04, vol=0.05, harmonicos=(1, 0.3)), ataque=0.002, queda=0.02), b * batida + batida / 2))
     faixa = misturar(*faixas)
     # O som que passa do fim (as últimas notas ainda tocando) volta para o
     # começo: é assim que um loop emenda sem corte.

@@ -6,6 +6,7 @@
         "UnityEditor.TestRunner",
         "Revoada.Nucleo",
         "Revoada",
+        "Revoada.Editor",
         "UnityEngine.UI"
     ],
     "includePlatforms": [],

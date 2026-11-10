@@ -23,7 +23,7 @@ public static class DefinicoesPadrao
             Com(P(Pata, "Pata", vida: 8, vel: 1.8f, dano: 3, moedas: 8, raio: 0.45f), p => { p.filho = Patinho; p.quantidadeFilhos = 4; }),
             P(Patinho, "Patinho", vida: 1, vel: 3f, dano: 1, moedas: 2, raio: 0.3f),
             Com(P(Urubu, "Urubu", vida: 28, vel: 1.4f, dano: 6, moedas: 24, raio: 0.45f), p => p.couraca = true),
-            Com(P(Gaviao, "Gavião-real", vida: 90, vel: 0.9f, dano: 30, moedas: 200, raio: 0.8f), p => p.chefe = true),
+            Com(P(Gaviao, "Tubarão-rei", vida: 90, vel: 0.9f, dano: 30, moedas: 200, raio: 0.8f), p => p.chefe = true),
         };
     }
 

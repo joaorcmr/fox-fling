@@ -18,7 +18,7 @@ extenso.
 **Objetivo**
 - Proteja a Torre dos Porcos por 30 ondas.
 - Cada pássaro que chega na Torre tira vida. Com 0, ela cai.
-- Chefes (gavião-real) nas ondas 10, 20 e 30.
+- Chefes (tubarão-rei) nas ondas 10, 20 e 30.
 
 **Ondas**
 - Nenhuma onda começa sozinha: aperte **▶ Soltar a onda** (ou **Espaço**).
@@ -66,7 +66,7 @@ do que foi gasto nele. As auras de Tamboreiros diferentes **não se somam**: val
 | Arara-azul | 10 | 2,0 | 4 | 12 | |
 | Pata | 8 | 1,8 | 3 | 8 | ao estourar, solta 4 patinhos |
 | Urubu | 28 | 1,4 | 6 | 24 | **couraça**: pedrinha e arpão tiram só metade |
-| Gavião-real (chefe) | 90 · 337 · 1.568 | 0,9 | 30 | 200 | ondas 10, 20 e 30; no máximo 30% mais lento |
+| Tubarão-rei (chefe) | 90 · 337 · 1.568 | 0,9 | 30 | 200 | ondas 10, 20 e 30; no máximo 30% mais lento |
 
 A partir da onda 11, os pássaros ganham **7% de vida por onda** (onda 20 = ×1,7; onda 30 = ×2,4), e as ondas
 da fase 3 (21 a 30) vêm com **mais 21%** por cima (onda 30 = ×2,9).
@@ -109,7 +109,7 @@ ver [Estrutura](#estrutura)) chamadas pelos componentes do Unity a cada passo. R
 | **Input Manager** e `EventSystem.IsPointerOverGameObject` (clique na loja não vaza para o mapa) | `Partida/Entrada/Controles.cs` |
 | **PlayerPrefs** (recorde, vitórias, dicas vistas, volumes) | `Progresso/`, `Sons/Preferencias.cs` |
 | **Editor scripting**: menu Fox Tower (`MenuItem`), `AssetDatabase`, `PrefabUtility`, `EditorSceneManager`, `TextureImporter`, `SerializedObject` | `Editor/` |
-| **Unity Test Framework**: 139 testes EditMode (incluindo os robôs de balanceamento) e 12 testes PlayMode, que carregam a cena Jogo (ou o Menu) de verdade (pausa, escurecer entre cenas, fim de jogo, menu principal, troca de fase) | `Testes/`, `TestesPlay/` |
+| **Unity Test Framework**: 139 testes EditMode (incluindo os robôs de balanceamento) e 14 testes PlayMode, que carregam a cena Jogo (ou o Menu) de verdade (pausa, escurecer entre cenas, fim de jogo, menu principal, troca de fase, pássaro novo anunciado) | `Testes/`, `TestesPlay/` |
 | **Build WebGL** (`BuildPipeline`) com uma página própria (`WebGLTemplate`) em vez da página em branco padrão do Unity | `ConstrutorRevoada.BuildWebGL`, `Assets/WebGLTemplates/FoxTower` |
 
 Durante o Play, selecione um pássaro ou um porco na Hierarchy: o Inspector mostra o estado dele ao vivo
