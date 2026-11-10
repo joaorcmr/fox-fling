@@ -16,6 +16,9 @@ public static class ConstrutorDados
     const string CaminhoOndas = Raiz + "/Ondas/Dados/Ondas.asset";
     const string CaminhoEconomia = Raiz + "/Moedas/Dados/Economia.asset";
     const string CaminhoFazenda = Raiz + "/Mapa/Dados/Fazenda.asset";
+    const string CaminhoPomar = Raiz + "/Mapa/Dados/Pomar.asset";
+    const string CaminhoFloresta = Raiz + "/Mapa/Dados/Floresta.asset";
+    const string CaminhoFases = Raiz + "/Mapa/Dados/Fases.asset";
 
     // Sprite e cor das penas de cada pássaro.
     static readonly Dictionary<EspeciePassaro, (string sprite, string cor)> VisualPassaro = new Dictionary<EspeciePassaro, (string, string)>
@@ -67,7 +70,10 @@ public static class ConstrutorDados
 
         Unico<ListaOndas>(CaminhoOndas, a => a.ondas = DefinicoesPadrao.Ondas(), sobrescrever);
         Unico<ConfigEconomia>(CaminhoEconomia, a => a.dados = DefinicoesPadrao.Economia(), sobrescrever);
-        Unico<Mapa>(CaminhoFazenda, a => a.dados = DefinicoesPadrao.Fazenda(), sobrescrever);
+        var fazenda = Unico<Mapa>(CaminhoFazenda, a => a.dados = DefinicoesPadrao.Fazenda(), sobrescrever);
+        var pomar = Unico<Mapa>(CaminhoPomar, a => a.dados = DefinicoesPadrao.Pomar(), sobrescrever);
+        var floresta = Unico<Mapa>(CaminhoFloresta, a => a.dados = DefinicoesPadrao.Floresta(), sobrescrever);
+        Unico<ListaFases>(CaminhoFases, a => a.mapas = new List<Mapa> { fazenda, pomar, floresta }, sobrescrever);
         AssetDatabase.SaveAssets();
     }
 
@@ -95,10 +101,13 @@ public static class ConstrutorDados
     public static ListaOndas Ondas() => AssetDatabase.LoadAssetAtPath<ListaOndas>(CaminhoOndas);
     public static ConfigEconomia Economia() => AssetDatabase.LoadAssetAtPath<ConfigEconomia>(CaminhoEconomia);
     public static Mapa Fazenda() => AssetDatabase.LoadAssetAtPath<Mapa>(CaminhoFazenda);
+    public static Mapa Pomar() => AssetDatabase.LoadAssetAtPath<Mapa>(CaminhoPomar);
+    public static Mapa Floresta() => AssetDatabase.LoadAssetAtPath<Mapa>(CaminhoFloresta);
+    public static ListaFases Fases() => AssetDatabase.LoadAssetAtPath<ListaFases>(CaminhoFases);
 
     static string Pasta(string caminhoAsset) => caminhoAsset.Substring(0, caminhoAsset.LastIndexOf('/'));
 
-    public static DadosJogo Carregar() => ConversorDados.Montar(Passaros(), Porcos(), Ondas(), Economia(), Fazenda());
+    public static DadosJogo Carregar() => ConversorDados.Montar(Passaros(), Porcos(), Ondas(), Economia(), Fazenda(), Fases());
 
     static IEnumerable<T> Todos<T>(string pasta) where T : UnityEngine.Object
     {

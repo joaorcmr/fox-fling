@@ -16,4 +16,9 @@ public class DadosJogo
     public List<DadosOnda> ondas = new List<DadosOnda>();
     public DadosEconomia economia = new DadosEconomia();
     public DadosMapa mapa = new DadosMapa();
+
+    // As fases (ver ListaFases): cada uma troca o mapa ativo a cada
+    // TotalOndas/fases.Count ondas. Vazio ou com 1 mapa só = sem fases, sempre
+    // o mesmo mapa (compatível com os testes, que não preenchem isto).
+    public List<DadosMapa> fases = new List<DadosMapa>();
 }

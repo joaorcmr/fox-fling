@@ -15,7 +15,10 @@ public partial class Simulacao
     public const float Dt = 1f / 60f;
 
     public readonly DadosJogo Dados;
-    public readonly Trilha Trilha;
+
+    // Não é mais "readonly": numa fase nova, o mapa (e portanto a trilha) troca
+    // (ver Simulacao.Fases).
+    public Trilha Trilha { get; private set; }
 
     public EstadoJogo Estado { get; private set; } = EstadoJogo.Preparando;
     public bool Auto { get; set; }
@@ -26,9 +29,12 @@ public partial class Simulacao
     public Simulacao(DadosJogo dados)
     {
         Dados = dados;
+        // A fase 1 sempre começa no primeiro mapa das fases, mesmo que o
+        // chamador tenha montado dados.mapa com outra coisa.
+        if (dados.fases.Count > 1) Dados.mapa = dados.fases[0];
         Trilha = new Trilha(dados.mapa.pontos, dados.mapa.raioCanto);
         Economia = new Economia(dados.economia);
-        Vida = dados.economia.vidaInicial;
+        Vida = VidaMaxima = dados.economia.vidaInicial;
         CalcularMoedasDasOndas();
     }
 

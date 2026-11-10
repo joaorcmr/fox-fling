@@ -143,11 +143,18 @@ public static class ConstrutorUI
         hud.textoVelocidade = Texto(hud.botaoVelocidade.transform, "Texto", "1×", 13, TextAnchor.MiddleCenter, Centro,
             new Vector2(0f, 1f), new Vector2(28f, 28f), Creme, contorno: true);
         hud.botaoMenu = Botao(barra, "BotaoMenu", Sprite("icone_menu"), TopoEsq, new Vector2(114f, -38f), new Vector2(28f, 28f));
+        // Mesma coluna dos ícones de cima, no espaço que sobra ao lado do texto da onda.
+        hud.botaoReparo = Botao(barra, "BotaoReparo", Sprite("icone_reparo"), TopoEsq, new Vector2(114f, -68f), new Vector2(28f, 22f));
 
         // A loja (porcos, Cofrinho e prévia) e, no mesmo lugar, o painel do porco selecionado.
         var loja = Retangulo(barra, "Loja", TopoEsq, new Vector2(0f, -98f), new Vector2(LarguraBarra, 304f));
         hud.grupoLoja = loja.gameObject;
         var balao = CriarBalao(t);
+        var reparo = hud.botaoReparo.gameObject.AddComponent<CartaoReparo>();
+        reparo.jogo = jogo;
+        reparo.botao = hud.botaoReparo;
+        reparo.grupo = hud.botaoReparo.gameObject.AddComponent<CanvasGroup>();
+        reparo.balao = balao;
         hud.cartoes = new CartaoPorcoLoja[porcos.Length];
         for (int i = 0; i < porcos.Length; i++)
         {
@@ -462,13 +469,14 @@ public static class ConstrutorUI
         var quadro = Imagem(escuro.transform, "Quadro", Sprite("painel"), Centro, Vector2.zero, new Vector2(460f, 360f), true).transform;
         Texto(quadro, "Titulo", "Como jogar", 22, TextAnchor.MiddleCenter, Topo, new Vector2(0f, -14f), new Vector2(420f, 30f), Marrom);
         Texto(quadro, "Regras",
-            "• Clique num porco da loja (ou aperte 1 a 4) e depois no mapa para colocá-lo.\n" +
+            "• Clique num porco da loja (ou aperte 1 a 4) e depois no mapa para colocá-lo. Só dá pra comprar entre ondas.\n" +
             "• Solte a onda no botão ▶ (ou Espaço). Com Auto ligado, as ondas seguem sozinhas.\n" +
-            "• Pássaros estourados deixam moedas. Gaste em porcos, em upgrades ou no Cofrinho, que faz cada pássaro render mais.\n" +
+            "• Pássaros estourados deixam moedas. Gaste em porcos, em upgrades, no Cofrinho (rende mais) ou no ♥+ (repara a Torre).\n" +
             "• O arpão atravessa a fila: ponha o Arpoador no fim de uma reta. A bomba de lama pega bandos e ignora a couraça do urubu.\n" +
             "• Porcos dentro do círculo do Tamboreiro atiram mais rápido. Clique num porco para melhorar (U), mudar a mira ou vender (Delete).\n" +
-            "• P pausa, F acelera (1×, 2×, 3×), Esc abre o menu. Os 100 de vida da Torre são a sua margem de erro.",
-            13, TextAnchor.UpperLeft, Topo, new Vector2(0f, -50f), new Vector2(420f, 250f), Marrom, negrito: false);
+            "• A cada 10 ondas o mapa muda, com um caminho novo até a Torre.\n" +
+            "• P pausa, F acelera (1×, 2×, 3×), Esc abre o menu.",
+            12, TextAnchor.UpperLeft, Topo, new Vector2(0f, -50f), new Vector2(420f, 250f), Marrom, negrito: false);
         m.botaoFecharComoJogar = BotaoTexto(quadro, "Fechar", "Fechar", new Vector2(0f, -150f));
 
         m.painelConfirmarZerar = CriarConfirmarZerar(t, out m.botaoCancelarZerar, out m.botaoConfirmarZerar);

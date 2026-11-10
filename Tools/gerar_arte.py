@@ -834,6 +834,12 @@ def icone(tipo):
     elif tipo == "reiniciar":
         t.arco(24, 25, 13, 40, 330, creme, 5)
         t.poligono([(32, 6), (41, 16), (29, 18)], creme)
+    elif tipo == "reparo":  # o coração da vida com uma cruz branca: reparar a Torre
+        t.elipse(17, 19, 10, 10, hexc("#E04B4B"))
+        t.elipse(31, 19, 10, 10, hexc("#E04B4B"))
+        t.poligono([(7.5, 22), (40.5, 22), (24, 41)], hexc("#E04B4B"))
+        t.retangulo(20.5, 14, 27.5, 31, creme, raio=1.5)
+        t.retangulo(13, 18.5, 35, 25.5, creme, raio=1.5)
     t.contornar(2.2)
     return t.final()
 
@@ -933,7 +939,7 @@ def gerar():
     # Interface
     salvar(caixa(96, 96, 18, hexc("#FFF6E0"), hexc("#F6E7C4"), hexc("#6B4A2E"), 4), "painel", feitos)
     salvar(caixa(64, 64, 14, hexc("#9BD36F"), hexc("#6FAE4A"), hexc("#3D5E28"), 3), "botao", feitos)
-    for tipo in ("vida", "moeda", "play", "rapido", "menu", "cofrinho", "reiniciar"):
+    for tipo in ("vida", "moeda", "play", "rapido", "menu", "cofrinho", "reiniciar", "reparo"):
         salvar(icone(tipo), "icone_" + tipo, feitos)
     salvar(logo(), "logo", feitos)
     for nome, cor in (("bronze", "#CD7F32"), ("prata", "#C3C7CF"), ("ouro", "#F2C14E")):

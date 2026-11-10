@@ -15,7 +15,11 @@ public class CartaoCofrinho : MonoBehaviour
     public Text retorno;
     public CanvasGroup grupo;
 
-    void Awake() => botao.onClick.AddListener(() => jogo.Selecao.Avisar(jogo.Sim.ComprarCofrinho()));
+    void Awake() => botao.onClick.AddListener(() =>
+    {
+        var s = jogo.Sim;
+        jogo.Selecao.Avisar(s.Estado == EstadoJogo.EmOnda ? Resultado.OndaEmAndamento : s.ComprarCofrinho());
+    });
 
     void Update()
     {
@@ -31,13 +35,16 @@ public class CartaoCofrinho : MonoBehaviour
             return;
         }
 
+        bool emOnda = s.Estado == EstadoJogo.EmOnda;
         multiplicador.text = $"×{Num(s.Economia.Multiplicador)} → ×{Num(proximo.multiplicador)}"; // o ícone do cofrinho já diz o que é
         custo.text = proximo.custo.ToString();
         int? ondas = s.OndasParaPagarCofrinho();
-        retorno.text = ondas.HasValue
-            ? $"se paga em ~{ondas} onda{(ondas == 1 ? "" : "s")}"
-            : $"não se paga mais até a onda {s.TotalOndas}";
-        botao.interactable = true;
-        grupo.alpha = s.Moedas >= proximo.custo ? 1f : 0.55f;
+        retorno.text = emOnda
+            ? "espere a onda terminar"
+            : ondas.HasValue
+                ? $"se paga em ~{ondas} onda{(ondas == 1 ? "" : "s")}"
+                : $"não se paga mais até a onda {s.TotalOndas}";
+        botao.interactable = !emOnda;
+        grupo.alpha = emOnda ? 0.4f : s.Moedas >= proximo.custo ? 1f : 0.55f;
     }
 }

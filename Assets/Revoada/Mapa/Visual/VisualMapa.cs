@@ -6,9 +6,17 @@ using UnityEngine;
 // view sem dar Play. Mexeu nos pontos do Mapa no Inspector? Os Gizmos mostram
 // a trilha nova na hora; clique com o botão direito no componente →
 // "Redesenhar" para atualizar os sprites.
+//
+// Com jogo e fases preenchidos (cena Jogo de verdade), o mapa troca sozinho
+// quando a Simulacao muda de fase (Jogo.Sim.FaseComecou): redesenha com o
+// mapa novo e tinge o cenário para o turno do dia (a Torre fica de fora, para
+// não brigar com o flash de "apanhando" do VisualTorre).
 public class VisualMapa : MonoBehaviour
 {
     public Mapa mapa;
+    [Tooltip("Opcional: com isto e 'fases' preenchidos, o mapa troca sozinho a cada fase nova.")]
+    public Jogo jogo;
+    public Mapa[] fases;
 
     [Header("Arte")]
     public Sprite grama;
@@ -23,6 +31,25 @@ public class VisualMapa : MonoBehaviour
 
     [Tooltip("Preenchido pelo Desenhar: o sprite da Torre dos Porcos.")]
     public SpriteRenderer torreDesenhada;
+
+    static readonly Color TintoDia = Color.white;
+    static readonly Color TintoTarde = new Color(1f, 0.8f, 0.62f);
+    static readonly Color TintoNoite = new Color(0.46f, 0.52f, 0.78f);
+    static readonly Color FundoDia = new Color(0.18f, 0.29f, 0.14f);
+    static readonly Color FundoTarde = new Color(0.32f, 0.2f, 0.11f);
+    static readonly Color FundoNoite = new Color(0.04f, 0.05f, 0.1f);
+
+    void Start()
+    {
+        if (jogo != null && fases != null && fases.Length > 0) jogo.Sim.FaseComecou += TrocarFase;
+    }
+
+    void TrocarFase(int fase)
+    {
+        if (fase < 1 || fase > fases.Length) return;
+        mapa = fases[fase - 1];
+        Desenhar();
+    }
 
     [ContextMenu("Redesenhar")]
     public void Desenhar()
@@ -70,6 +97,27 @@ public class VisualMapa : MonoBehaviour
             f.flipX = rnd.Next(2) == 0;
             feitas++;
         }
+
+        Tingir(d.turno);
+    }
+
+    // O cenário (grama, trilha, obstáculos, flores) muda de cor para o turno;
+    // a Torre fica de fora (o VisualTorre já mexe na cor dela para o flash de
+    // "apanhando", e brigaria com um tingimento por cima). O fundo da câmera
+    // também muda, para reforçar a hora do dia.
+    void Tingir(TurnoDoDia turno)
+    {
+        var tinto = turno == TurnoDoDia.Tarde ? TintoTarde : turno == TurnoDoDia.Noite ? TintoNoite : TintoDia;
+        foreach (var r in GetComponentsInChildren<SpriteRenderer>())
+            if (r != torreDesenhada) r.color = tinto;
+        foreach (var lr in GetComponentsInChildren<LineRenderer>())
+        {
+            lr.startColor = tinto;
+            lr.endColor = tinto;
+        }
+
+        if (Camera.main != null)
+            Camera.main.backgroundColor = turno == TurnoDoDia.Tarde ? FundoTarde : turno == TurnoDoDia.Noite ? FundoNoite : FundoDia;
     }
 
     SpriteRenderer Filho(string nome, Sprite sprite, Vector2 posicao, int ordem)

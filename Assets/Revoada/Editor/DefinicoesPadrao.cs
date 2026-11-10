@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static EspeciePassaro;
 
@@ -193,6 +194,10 @@ public static class DefinicoesPadrao
             bonusOndaPorOnda = 5,
             fracaoVenda = 0.7f,
             esperaAuto = 2f,
+            esperaAutoNovaFase = 8f,
+            custoReparoBase = 80,
+            custoReparoIncremento = 40,
+            curaPorReparo = 20,
             cofrinho = new List<NivelCofrinho>
             {
                 // Mais barato que o ponto de partida do design (250 … 2500): com os
@@ -233,6 +238,43 @@ public static class DefinicoesPadrao
         };
     }
 
+    // Fase 2, de tarde: a Fazenda espelhada de cima para baixo — a entrada vira
+    // saída, o caminho é outro do jeito de andar (transformação rígida: as
+    // distâncias entre a trilha e os obstáculos, que os testes conferem,
+    // continuam as mesmas de propósito).
+    public static DadosMapa Pomar() => Transformar(Fazenda(), "Pomar", TurnoDoDia.Tarde,
+        p => new Vector2(p.x, 15f - p.y));
+
+    // Fase 3, de noite: a Fazenda girada 90° em volta do centro do mapa — de
+    // fileiras na horizontal para fileiras na vertical.
+    public static DadosMapa Floresta()
+    {
+        var centro = Fazenda().tamanho / 2f;
+        return Transformar(Fazenda(), "Floresta", TurnoDoDia.Noite,
+            p => new Vector2(centro.x + (p.y - centro.y), centro.y - (p.x - centro.x)));
+    }
+
+    // Aplica uma transformação rígida (espelhar, girar) num mapa inteiro:
+    // pontos da trilha, Torre e obstáculos, todos pelo mesmo cálculo. Como a
+    // transformação não muda distância nenhuma, as regras de posição (trilha
+    // dentro do mapa, obstáculo longe da trilha, Torre no fim da trilha)
+    // continuam valendo sem precisar conferir os números de novo à mão.
+    static DadosMapa Transformar(DadosMapa original, string nome, TurnoDoDia turno, System.Func<Vector2, Vector2> t)
+    {
+        return new DadosMapa
+        {
+            nome = nome,
+            turno = turno,
+            tamanho = original.tamanho,
+            raioCanto = original.raioCanto,
+            meiaLargura = original.meiaLargura,
+            raioTorre = original.raioTorre,
+            torre = t(original.torre),
+            pontos = original.pontos.Select(t).ToList(),
+            obstaculos = original.obstaculos.Select(o => new Obstaculo { tipo = o.tipo, centro = t(o.centro), raio = o.raio }).ToList(),
+        };
+    }
+
     public static DadosJogo Jogo()
     {
         var d = new DadosJogo
@@ -240,6 +282,7 @@ public static class DefinicoesPadrao
             ondas = Ondas(),
             economia = Economia(),
             mapa = Fazenda(),
+            fases = new List<DadosMapa> { Fazenda(), Pomar(), Floresta() },
         };
         foreach (var p in Passaros()) d.passaros[p.especie] = p;
         foreach (var p in Porcos()) d.porcos[p.especie] = p;

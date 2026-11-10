@@ -71,7 +71,11 @@ No `FixedUpdate`, o `Jogo` chama `Sim.Passo()`. Os outros componentes chegam a t
 - `Visual/`, `Interface/` (uGUI) e `Prefabs/`, além de `Partida/Entrada/` para teclado e mouse.
 - Todo o resto compila no assembly `Revoada` (`Assets/Revoada/Revoada.asmdef`). `Editor/`, `Testes/` e `TestesPlay/` têm assemblies próprios. `Revoada.Testes` referencia `Revoada.Editor`, então os testes podem usar `ConstrutorDados`, `DefinicoesPadrao` e `Robos`.
 
-`Simulacao` é `partial`: cada assunto guarda a sua parte em `<Assunto>/Regras/Simulacao.<Assunto>.cs` (ondas, pássaros, Torre, moedas, porcos, combate). `Partida/Regras/Simulacao.cs` tem o estado geral e a ordem do `Passo()`. Uma regra nova vai no arquivo parcial do assunto dela.
+`Simulacao` é `partial`: cada assunto guarda a sua parte em `<Assunto>/Regras/Simulacao.<Assunto>.cs` (ondas, pássaros, Torre, moedas, porcos, combate, fases). `Partida/Regras/Simulacao.cs` tem o estado geral e a ordem do `Passo()`. Uma regra nova vai no arquivo parcial do assunto dela.
+
+O jogo pode se dividir em **fases** (`Mapa/Regras/Simulacao.Fases.cs`): com `DadosJogo.fases` preenchido (2+ mapas), as ondas se dividem em partes iguais entre eles e o mapa troca (com o Intervalo inteiro de folga) ao terminar a última onda de cada fase. Quem fica em cima da trilha nova sai do mapa (devolve 70%, a taxa de vender); quem continua válido fica do jeito que estava. Sem `fases` preenchido (todo cenário de teste feito à mão), nada disso roda — o jogo fica num mapa só, como sempre. Mexeu num número de onda, mapa ou fase? Rode os robôs (`Revoada > Balanceamento`) e ajuste os limiares do `BalanceamentoTests` como o comentário de lá explica.
+
+Só dá para comprar porco novo, Cofrinho ou reparo da Torre **entre ondas** (`Estado != EmOnda`): `Selecao.IniciarColocacao` e os cliques do Cofrinho/Reparo checam isso e avisam `Resultado.OndaEmAndamento`. Isso é regra de UI/jogador — a `Simulacao` pura (`Comprar`, `ComprarCofrinho`, `ComprarReparo`) continua aceitando a qualquer hora, de propósito: é o que os robôs de balanceamento e a maioria dos testes usam.
 
 As responsabilidades estão separadas de propósito; não junte de volta:
 - `Controles` só lê a entrada.

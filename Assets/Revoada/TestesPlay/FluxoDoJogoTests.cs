@@ -134,4 +134,33 @@ public class FluxoDoJogoTests
         Assert.IsTrue(jogo.Relogio.Pausado, "o ☰ precisa continuar pausando ao abrir o menu");
         Assert.IsTrue(hud.menuPausa.Aberto);
     }
+
+    // O botão de reparar a Torre, na barra de verdade (issue #14): cura e sobe
+    // o preço do próximo, e fica bloqueado com a onda em andamento.
+    [UnityTest]
+    public IEnumerator BotaoReparo_CuraESobeOPreco_EFicaBloqueadoNaOnda()
+    {
+        yield return CarregarJogo();
+        var jogo = Jogo.Atual;
+        var hud = Object.FindAnyObjectByType<Hud>();
+        var s = jogo.Sim;
+
+        // Sem porco nenhum, a primeira onda já bate na Torre: tira um pouco de vida de verdade.
+        s.SoltarOnda();
+        for (int i = 0; i < 60 * 60 * 20 && s.Vida == s.VidaMaxima; i++) s.Passo();
+        Assert.Less(s.Vida, s.VidaMaxima, "nenhum pássaro bateu na Torre a tempo");
+        for (int i = 0; i < 60 * 60 * 20 && s.Estado == EstadoJogo.EmOnda; i++) s.Passo(); // espera a onda acabar
+
+        int custoAntes = s.Economia.CustoProximoReparo;
+        int vidaAntes = s.Vida;
+        hud.botaoReparo.onClick.Invoke();
+
+        Assert.Greater(s.Vida, vidaAntes, "o botão de verdade devia ter curado algo");
+        Assert.Greater(s.Economia.CustoProximoReparo, custoAntes, "o próximo reparo fica mais caro");
+
+        s.SoltarOnda();
+        int vidaEmOnda = s.Vida;
+        hud.botaoReparo.onClick.Invoke();
+        Assert.AreEqual(vidaEmOnda, s.Vida, "com a onda em andamento, o botão não pode curar nada");
+    }
 }

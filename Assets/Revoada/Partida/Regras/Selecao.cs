@@ -6,6 +6,11 @@ using UnityEngine;
 // quer que seja (teclado e mouse nos Controles, botões da interface) e avisa
 // por eventos. Não lê teclado nem desenha nada, por isso dá para testar sem
 // dar Play.
+//
+// Só dá para começar a colocar um porco ENTRE ondas (Preparando ou Intervalo):
+// com a onda em andamento, o jogo espera o jogador comprar e só segue para a
+// próxima quando ele soltar (issue #14). Se a onda começa com um porco ainda
+// na mão (o Auto não espera), a colocação é cancelada sozinha.
 public class Selecao
 {
     readonly Simulacao sim;
@@ -24,6 +29,7 @@ public class Selecao
         {
             if (p == Selecionado) Selecionar(null);
         };
+        sim.OndaComecou += _ => CancelarColocacao();
         // Acabou: nada fica na mão do jogador (daqui em diante só a tela de fim responde).
         sim.FimDeJogo += _ =>
         {
@@ -34,6 +40,11 @@ public class Selecao
 
     public void IniciarColocacao(EspeciePorco especie)
     {
+        if (sim.Estado == EstadoJogo.EmOnda)
+        {
+            Falhou?.Invoke(Resultado.OndaEmAndamento);
+            return;
+        }
         Selecionar(null);
         Colocando = especie;
         ColocacaoMudou?.Invoke(especie);

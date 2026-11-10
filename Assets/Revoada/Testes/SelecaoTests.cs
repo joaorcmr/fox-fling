@@ -100,6 +100,39 @@ public class SelecaoTests
         Assert.IsNull(selecao.Selecionado);
     }
 
+    // Só dá para comprar ENTRE ondas (issue #14): com a onda em andamento, o
+    // jogo espera o jogador comprar e só segue quando ele soltar a próxima.
+    [Test]
+    public void IniciarColocacao_ComAOndaEmAndamento_AvisaENaoPegaOPorco()
+    {
+        var s = Partida();
+        var selecao = new Selecao(s);
+        var falhas = new List<Resultado>();
+        selecao.Falhou += r => falhas.Add(r);
+        s.SoltarOnda();
+
+        selecao.IniciarColocacao(EspeciePorco.Estilingueiro);
+
+        Assert.IsFalse(selecao.Colocando.HasValue, "não devia ter pego o porco com a onda em andamento");
+        CollectionAssert.AreEqual(new[] { Resultado.OndaEmAndamento }, falhas);
+    }
+
+    [Test]
+    public void OndaComeca_CancelaOPorcoQueEstavaNaMao()
+    {
+        // Com o Auto ligado a onda pode começar sozinha enquanto o jogador
+        // ainda está escolhendo onde colocar: o fantasma não pode ficar preso
+        // no mapa depois disso.
+        var s = Partida();
+        var selecao = new Selecao(s);
+        selecao.IniciarColocacao(EspeciePorco.Estilingueiro);
+        Assert.IsTrue(selecao.Colocando.HasValue);
+
+        s.SoltarOnda();
+
+        Assert.IsFalse(selecao.Colocando.HasValue);
+    }
+
     [Test]
     public void PorcoEm_ForaDeMeiaUnidade_NaoAchaNinguem()
     {

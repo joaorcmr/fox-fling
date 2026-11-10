@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b198150c7a9f68f4cb448f9a22074fec, type: 3}
+  m_Name: Fases
+  m_EditorClassIdentifier: Revoada::ListaFases
+  mapas:
+  - {fileID: 11400000, guid: de9e204abf83544a58d392ffc858ef8f, type: 2}
+  - {fileID: 11400000, guid: efa9b925ac388064882cf0ddb52eccd7, type: 2}
+  - {fileID: 11400000, guid: e76bb7e9875b39b45bd10eea083b4d52, type: 2}

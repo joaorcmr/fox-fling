@@ -19,6 +19,8 @@ public class Jogo : MonoBehaviour
     public ListaOndas ondas;
     public ConfigEconomia economia;
     public Mapa mapa;
+    [Tooltip("Opcional: com 2 ou mais mapas, as ondas se dividem em fases (ver Simulacao.Fase).")]
+    public ListaFases fases;
 
     public static Jogo Atual { get; private set; }
 
@@ -33,7 +35,7 @@ public class Jogo : MonoBehaviour
         Atual = this;
         Time.fixedDeltaTime = Simulacao.Dt;
         Relogio = new RelogioPartida();
-        Sim = new Simulacao(ConversorDados.Montar(passaros, porcos, ondas, economia, mapa));
+        Sim = new Simulacao(ConversorDados.Montar(passaros, porcos, ondas, economia, mapa, fases));
         Tipos = new CatalogoTipos(passaros, porcos);
         Selecao = new Selecao(Sim);
         Fim = new FimDePartida(Sim);

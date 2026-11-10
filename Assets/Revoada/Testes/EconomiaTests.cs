@@ -97,4 +97,31 @@ public class EconomiaTests
         Assert.AreEqual(2, e.OndasParaPagar(moedasBase, 1));
         Assert.IsNull(e.OndasParaPagar(moedasBase, 4));
     }
+
+    [Test]
+    public void ComprarReparo_CadaCompraFicaMaisCara()
+    {
+        var e = new Economia(new DadosEconomia { moedasIniciais = 1000, custoReparoBase = 80, custoReparoIncremento = 40 });
+
+        Assert.AreEqual(80, e.CustoProximoReparo);
+        Assert.IsTrue(e.ComprarReparo());
+        Assert.AreEqual(920, e.Moedas);
+
+        Assert.AreEqual(120, e.CustoProximoReparo, "o segundo reparo custa 40 a mais que o primeiro");
+        Assert.IsTrue(e.ComprarReparo());
+        Assert.AreEqual(800, e.Moedas);
+
+        Assert.AreEqual(160, e.CustoProximoReparo);
+    }
+
+    [Test]
+    public void ComprarReparo_SemMoedas_NaoCobraNemContaComoCompra()
+    {
+        var e = new Economia(new DadosEconomia { moedasIniciais = 50, custoReparoBase = 80 });
+
+        Assert.IsFalse(e.ComprarReparo());
+        Assert.AreEqual(50, e.Moedas);
+        Assert.AreEqual(0, e.ComprasDeReparo);
+        Assert.AreEqual(80, e.CustoProximoReparo, "não contou como compra: o custo não subiu");
+    }
 }

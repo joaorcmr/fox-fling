@@ -10,11 +10,16 @@ public class Obstaculo
     public float raio;
 }
 
+// O turno do mapa: só muda a luz (VisualMapa tinge o cenário e a câmera), sem
+// efeito nenhum na simulação.
+public enum TurnoDoDia { Dia, Tarde, Noite }
+
 // O mapa: a trilha, a Torre e os obstáculos (editados no Inspector, no asset Mapa).
 [Serializable]
 public class DadosMapa
 {
     public string nome;
+    public TurnoDoDia turno = TurnoDoDia.Dia;
     public Vector2 tamanho = new Vector2(14f, 15f);
     [Tooltip("Pontos da trilha, do lugar onde os pássaros entram até a Torre.")]
     public List<Vector2> pontos = new List<Vector2>();

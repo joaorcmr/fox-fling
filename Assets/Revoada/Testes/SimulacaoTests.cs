@@ -111,5 +111,60 @@ public class SimulacaoTests
         Assert.AreEqual(Resultado.Indisponivel, s.Comprar(EspeciePorco.Estilingueiro, new Vector2(7f, 10f), out _));
         Assert.AreEqual(0, s.Vender(porco));
         Assert.AreEqual(Resultado.Indisponivel, s.ComprarCofrinho());
+        Assert.AreEqual(Resultado.Indisponivel, s.ComprarReparo());
+    }
+
+    // Tira "dano" de vida deixando 1 pardal (bem rápido, sem porco no caminho)
+    // chegar na Torre; a onda termina (Intervalo) logo em seguida, então o
+    // teste já pode comprar reparo fora de uma onda em andamento.
+    static Simulacao ComDanoNaTorre(int vidaInicial, int dano, int moedasIniciais = 1000)
+    {
+        var d = ComEstilingueiro(moedas: moedasIniciais);
+        d.economia.vidaInicial = vidaInicial;
+        d.passaros[EspeciePassaro.Pardal] = Passaro(EspeciePassaro.Pardal, velocidade: 100f, dano: dano);
+        d.ondas.Add(Onda(Grupo(EspeciePassaro.Pardal, 1)));
+        d.ondas.Add(Onda(Grupo(EspeciePassaro.Pardal, 1)));
+        var s = new Simulacao(d);
+        s.SoltarOnda();
+        Avancar(s, 1f); // o pardal é bem rápido: já chega e a onda termina (Intervalo)
+        Assert.AreEqual(vidaInicial - dano, s.Vida);
+        Assert.AreNotEqual(EstadoJogo.EmOnda, s.Estado);
+        return s;
+    }
+
+    // Comprar saúde para a Torre, com custo que sobe a cada compra (issue #14).
+    [Test]
+    public void ComprarReparo_CuraSemPassarDaVidaInicial()
+    {
+        var s = ComDanoNaTorre(vidaInicial: 100, dano: 10); // Vida = 90
+        s.Dados.economia.curaPorReparo = 20;
+        s.Dados.economia.custoReparoBase = 50;
+        int? curado = null;
+        s.TorreReparada += c => curado = c;
+
+        Assert.AreEqual(Resultado.Ok, s.ComprarReparo());
+        Assert.AreEqual(100, s.Vida, "90 + 20 passaria de 100: a cura é limitada à vida inicial");
+        Assert.AreEqual(10, curado, "só curou os 10 que faltavam");
+        Assert.AreEqual(Resultado.Indisponivel, s.ComprarReparo(), "vida cheia: não tem o que reparar");
+    }
+
+    [Test]
+    public void ComprarReparo_SemMoedas()
+    {
+        var s = ComDanoNaTorre(vidaInicial: 100, dano: 50, moedasIniciais: 0); // Vida = 50, sem moedas
+
+        Assert.AreEqual(Resultado.SemMoedas, s.ComprarReparo());
+        Assert.AreEqual(50, s.Vida);
+    }
+
+    [Test]
+    public void ComprarReparo_ComAOndaEmAndamento_NaoDeixaComprar()
+    {
+        var d = ComEstilingueiro();
+        d.ondas.Add(Onda(Grupo(EspeciePassaro.Pardal, 1)));
+        var s = new Simulacao(d);
+        s.SoltarOnda();
+
+        Assert.AreEqual(Resultado.OndaEmAndamento, s.ComprarReparo());
     }
 }

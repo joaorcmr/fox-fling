@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -36,11 +37,12 @@ public static class ConstrutorCenas
         jogo.ondas = ConstrutorDados.Ondas();
         jogo.economia = ConstrutorDados.Economia();
         jogo.mapa = ConstrutorDados.Fazenda();
+        jogo.fases = ConstrutorDados.Fases();
 
         // Os sons do que acontece no mapa ficam junto do Sons da cena.
         sons.gameObject.AddComponent<SonsDaPartida>().jogo = jogo;
 
-        var mapa = CriarMapa(jogo.mapa);
+        var mapa = CriarMapa(jogo.mapa, jogo);
         var torre = new GameObject("Torre").AddComponent<VisualTorre>();
         torre.jogo = jogo;
         torre.torre = mapa.torreDesenhada;
@@ -97,7 +99,9 @@ public static class ConstrutorCenas
         EditorSceneManager.SaveScene(cena, CenaMenu);
     }
 
-    static VisualMapa CriarMapa(Mapa dados)
+    // Com "jogo" preenchido (cena Jogo), liga o mapa às fases dele: ao trocar
+    // de fase, o mapa redesenha sozinho com o mapa novo (ver VisualMapa).
+    static VisualMapa CriarMapa(Mapa dados, Jogo jogo = null)
     {
         var mapa = new GameObject("Mapa").AddComponent<VisualMapa>();
         mapa.mapa = dados;
@@ -109,6 +113,11 @@ public static class ConstrutorCenas
         mapa.flores = new[] { ConstrutorAssets.Sprite("flor_1"), ConstrutorAssets.Sprite("flor_2") };
         mapa.materialTerra = ConstrutorAssets.MaterialSprite("Terra", ConstrutorAssets.Textura("terra"));
         mapa.materialBorda = ConstrutorAssets.MaterialSprite("TerraBorda", ConstrutorAssets.Textura("terra_borda"));
+        if (jogo != null && jogo.fases != null)
+        {
+            mapa.jogo = jogo;
+            mapa.fases = jogo.fases.mapas.ToArray();
+        }
         mapa.Desenhar();
         return mapa;
     }

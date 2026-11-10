@@ -19,6 +19,7 @@ public class Hud : MonoBehaviour
     public Button botaoVelocidade;
     public Text textoVelocidade;
     public Button botaoMenu;
+    public Button botaoReparo;
 
     [Header("Loja (some quando um porco está selecionado)")]
     public GameObject grupoLoja;
@@ -63,6 +64,7 @@ public class Hud : MonoBehaviour
         {
             if (r == Resultado.SemMoedas) Avisar("Faltam moedas");
             else if (r == Resultado.LugarInvalido) Avisar("Não dá para colocar aqui");
+            else if (r == Resultado.OndaEmAndamento) Avisar("Espere a onda terminar");
             if (Sons.Instancia != null) Sons.Tocar(Sons.Instancia.erro, 0.6f, 0f);
         };
         s.TorreAtingida += dano => pulsoVida = 1f;

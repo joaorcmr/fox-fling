@@ -11,6 +11,7 @@ public class Economia
 
     public int Moedas { get; private set; }
     public int NivelCofrinho { get; private set; }
+    public int ComprasDeReparo { get; private set; }
 
     public Economia(DadosEconomia dados)
     {
@@ -45,6 +46,16 @@ public class Economia
         var proximo = ProximoCofrinho;
         if (proximo == null || !Gastar(proximo.custo)) return false;
         NivelCofrinho++;
+        return true;
+    }
+
+    // Cada reparo da Torre fica mais caro que o anterior (issue #14).
+    public int CustoProximoReparo => dados.custoReparoBase + dados.custoReparoIncremento * ComprasDeReparo;
+
+    public bool ComprarReparo()
+    {
+        if (!Gastar(CustoProximoReparo)) return false;
+        ComprasDeReparo++;
         return true;
     }
 
