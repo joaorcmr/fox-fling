@@ -12,17 +12,37 @@ depois?
 
 ## Como jogar
 
-| Ação | Como |
-|---|---|
-| Comprar e colocar um porco | Clique no porco da loja (ou aperte **1** a **4**) e depois no mapa. Verde = pode, vermelho = não pode. Só entre ondas |
-| Reparar a Torre | Ícone **♥+** na barra (cura uma parte da vida perdida; cada reparo custa mais que o anterior). Só entre ondas |
-| Soltar a onda | Botão **▶ Soltar a onda** ou **Espaço**. Nenhuma onda começa sozinha |
-| Ver e melhorar um porco | Clique nele: o painel mostra os números, o próximo upgrade (**U**), a mira e **Vender** (**Delete**) |
-| Pausar / acelerar | **P** · **F** ou o botão 1×/2×/3× |
-| Menu | **Esc** (sem nada selecionado) ou ☰ |
+A tela **Como jogar**, dentro do jogo, tem as mesmas regras divididas nestes seis tópicos — aqui estão por
+extenso.
 
-**Objetivo:** sobreviver às 30 ondas. A Torre começa com 100 de vida, e cada pássaro que chega nela tira um
-pouco. Há chefes (gavião-real) nas ondas 10, 20 e 30.
+**Objetivo**
+- Proteja a Torre dos Porcos por 30 ondas.
+- Cada pássaro que chega na Torre tira vida. Com 0, ela cai.
+- Chefes (gavião-real) nas ondas 10, 20 e 30.
+
+**Ondas**
+- Nenhuma onda começa sozinha: aperte **▶ Soltar a onda** (ou **Espaço**).
+- A prévia, na barra, mostra quem vem na próxima.
+
+**Loja e moedas**
+- Pássaros estourados e ondas vencidas dão moedas.
+- Só dá para comprar entre ondas.
+- Porco: clique no cartão (ou **1** a **4**) e depois no mapa. Verde = pode, vermelho = não pode.
+- Reparo (ícone **♥+**): cura uma parte da vida da Torre; fica mais caro a cada uso.
+- Cofrinho: cada pássaro passa a render mais moedas.
+
+**Fases e mapas**
+- A cada 10 ondas o mapa muda e os pássaros vêm por outro caminho.
+- Na troca, todos os porcos voltam para a carteira pelo valor inteiro: monte a defesa de novo.
+
+**Porcos**
+- Clique num porco para melhorar (**U**), mudar a mira ou vender (**Delete**, devolve 70% do que custou).
+- O arpão atravessa a fila; a bomba pega bandos e a couraça do urubu.
+- No círculo do Tamboreiro, os porcos atiram mais rápido.
+
+**Atalhos**
+- **P** pausa · **F** acelera (1×, 2×, 3×)
+- **Esc** abre o menu · clique direito cancela
 
 ### Os porcos
 
@@ -46,9 +66,10 @@ do que foi gasto nele. As auras de Tamboreiros diferentes **não se somam**: val
 | Arara-azul | 10 | 2,0 | 4 | 12 | |
 | Pata | 8 | 1,8 | 3 | 8 | ao estourar, solta 4 patinhos |
 | Urubu | 28 | 1,4 | 6 | 24 | **couraça**: pedrinha e arpão tiram só metade |
-| Gavião-real (chefe) | 90 · 356 · 1.404 | 0,9 | 30 | 200 | ondas 10, 20 e 30; no máximo 30% mais lento |
+| Gavião-real (chefe) | 90 · 337 · 1.568 | 0,9 | 30 | 200 | ondas 10, 20 e 30; no máximo 30% mais lento |
 
-A partir da onda 11, os pássaros ganham **8% de vida por onda** (onda 20 = ×1,8; onda 30 = ×2,6).
+A partir da onda 11, os pássaros ganham **7% de vida por onda** (onda 20 = ×1,7; onda 30 = ×2,4), e as ondas
+da fase 3 (21 a 30) vêm com **mais 21%** por cima (onda 30 = ×2,9).
 
 ### As 3 fases: mapas diferentes, turnos diferentes
 
@@ -57,9 +78,9 @@ turno do dia: a Fazenda de dia (fase 1), o Pomar à tarde (fase 2) e a Floresta 
 acontece ao fim da 10ª e da 20ª onda, e como nenhuma onda começa sozinha, você vê o mapa novo e se prepara
 no seu tempo antes de soltar a próxima.
 
-Porco que fica em cima da trilha nova (ou perto demais da Torre ou de um obstáculo novo) sai do mapa — devolve
-70% do que foi gasto nele, a mesma taxa de vender; quem continua num lugar válido fica exatamente como estava,
-nível e tudo.
+O mapa novo tem outro caminho, então nenhum lugar antigo serve mais: todos os porcos saem do mapa e o que foi
+gasto em cada um — compra, upgrades e especialização — volta inteiro para a carteira. O jogador monta a
+defesa de novo no mapa novo sem perder o que já tinha investido.
 
 ### Moedas e o Cofrinho
 
@@ -88,7 +109,7 @@ ver [Estrutura](#estrutura)) chamadas pelos componentes do Unity a cada passo. R
 | **Input Manager** e `EventSystem.IsPointerOverGameObject` (clique na loja não vaza para o mapa) | `Partida/Entrada/Controles.cs` |
 | **PlayerPrefs** (recorde, vitórias, dicas vistas, volumes) | `Progresso/`, `Sons/Preferencias.cs` |
 | **Editor scripting**: menu Fox Tower (`MenuItem`), `AssetDatabase`, `PrefabUtility`, `EditorSceneManager`, `TextureImporter`, `SerializedObject` | `Editor/` |
-| **Unity Test Framework**: 127 testes EditMode (incluindo os robôs de balanceamento) e 7 testes PlayMode, que carregam a cena Jogo (ou o Menu) de verdade (pausa, escurecer entre cenas, fim de jogo, menu principal) | `Testes/`, `TestesPlay/` |
+| **Unity Test Framework**: 133 testes EditMode (incluindo os robôs de balanceamento) e 9 testes PlayMode, que carregam a cena Jogo (ou o Menu) de verdade (pausa, escurecer entre cenas, fim de jogo, menu principal, troca de fase) | `Testes/`, `TestesPlay/` |
 | **Build WebGL** (`BuildPipeline`) | `ConstrutorRevoada.BuildWebGL` |
 
 Durante o Play, selecione um pássaro ou um porco na Hierarchy: o Inspector mostra o estado dele ao vivo
@@ -104,16 +125,17 @@ mesma ordem de construção e só mudam o que fazem com o Cofrinho:
 |---|---|---|
 | Parado | não compra nada | perde na onda 5 |
 | Só Estilingue | só Estilingueiros e os upgrades deles | perde na onda 24 |
-| Defesa pura | porcos e upgrades, **nunca** o Cofrinho | perde na onda 20 |
+| Defesa pura | porcos e upgrades, **nunca** o Cofrinho | perde na onda 22 |
 | Ganancioso | guarda tudo para o Cofrinho | perde na onda 8 |
-| **Equilibrado** | mistura defesa e Cofrinho (compra quando ele se paga em até 6 ondas) | **vence** a onda 30 com 9 de vida |
+| **Equilibrado** | mistura defesa e Cofrinho (compra quando ele se paga em até 6 ondas) | **vence** a onda 30 com 40 de vida |
 
 A virada do jogo são as ondas 16 e 19, com urubus de couraça: quem só tem pedrinha, ou não investiu em moedas,
 cai ali ou logo depois. A troca de mapa a cada 10 ondas (ver [as 3 fases](#as-3-fases-mapas-diferentes-turnos-diferentes))
-também pesa: quem tinha porco em cima da trilha nova perde esse porco (devolve 70%, a mesma taxa de vender) e
-precisa recompor, por isso as metas ficaram mais apertadas logo depois das ondas 10 e 20. Se alguém mexer num
-número e quebrar esse equilíbrio, os testes avisam. As metas estão
-com pouca folga, então depois de mexer em qualquer número rode os robôs (ou os testes) antes de jogar.
+também pesa: todos os porcos voltam para a carteira (pelo valor inteiro) e o robô precisa recompor a defesa do
+zero no mapa novo antes de voltar a pensar no Cofrinho, por isso a fase 3 vem com pássaros 21% mais fortes —
+sem esse extra, até o Defesa pura vencia a onda 30. Se alguém mexer num número e quebrar esse equilíbrio, os
+testes avisam. As metas estão com pouca folga, então depois de mexer em qualquer número rode os robôs (ou os
+testes) antes de jogar.
 
 ## Mexendo nos números
 

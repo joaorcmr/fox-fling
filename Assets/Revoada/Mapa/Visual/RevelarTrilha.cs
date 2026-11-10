@@ -24,6 +24,7 @@ public class RevelarTrilha : MonoBehaviour
 
     LineRenderer faixa;
     SpriteRenderer anelEntrada, anelTorre;
+    SpriteRenderer[] aneis; // anelEntrada e anelTorre juntos, para o Update não alocar a cada quadro
     readonly List<SpriteRenderer> setas = new List<SpriteRenderer>();
     readonly List<Vector3> pontos = new List<Vector3>();
     Trilha trilha;
@@ -112,7 +113,7 @@ public class RevelarTrilha : MonoBehaviour
         float pulso = Mathf.Repeat(t, 1f);
         float escalaAnel = anel != null ? tamanhoAnel / anel.bounds.size.x : 1f;
         var corAnel = new Color(Cor.r, Cor.g, Cor.b, (1f - pulso) * sumir);
-        foreach (var a in new[] { anelEntrada, anelTorre })
+        foreach (var a in aneis)
         {
             a.transform.localScale = Vector3.one * escalaAnel * (1f + 0.7f * pulso);
             a.color = corAnel;
@@ -144,6 +145,7 @@ public class RevelarTrilha : MonoBehaviour
         faixa.receiveShadows = false;
         anelEntrada = NovoSprite("AnelEntrada", anel, 29);
         anelTorre = NovoSprite("AnelTorre", anel, 29);
+        aneis = new[] { anelEntrada, anelTorre };
     }
 
     SpriteRenderer NovoSprite(string nome, Sprite sprite, int ordem)

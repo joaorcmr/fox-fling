@@ -228,118 +228,118 @@ MonoBehaviour:
       quantidade: 25
       intervalo: 0.6
       atraso: 0
-      multiplicadorVida: 2.2125
+      multiplicadorVida: 2.1417
     - especie: 1
       quantidade: 30
       intervalo: 0.3
       atraso: 2
-      multiplicadorVida: 2.2125
+      multiplicadorVida: 2.1417
   - grupos:
     - especie: 6
       quantidade: 10
       intervalo: 1.2
       atraso: 0
-      multiplicadorVida: 2.3
+      multiplicadorVida: 2.2264001
     - especie: 2
       quantidade: 30
       intervalo: 0.35
       atraso: 3
-      multiplicadorVida: 2.3
+      multiplicadorVida: 2.2264001
   - grupos:
     - especie: 4
       quantidade: 16
       intervalo: 0.8
       atraso: 0
-      multiplicadorVida: 2.3875
+      multiplicadorVida: 2.3111
     - especie: 3
       quantidade: 20
       intervalo: 0.7
       atraso: 2
-      multiplicadorVida: 2.3875
+      multiplicadorVida: 2.3111
   - grupos:
     - especie: 6
       quantidade: 14
       intervalo: 1
       atraso: 0
-      multiplicadorVida: 2.475
+      multiplicadorVida: 2.3958
     - especie: 0
       quantidade: 40
       intervalo: 0.15
       atraso: 4
-      multiplicadorVida: 2.475
+      multiplicadorVida: 2.3958
   - grupos:
     - especie: 1
       quantidade: 60
       intervalo: 0.15
       atraso: 0
-      multiplicadorVida: 2.5625
+      multiplicadorVida: 2.4805
     - especie: 2
       quantidade: 40
       intervalo: 0.2
       atraso: 3
-      multiplicadorVida: 2.5625
+      multiplicadorVida: 2.4805
   - grupos:
     - especie: 6
       quantidade: 18
       intervalo: 0.8
       atraso: 0
-      multiplicadorVida: 2.6499999
+      multiplicadorVida: 2.5651999
     - especie: 4
       quantidade: 12
       intervalo: 1
       atraso: 4
-      multiplicadorVida: 2.6499999
+      multiplicadorVida: 2.5651999
   - grupos:
     - especie: 3
       quantidade: 30
       intervalo: 0.4
       atraso: 0
-      multiplicadorVida: 2.7375002
+      multiplicadorVida: 2.6499002
     - especie: 4
       quantidade: 20
       intervalo: 0.6
       atraso: 3
-      multiplicadorVida: 2.7375002
+      multiplicadorVida: 2.6499002
   - grupos:
     - especie: 6
       quantidade: 22
       intervalo: 0.6
       atraso: 0
-      multiplicadorVida: 2.825
+      multiplicadorVida: 2.7346
     - especie: 2
       quantidade: 50
       intervalo: 0.2
       atraso: 3
-      multiplicadorVida: 2.825
+      multiplicadorVida: 2.7346
   - grupos:
     - especie: 6
       quantidade: 25
       intervalo: 0.5
       atraso: 0
-      multiplicadorVida: 2.9125
+      multiplicadorVida: 2.8193
     - especie: 4
       quantidade: 25
       intervalo: 0.5
       atraso: 2
-      multiplicadorVida: 2.9125
+      multiplicadorVida: 2.8193
     - especie: 3
       quantidade: 30
       intervalo: 0.4
       atraso: 6
-      multiplicadorVida: 2.9125
+      multiplicadorVida: 2.8193
   - grupos:
     - especie: 6
       quantidade: 20
       intervalo: 0.8
       atraso: 0
-      multiplicadorVida: 3
+      multiplicadorVida: 2.9040003
     - especie: 3
       quantidade: 30
       intervalo: 0.5
       atraso: 5
-      multiplicadorVida: 3
+      multiplicadorVida: 2.9040003
     - especie: 7
       quantidade: 1
       intervalo: 1
       atraso: 8
-      multiplicadorVida: 18
+      multiplicadorVida: 17.424002
