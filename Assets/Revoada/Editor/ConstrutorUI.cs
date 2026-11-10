@@ -390,8 +390,10 @@ public static class ConstrutorUI
         fundo.color = new Color(0.93f, 0.86f, 0.7f);
         var p = fundo.gameObject.AddComponent<PreviaOnda>();
         p.jogo = jogo;
-        p.titulo = Texto(fundo.transform, "Titulo", "Próxima: onda 1", 13, TextAnchor.MiddleLeft, TopoEsq,
-            new Vector2(8f, -5f), new Vector2(122f, 16f), Marrom);
+        // Fonte menor e caixa mais larga: "Próxima: onda 20" não pode quebrar
+        // linha (o texto some pra cima, cortado pelo cartão).
+        p.titulo = Texto(fundo.transform, "Titulo", "Próxima: onda 1", 12, TextAnchor.MiddleLeft, TopoEsq,
+            new Vector2(6f, -5f), new Vector2(128f, 16f), Marrom);
         p.icones = new Image[4];
         p.quantidades = new Text[4];
         for (int i = 0; i < 4; i++)
