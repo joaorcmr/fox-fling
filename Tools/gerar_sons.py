@@ -203,19 +203,22 @@ def emendar(faixa, cruzamento):
 
 
 def ambiente():
-    """Fazenda ao fundo: vento (ruído marrom bem filtrado) e piados distantes."""
+    """Fazenda ao fundo: vento (ruído marrom bem filtrado) e piados distantes.
+    Toca em loop o jogo inteiro, então pouco ruído já soma muito: o corte mais
+    baixo (0,012) deixa o vento mais abafado, e os piados (menos, mais baixos
+    e mais graves) só pontuam de vez em quando, sem virar chiado constante."""
     dur = 8.0
     rnd = random.Random(77)
     vento = []
     y = 0.0
     for i in range(amostras(dur + 1.0)):
-        y += 0.02 * (rnd.uniform(-1, 1) - y)  # ruído marrom: integra o branco
+        y += 0.012 * (rnd.uniform(-1, 1) - y)  # ruído marrom: integra o branco
         onda = 0.75 + 0.25 * math.sin(2 * math.pi * i / TAXA / 4.5)  # rajadas lentas
-        vento.append(y * 6.0 * onda)
+        vento.append(y * 4.0 * onda)
     piados = []
-    for _ in range(7):
-        f = rnd.uniform(2400, 3600)
-        piado = envelope(seno(f, 0.09, f * rnd.uniform(1.1, 1.3), vol=0.05), ataque=0.01, queda=0.05)
+    for _ in range(4):
+        f = rnd.uniform(2000, 3000)
+        piado = envelope(seno(f, 0.09, f * rnd.uniform(1.1, 1.3), vol=0.03), ataque=0.01, queda=0.05)
         piados.append(atrasar(piado, rnd.uniform(0.2, dur - 0.3)))
     return emendar(misturar(vento, *piados), 1.0)
 
@@ -244,7 +247,11 @@ def musica():
     for b in range(32):  # bumbo nos tempos 1 e 3, chimbal nos contratempos
         if b % 2 == 0:
             faixas.append(atrasar(envelope(seno(110, 0.12, 45, vol=0.35), queda=0.07), b * batida))
-        faixas.append(atrasar(envelope(ruido(0.04, vol=0.06, corte=0.9, semente=200 + b), queda=0.015), b * batida + batida / 2))
+        # O chimbal toca o tempo todo que a música toca (32× por volta do
+        # loop): com pouco filtro (corte perto de 1) e alto, vira um chiado de
+        # fundo constante. Mais abafado e mais baixo continua marcando o
+        # contratempo sem incomodar.
+        faixas.append(atrasar(envelope(ruido(0.04, vol=0.035, corte=0.55, semente=200 + b), queda=0.015), b * batida + batida / 2))
     faixa = misturar(*faixas)
     # O som que passa do fim (as últimas notas ainda tocando) volta para o
     # começo: é assim que um loop emenda sem corte.

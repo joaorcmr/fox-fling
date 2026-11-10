@@ -21,7 +21,7 @@ public class Sons : MonoBehaviour
     [Header("Fundo (em loop)")]
     public AudioClip ambiente;
     public AudioClip musica;
-    public float volumeAmbiente = 0.35f;
+    public float volumeAmbiente = 0.22f;
     public float volumeMusicaBase = 0.5f;
 
     [Header("Ajustes")]

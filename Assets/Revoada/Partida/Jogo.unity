@@ -3131,7 +3131,7 @@ MonoBehaviour:
   fase: {fileID: 8300000, guid: 42b3de0757cd922449b771e2376d55f6, type: 3}
   ambiente: {fileID: 8300000, guid: 676dd9ef44d6b43c4837a9562262f568, type: 3}
   musica: {fileID: 8300000, guid: a8245a736c0794d958be76d4953c87da, type: 3}
-  volumeAmbiente: 0.35
+  volumeAmbiente: 0.22
   volumeMusicaBase: 0.5
   vozes: 16
   intervaloMinimo: 0.045
