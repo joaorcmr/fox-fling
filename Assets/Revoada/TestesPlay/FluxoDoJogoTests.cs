@@ -263,4 +263,32 @@ public class FluxoDoJogoTests
         float alturaCurta = balao.caixa.sizeDelta.y;
         Assert.That(alturaCurta, Is.LessThan(alturaComprida), "um texto de uma linha não devia manter o balão esticado");
     }
+
+    // O aviso "Novo: <pássaro> (<detalhe>)" da prévia quebrava em 2 linhas
+    // pros detalhes mais compridos, e a segunda linha ficava embaixo do botão
+    // de soltar a onda (o cartão só tem espaço certo pra 1 linha). A onda 6 é
+    // onde o Beija-flor (rápido) estreia de verdade.
+    [UnityTest]
+    public IEnumerator PreviaDaOnda_AvisoDeEstreiaNaoQuebraLinha()
+    {
+        yield return CarregarJogo();
+        var p = Object.FindAnyObjectByType<PreviaOnda>();
+
+        p.Mostrar(6);
+
+        Assert.AreEqual("Novo: Beija-flor", p.aviso.text, "sem o detalhe: com ele, quebra e vaza pro botão embaixo");
+        Assert.That(p.aviso.preferredWidth, Is.LessThanOrEqualTo(p.aviso.rectTransform.rect.width));
+
+        // O texto (não só a caixa) precisa ficar acima do botão de soltar a
+        // onda: a caixa do aviso central (MiddleCenter) pode encostar no
+        // botão mesmo com texto de 1 linha só, se o cartão ficar baixo demais.
+        var soltar = Object.FindAnyObjectByType<Hud>().botaoSoltar.GetComponent<RectTransform>();
+        var linha = p.aviso.cachedTextGenerator.lines[p.aviso.cachedTextGenerator.lineCount - 1];
+        var corners = new Vector3[4];
+        p.aviso.rectTransform.GetWorldCorners(corners);
+        float linhaBase = corners[1].y + linha.topY - linha.height;
+        var soltarCantos = new Vector3[4];
+        soltar.GetWorldCorners(soltarCantos);
+        Assert.That(linhaBase, Is.GreaterThan(soltarCantos[1].y), "o texto do aviso encosta no botão de soltar a onda");
+    }
 }

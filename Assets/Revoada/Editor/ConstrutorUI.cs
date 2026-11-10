@@ -176,7 +176,7 @@ public static class ConstrutorUI
         hud.botaoReparo = hud.cartaoReparo.botao;
         hud.cartaoCofrinho = CriarCofrinho(loja, jogo, PosicaoCartao(porcos.Length + 1));
         hud.cartaoCofrinho.balao = balao;
-        hud.previa = CriarPrevia(loja, jogo, new Vector2(8f, PosicaoCartao(porcos.Length + 2).y - 28f));
+        hud.previa = CriarPrevia(loja, jogo, new Vector2(8f, PosicaoCartao(porcos.Length + 2).y - 30f));
         hud.painelPorco = CriarPainelPorco(barra, jogo, new Vector2(8f, -98f));
 
         // Sem Auto: o jogador decide toda vez quando a próxima onda começa.
@@ -206,7 +206,7 @@ public static class ConstrutorUI
     // Os cartões da loja, em 2 colunas: 0–3 os porcos, 4 o Reparo, 5 o Cofrinho.
     static readonly Vector2 TamanhoCartao = new Vector2(64f, 64f);
 
-    static Vector2 PosicaoCartao(int i) => new Vector2(10f + (i % 2) * 68f, -(i / 2) * 68f);
+    public static Vector2 PosicaoCartao(int i) => new Vector2(10f + (i % 2) * 68f, -(i / 2) * 68f);
 
     // A troca de fase (TrocaDeFase): a cortina sobre o mapa, o véu sobre a barra
     // (os dois bloqueiam os cliques enquanto a troca acontece) e o quadro que
@@ -379,14 +379,18 @@ public static class ConstrutorUI
         c.custo = preco;
         c.multiplicador = Selo(fundo.transform, "×1,25", new Color(1f, 0.9f, 0.45f));
         // Logo embaixo do cartão, em duas linhas: em quantas ondas o próximo nível se paga.
+        // Caixa com folga (34, não só as 2 linhas justas) e um pouco mais de
+        // distância do cartão de baixo (a prévia da onda): sem isso, a
+        // descida de uma letra como o "g" de "paga" encostava no painel da
+        // prévia, que é desenhado por cima (cartão seguinte) e cobria o texto.
         c.retorno = Texto(pai, "Retorno", "se paga em ~3 ondas", 12, TextAnchor.UpperCenter, TopoEsq,
-            new Vector2(posicao.x - 4f, posicao.y - TamanhoCartao.y - 1f), new Vector2(TamanhoCartao.x + 8f, 28f), Marrom, negrito: false);
+            new Vector2(posicao.x - 4f, posicao.y - TamanhoCartao.y - 2f), new Vector2(TamanhoCartao.x + 8f, 32f), Marrom, negrito: false);
         return c;
     }
 
-    static PreviaOnda CriarPrevia(Transform pai, Jogo jogo, Vector2 posicao)
+    public static PreviaOnda CriarPrevia(Transform pai, Jogo jogo, Vector2 posicao)
     {
-        var fundo = Imagem(pai, "Previa", Sprite("painel"), TopoEsq, posicao, new Vector2(136f, 104f), true);
+        var fundo = Imagem(pai, "Previa", Sprite("painel"), TopoEsq, posicao, new Vector2(136f, 80f), true);
         fundo.color = new Color(0.93f, 0.86f, 0.7f);
         var p = fundo.gameObject.AddComponent<PreviaOnda>();
         p.jogo = jogo;
@@ -399,18 +403,20 @@ public static class ConstrutorUI
         for (int i = 0; i < 4; i++)
         {
             var x = 6f + (i % 2) * 64f;
-            var y = -22f - (i / 2) * 23f;
+            var y = -22f - (i / 2) * 18f;
             p.icones[i] = Imagem(fundo.transform, "Icone" + i, null, TopoEsq, new Vector2(x, y), new Vector2(22f, 22f));
             p.icones[i].preserveAspect = true;
             p.icones[i].raycastTarget = false;
             p.quantidades[i] = Texto(fundo.transform, "Quantidade" + i, "×0", 13, TextAnchor.MiddleLeft, TopoEsq,
                 new Vector2(x + 24f, y - 2f), new Vector2(38f, 18f), Marrom);
         }
-        // Centrado: longe dos cantos arredondados do painel. Caixa alta o
-        // bastante pra "Novo: <pássaro> (rápido/couraça/solta filhotes)"
-        // quebrar em 2 linhas sem vazar pra fora do cartão.
-        p.aviso = Texto(fundo.transform, "Aviso", "", 12, TextAnchor.MiddleCenter, Topo, new Vector2(0f, -67f),
-            new Vector2(128f, 30f), new Color(0.72f, 0.2f, 0.16f));
+        // Centrado: longe dos cantos arredondados do painel. O texto do aviso
+        // nunca é o nome puro de um pássaro (PreviaOnda.Mostrar troca por uma
+        // versão mais curta, sem o detalhe entre parênteses, quando quebraria
+        // linha), então 1 linha de sobra já basta: o cartão não tem espaço
+        // pra 2, o botão de soltar a onda fica logo embaixo dele.
+        p.aviso = Texto(fundo.transform, "Aviso", "", 12, TextAnchor.MiddleCenter, Topo, new Vector2(0f, -62f),
+            new Vector2(128f, 16f), new Color(0.72f, 0.2f, 0.16f));
         return p;
     }
 

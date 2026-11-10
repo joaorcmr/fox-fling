@@ -51,7 +51,16 @@ public class PreviaOnda : MonoBehaviour
         int faseDaOnda = s.FaseDaOnda(numero);
         if (chefe) aviso.text = "CHEFE!";
         else if (faseDaOnda != s.Fase) aviso.text = "Mapa novo: " + s.Dados.fases[faseDaOnda - 1].nome;
-        else if (novos.Count > 0 && numero > 1) aviso.text = "Novo: " + Descrever(s.Dados.passaros[novos[0]]); // na onda 1 tudo é novo
+        else if (novos.Count > 0 && numero > 1) // na onda 1 tudo é novo
+        {
+            var p = s.Dados.passaros[novos[0]];
+            // "Novo: <nome> (<detalhe>)" quebra em 2 linhas pros detalhes mais
+            // compridos ("solta filhotes"), e aí o cartão só tem espaço certo
+            // pra 1 linha (o aviso fica colado no botão de soltar a onda
+            // embaixo). Sem o detalhe sempre cabe: sobra ele, não a tela.
+            aviso.text = "Novo: " + Descrever(p);
+            if (aviso.preferredWidth > aviso.rectTransform.rect.width) aviso.text = "Novo: " + p.nome;
+        }
         else aviso.text = "";
         aviso.fontStyle = chefe ? FontStyle.Bold : FontStyle.Normal; // em negrito, "Novo: Urubu (couraça)" não cabia na linha
     }
