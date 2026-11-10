@@ -809,9 +809,6 @@ def icone(tipo):
         t.elipse(19.5, 19.5, 3.4, 2.4, hexc("#FFF3C4"))
     elif tipo == "play":
         t.poligono([(15, 9), (39, 24), (15, 39)], creme)
-    elif tipo == "pausa":
-        t.retangulo(13, 10, 21, 38, creme, raio=2)
-        t.retangulo(27, 10, 35, 38, creme, raio=2)
     elif tipo == "rapido":
         t.poligono([(8, 11), (24, 24), (8, 37)], creme)
         t.poligono([(24, 11), (40, 24), (24, 37)], creme)
@@ -936,7 +933,7 @@ def gerar():
     # Interface
     salvar(caixa(96, 96, 18, hexc("#FFF6E0"), hexc("#F6E7C4"), hexc("#6B4A2E"), 4), "painel", feitos)
     salvar(caixa(64, 64, 14, hexc("#9BD36F"), hexc("#6FAE4A"), hexc("#3D5E28"), 3), "botao", feitos)
-    for tipo in ("vida", "moeda", "play", "pausa", "rapido", "menu", "cofrinho", "reiniciar"):
+    for tipo in ("vida", "moeda", "play", "rapido", "menu", "cofrinho", "reiniciar"):
         salvar(icone(tipo), "icone_" + tipo, feitos)
     salvar(logo(), "logo", feitos)
     for nome, cor in (("bronze", "#CD7F32"), ("prata", "#C3C7CF"), ("ouro", "#F2C14E")):

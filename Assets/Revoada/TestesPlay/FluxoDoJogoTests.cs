@@ -112,8 +112,26 @@ public class FluxoDoJogoTests
         Assert.IsFalse(controles.enabled, "teclas e cliques no mapa continuam valendo depois do fim");
         Assert.IsFalse(selecao.Colocando.HasValue, "o fantasma do porco continua no mapa");
         Assert.IsFalse(hud.botaoMenu.interactable, "o ☰ abre o menu de pausa por cima da tela de fim");
-        Assert.IsFalse(hud.botaoPausa.interactable, "o ⏸ pausa um jogo que já acabou");
         Assert.IsFalse(hud.botaoVelocidade.interactable);
         Assert.AreEqual($"Onda {s.Onda}/{s.TotalOndas}", hud.textoOnda.text, "a HUD mostra uma onda diferente da tela de fim");
+    }
+
+    // Um ícone de pausa avulso ao lado do ☰ pausava do mesmo jeito, por um
+    // caminho diferente: dois controles para a mesma coisa (issue #13). Só o
+    // ☰ fica na barra, e ele continua pausando ao abrir o menu.
+    [UnityTest]
+    public IEnumerator Hud_SoOMenuPausaPeloMouse_NaoTemBotaoDePausaAvulso()
+    {
+        yield return CarregarJogo();
+        var jogo = Jogo.Atual;
+        var hud = Object.FindAnyObjectByType<Hud>();
+
+        Assert.IsNull(hud.transform.Find("BarraLateral/BotaoPausa"), "ainda existe um botão de pausa avulso na barra");
+        Assert.IsFalse(jogo.Relogio.Pausado);
+
+        hud.botaoMenu.onClick.Invoke();
+
+        Assert.IsTrue(jogo.Relogio.Pausado, "o ☰ precisa continuar pausando ao abrir o menu");
+        Assert.IsTrue(hud.menuPausa.Aberto);
     }
 }

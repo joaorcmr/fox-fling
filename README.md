@@ -17,7 +17,7 @@ depois?
 | Comprar e colocar um porco | Clique no porco da loja (ou aperte **1** a **4**) e depois no mapa. Verde = pode, vermelho = não pode |
 | Soltar a onda | Botão **▶ Soltar a onda** ou **Espaço**. Com **Auto** ligado, as ondas seguem sozinhas |
 | Ver e melhorar um porco | Clique nele: o painel mostra os números, o próximo upgrade (**U**), a mira e **Vender** (**Delete**) |
-| Pausar / acelerar | **P** ou ⏸ · **F** ou o botão 1×/2×/3× |
+| Pausar / acelerar | **P** · **F** ou o botão 1×/2×/3× |
 | Menu | **Esc** (sem nada selecionado) ou ☰ |
 
 **Objetivo:** sobreviver às 30 ondas. A Torre começa com 100 de vida, e cada pássaro que chega nela tira um

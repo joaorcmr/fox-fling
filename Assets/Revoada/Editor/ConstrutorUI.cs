@@ -127,7 +127,11 @@ public static class ConstrutorUI
         var barra = Imagem(t, "BarraLateral", Sprite("painel"), TopoDir, Vector2.zero,
             new Vector2(LarguraBarra, ConstrutorRevoada.Altura), true).transform;
 
-        // Topo: vida, moedas e onda à esquerda; pausa, velocidade e menu à direita.
+        // Topo: vida, moedas e onda à esquerda; velocidade e menu à direita. O
+        // ☰ já pausa ao abrir o menu (Continuar/Reiniciar/Menu): um botão de
+        // pausa avulso ao lado dele pausava do mesmo jeito, por um caminho
+        // diferente — dois controles para a mesma coisa (ver #13). P continua
+        // pausando pelo teclado (documentado em "Como jogar").
         hud.iconeVida = Imagem(barra, "IconeVida", Sprite("icone_vida"), TopoEsq, new Vector2(10f, -8f), new Vector2(26f, 26f));
         hud.iconeVida.raycastTarget = false;
         hud.textoVida = Texto(barra, "Vida", "100", 22, TextAnchor.MiddleLeft, TopoEsq, new Vector2(40f, -8f), new Vector2(72f, 26f), Marrom);
@@ -135,15 +139,10 @@ public static class ConstrutorUI
         hud.textoMoedas = Texto(barra, "Moedas", "300", 22, TextAnchor.MiddleLeft, TopoEsq, new Vector2(40f, -38f), new Vector2(72f, 26f), Marrom);
         hud.textoOnda = Texto(barra, "Onda", "Onda 1/30", 14, TextAnchor.MiddleLeft, TopoEsq, new Vector2(10f, -68f), new Vector2(104f, 22f), Marrom);
 
-        hud.spritePausa = Sprite("icone_pausa");
-        hud.spritePlay = Sprite("icone_play");
-        hud.botaoPausa = Botao(barra, "BotaoPausa", null, TopoEsq, new Vector2(114f, -8f), new Vector2(28f, 28f));
-        hud.iconePausa = Imagem(hud.botaoPausa.transform, "Icone", hud.spritePausa, Centro, Vector2.zero, new Vector2(18f, 18f));
-        hud.iconePausa.raycastTarget = false;
-        hud.botaoVelocidade = Botao(barra, "BotaoVelocidade", null, TopoEsq, new Vector2(114f, -38f), new Vector2(28f, 28f));
+        hud.botaoVelocidade = Botao(barra, "BotaoVelocidade", null, TopoEsq, new Vector2(114f, -8f), new Vector2(28f, 28f));
         hud.textoVelocidade = Texto(hud.botaoVelocidade.transform, "Texto", "1×", 13, TextAnchor.MiddleCenter, Centro,
             new Vector2(0f, 1f), new Vector2(28f, 28f), Creme, contorno: true);
-        hud.botaoMenu = Botao(barra, "BotaoMenu", Sprite("icone_menu"), TopoEsq, new Vector2(114f, -68f), new Vector2(28f, 28f));
+        hud.botaoMenu = Botao(barra, "BotaoMenu", Sprite("icone_menu"), TopoEsq, new Vector2(114f, -38f), new Vector2(28f, 28f));
 
         // A loja (porcos, Cofrinho e prévia) e, no mesmo lugar, o painel do porco selecionado.
         var loja = Retangulo(barra, "Loja", TopoEsq, new Vector2(0f, -98f), new Vector2(LarguraBarra, 304f));

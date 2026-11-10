@@ -16,10 +16,6 @@ public class Hud : MonoBehaviour
     public Text textoVida;
     public Text textoMoedas;
     public Text textoOnda;
-    public Button botaoPausa;
-    public Image iconePausa;
-    public Sprite spritePausa;
-    public Sprite spritePlay;
     public Button botaoVelocidade;
     public Text textoVelocidade;
     public Button botaoMenu;
@@ -54,7 +50,6 @@ public class Hud : MonoBehaviour
         foreach (var c in cartoes) c.Configurar(jogo);
         botaoSoltar.onClick.AddListener(() => s.SoltarOnda());
         botaoAuto.onClick.AddListener(() => s.Auto = !s.Auto);
-        botaoPausa.onClick.AddListener(() => jogo.Relogio.AlternarPausa());
         botaoVelocidade.onClick.AddListener(() => jogo.Relogio.ProximaVelocidade());
         botaoMenu.onClick.AddListener(() => menuPausa.Abrir());
 
@@ -72,7 +67,7 @@ public class Hud : MonoBehaviour
         };
         s.TorreAtingida += dano => pulsoVida = 1f;
         // Jogo acabado: pausar, acelerar e abrir o menu de pausa não fazem mais sentido.
-        s.FimDeJogo += venceu => botaoPausa.interactable = botaoVelocidade.interactable = botaoMenu.interactable = false;
+        s.FimDeJogo += venceu => botaoVelocidade.interactable = botaoMenu.interactable = false;
         moedasNaTela = s.Moedas;
         corTexto = textoVida.color;
 
@@ -117,7 +112,6 @@ public class Hud : MonoBehaviour
         int numero = ondaAtual ? s.Onda : Mathf.Min(s.Onda + 1, s.TotalOndas);
         textoOnda.text = $"Onda {numero}/{s.TotalOndas}";
 
-        iconePausa.sprite = jogo.Relogio.Pausado ? spritePlay : spritePausa;
         textoVelocidade.text = jogo.Relogio.Velocidade + "×";
         textoAuto.text = s.Auto ? "Auto: ligado" : "Auto: desligado";
 
