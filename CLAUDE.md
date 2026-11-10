@@ -45,6 +45,10 @@ Com o Editor fechado (o Unity não abre o mesmo projeto duas vezes), use o modo 
 
 ## Arquitetura
 
+O README (seção "Padrões de projeto") mapeia onde cada padrão clássico de design de jogos (State, Observer,
+Flyweight, Prototype, Singleton, Game Loop, Update Method, Component, ECS) aparece nesta arquitetura — a maioria
+já estava aqui antes da issue #17 pedir isso explicitamente; a seção só nomeia.
+
 ### Simulação em C# puro; o Unity só escuta
 
 O jogo inteiro roda na classe `Simulacao`, que não é `MonoBehaviour`:

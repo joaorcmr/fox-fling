@@ -109,11 +109,32 @@ ver [Estrutura](#estrutura)) chamadas pelos componentes do Unity a cada passo. R
 | **Input Manager** e `EventSystem.IsPointerOverGameObject` (clique na loja não vaza para o mapa) | `Partida/Entrada/Controles.cs` |
 | **PlayerPrefs** (recorde, vitórias, dicas vistas, volumes) | `Progresso/`, `Sons/Preferencias.cs` |
 | **Editor scripting**: menu Fox Tower (`MenuItem`), `AssetDatabase`, `PrefabUtility`, `EditorSceneManager`, `TextureImporter`, `SerializedObject` | `Editor/` |
-| **Unity Test Framework**: 135 testes EditMode (incluindo os robôs de balanceamento) e 10 testes PlayMode, que carregam a cena Jogo (ou o Menu) de verdade (pausa, escurecer entre cenas, fim de jogo, menu principal, troca de fase) | `Testes/`, `TestesPlay/` |
+| **Unity Test Framework**: 137 testes EditMode (incluindo os robôs de balanceamento) e 10 testes PlayMode, que carregam a cena Jogo (ou o Menu) de verdade (pausa, escurecer entre cenas, fim de jogo, menu principal, troca de fase) | `Testes/`, `TestesPlay/` |
 | **Build WebGL** (`BuildPipeline`) | `ConstrutorRevoada.BuildWebGL` |
 
 Durante o Play, selecione um pássaro ou um porco na Hierarchy: o Inspector mostra o estado dele ao vivo
 (vida, distância na trilha, nível, alcance).
+
+## Padrões de projeto (issue #17)
+
+A arquitetura já usa a maioria destes padrões desde o início (são a razão de várias decisões do
+[Onde está o Unity](#onde-está-o-unity) e da [Arquitetura](#arquitetura) do `CLAUDE.md`); esta seção só nomeia
+onde cada um mora, para quem está estudando o assunto.
+
+| Padrão | Onde no Fox Tower |
+|---|---|
+| **State** | `EstadoJogo` (`Partida/Regras/EstadoJogo.cs`): um enum fechado — `Preparando`, `EmOnda`, `Intervalo`, `Vitoria`, `Derrota` — e os métodos de `Simulacao` só deixam agir ou transicionar de acordo com o estado atual (por exemplo, `Comprar`/`ComprarCofrinho`/`ComprarReparo` recusam com `Resultado.OndaEmAndamento` fora de `Preparando`/`Intervalo`). É a variante "state como enum" do padrão: mais simples que uma classe por estado, e suficiente porque os estados do Fox Tower não têm comportamento próprio além de travar comandos. |
+| **Observer** | Os eventos em C# da `Simulacao` (`PassaroEstourou`, `TorreAtingida`, `OndaComecou`, `FimDeJogo`, `FaseComecou`...) — 21 ao todo. A simulação nunca conhece quem está ouvindo: `GerenteVisuais`, `SonsDaPartida`, `Hud` e `TelaFim` se inscrevem e reagem, cada um à sua parte, sem a `Simulacao` saber que a camada Unity existe (por isso ela compila sozinha no assembly `Revoada.Nucleo`). |
+| **Flyweight** | `DadosPorco`/`DadosPassaro` (um `.asset` por espécie, carregado por `CatalogoTipos`/`DadosJogo.porcos`) é o objeto compartilhado: todo `Porco` da mesma espécie guarda a mesma referência em `Porco.Dados` (`Porcos/Regras/Porco.cs:7`) em vez de copiar nome, custo, raio e os 3 níveis de melhoria para cada unidade colocada no mapa. Só o que muda de porco para porco (posição, vida/nível atual, recarga, mira) fica na instância. |
+| **Prototype** | `Atributos.Copia()` (`Porcos/Regras/DadosPorco.cs:47`, um `MemberwiseClone`). Em vez de montar um `Atributos` novo campo a campo, o jogo clona o do nível/melhoria (o "protótipo"): `Porco` nasce com `dados.nivel1.Copia()`, melhorar clona o próximo nível (`Simulacao.Porcos.cs:75`) e o tiro clona os atributos do porco na hora de atirar para aplicar bônus de aura sem alterar o original (`Simulacao.Combate.cs:39`). |
+| **Singleton** | `Sons.Instancia` (`Sons/Sons.cs`): um só `Awake` grava a referência estática, e quem quer tocar um som só verifica `Sons.Instancia != null` (ela pode não existir ainda no primeiro quadro do Menu). `Jogo.Atual` segue a mesma ideia para achar a partida em andamento a partir de qualquer lugar (os robôs de balanceamento e os testes PlayMode usam os dois). |
+| **Game Loop** | `Jogo.FixedUpdate() => Sim.Passo()` (`Partida/Jogo.cs`): um passo de tempo fixo (1/60 s) sempre na mesma ordem (nascimentos → pássaros andam → porcos atiram → tiros voam → limpeza → fim de onda), independente da taxa de quadros da tela — por isso os robôs jogam partidas inteiras sem um único `Update` do Unity. |
+| **Update Method** | Cada visual atualiza a si mesmo a cada quadro: `VisualPorco.Atualizar()`, `VisualPassaro`, `Hud.Update()`, `GerenteVisuais.Update()` (interpola entre o último passo fixo e o atual). Quem builda a lista de "quem existe" é o `GerenteVisuais`, ouvindo os eventos da simulação (Observer); cada objeto só cuida do próprio desenho. |
+| **Component** | O próprio `GameObject` do Unity: um porco é `VisualPorco` + `SpriteRenderer` (corpo, arma, acessório) + `CirculoAlcance` + `Transform`, montados por `ConstrutorPrefabs` em vez de uma classe `Porco3D` monolítica. Trocar o comportamento (um porco novo, uma aura diferente) é compor outro conjunto de componentes, não herdar de outra classe. |
+| **Entity Component System** | O Fox Tower usa uma variante leve, não o ECS/DOTS do Unity: as "entidades" são dados puros sem comportamento próprio (`Porco`, `Passaro`, `Projetil`, todas em `Regras/`, só campos), e quem processa todo mundo de uma vez são os métodos "sistema" dos arquivos parciais de `Simulacao` (`Simulacao.Passaros.cs` move todos os pássaros, `Simulacao.Combate.cs` decide quem atira em quem, `Simulacao.Ondas.cs` cuida do cronômetro de onda) — cada um iterando a lista certa a cada `Passo()`. Um ECS de verdade (arrays contíguos, jobs paralelos) ganharia desempenho que um tower defense de ~600×480 com algumas dezenas de pássaros não precisa, e complicaria demais os robôs de balanceamento e os testes determinísticos; por isso o projeto fica com "dados sem comportamento + sistemas que iteram listas", que já entrega a mesma separação (dado ≠ lógica) sem o custo. |
+
+`Assets/Revoada/Testes/PadroesTests.cs` confere o Flyweight (dois porcos da mesma espécie compartilham o mesmo
+`DadosPorco`) e o Prototype (`Copia()` devolve um objeto separado, com os mesmos valores).
 
 ## Balanceamento: robôs que jogam o jogo
 
