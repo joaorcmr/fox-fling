@@ -2,7 +2,7 @@ using System.Linq;
 using NUnit.Framework;
 using UnityEngine;
 
-// Confere os DADOS de verdade do jogo (os .asset em Assets/Revoada/Dados): se
+// Confere os DADOS de verdade do jogo (os .asset das pastas Dados de cada assunto): se
 // alguém mexer num número no Inspector e criar uma onda impossível de ler ou um
 // obstáculo em cima da trilha, estes testes avisam.
 public class DadosTests

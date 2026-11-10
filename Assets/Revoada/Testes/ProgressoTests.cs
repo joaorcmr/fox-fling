@@ -1,8 +1,8 @@
 using NUnit.Framework;
 
-// O que fica salvo entre partidas (PlayerPrefs): melhor onda, vitórias, dicas
-// já vistas e volumes. Os testes usam um prefixo próprio para não apagar o
-// progresso de verdade de quem joga no mesmo computador.
+// O que fica salvo entre partidas (PlayerPrefs): melhor onda, vitórias e dicas
+// já vistas (Progresso) e volumes (Preferencias). Os testes usam um prefixo
+// próprio para não apagar o progresso de verdade de quem joga no mesmo computador.
 public class ProgressoTests
 {
     string prefixoOriginal;
@@ -10,8 +10,8 @@ public class ProgressoTests
     [SetUp]
     public void Isolar()
     {
-        prefixoOriginal = Progresso.Prefixo;
-        Progresso.Prefixo = "teste_revoada_";
+        prefixoOriginal = Salvamento.Prefixo;
+        Salvamento.Prefixo = "teste_revoada_";
         Progresso.Zerar();
         ApagarVolumes();
     }
@@ -21,15 +21,15 @@ public class ProgressoTests
     {
         Progresso.Zerar();
         ApagarVolumes();
-        Progresso.Prefixo = prefixoOriginal;
+        Salvamento.Prefixo = prefixoOriginal;
     }
 
     // O Zerar() de propósito não mexe nos volumes (são preferência, não
     // progresso), então o teste limpa os que ele mesmo grava.
     static void ApagarVolumes()
     {
-        UnityEngine.PlayerPrefs.DeleteKey(Progresso.Prefixo + "volume_efeitos");
-        UnityEngine.PlayerPrefs.DeleteKey(Progresso.Prefixo + "volume_musica");
+        UnityEngine.PlayerPrefs.DeleteKey(Salvamento.Prefixo + "volume_efeitos");
+        UnityEngine.PlayerPrefs.DeleteKey(Salvamento.Prefixo + "volume_musica");
     }
 
     [Test]
@@ -65,12 +65,13 @@ public class ProgressoTests
     [Test]
     public void Volume_GuardaENaoSaiDoIntervalo()
     {
-        Assert.AreEqual(0.8f, Progresso.Volume("efeitos", 0.8f), 1e-5f); // padrão
-        Progresso.SalvarVolume("efeitos", 0.3f);
-        Progresso.SalvarVolume("musica", 7f);
+        Assert.AreEqual(0.8f, Preferencias.Volume(Preferencias.Efeitos), 1e-5f); // padrão
+        Assert.AreEqual(0.5f, Preferencias.Volume(Preferencias.Musica), 1e-5f);
+        Preferencias.SalvarVolume(Preferencias.Efeitos, 0.3f);
+        Preferencias.SalvarVolume(Preferencias.Musica, 7f);
 
-        Assert.AreEqual(0.3f, Progresso.Volume("efeitos", 0.8f), 1e-5f);
-        Assert.AreEqual(1f, Progresso.Volume("musica", 0.5f), 1e-5f);
+        Assert.AreEqual(0.3f, Preferencias.Volume(Preferencias.Efeitos), 1e-5f);
+        Assert.AreEqual(1f, Preferencias.Volume(Preferencias.Musica), 1e-5f);
     }
 
     [Test]

@@ -5,7 +5,7 @@ Tower defense 2D com visão de cima, feito em **Unity 6**. Bandos de pássaros v
 decide a toda hora: gastar em mais defesa agora ou no **Ninho de Penas**, que faz cada pássaro render mais
 depois?
 
-- **Autor:** Joao Ricardo Ribeiro ([@joaorcmr](https://github.com/joaorcmr)), Insper, Jogos Digitais
+- **Disciplina:** Jogos Digitais, Insper
 - **Resolução:** 600×480
 - **Arte do urubu e da arara-azul:** Iran. O resto da arte e todos os sons são gerados por código (`Tools/`).
 - Design e plano: `docs/superpowers/specs/2026-11-07-revoada-design.md` e `docs/superpowers/plans/2026-11-07-revoada.md`
@@ -58,25 +58,25 @@ paga**: income comprado cedo rende muito, e comprado tarde não rende nada.
 
 ## Onde está o Unity
 
-O jogo inteiro é um projeto Unity 6. As regras ficam em classes C# (`Scripts/Nucleo`) chamadas pelos
-componentes do Unity a cada passo. Recurso por recurso:
+O jogo inteiro é um projeto Unity 6. As regras ficam em classes C# puras (as pastas `Regras/` de cada assunto,
+ver [Estrutura](#estrutura)) chamadas pelos componentes do Unity a cada passo. Recurso por recurso:
 
 | Recurso do Unity | Onde |
 |---|---|
-| **Ciclo do jogo**: `FixedUpdate` avança a simulação no passo fixo (`Time.fixedDeltaTime` = 1/60 s, gravado no TimeManager); pausa e 1×/2×/3× são o `Time.timeScale` | `Scripts/Jogo.cs` |
-| **Cenas** (Menu e Jogo), Build Settings, `SceneManager` e o escurecer entre telas (`DontDestroyOnLoad`) | `Cenas/`, `Scripts/Transicao.cs` |
-| **Prefabs** (pássaro, porco, tiro, texto, efeitos) e **pool** de objetos | `Prefabs/`, `Scripts/Visual/Pool.cs` |
-| **ScriptableObjects** com os números do jogo, editáveis no Inspector (`[CreateAssetMenu]`) | `Dados/`, `Scripts/Dados/` |
+| **Ciclo do jogo**: `FixedUpdate` avança a simulação no passo fixo (`Time.fixedDeltaTime` = 1/60 s, gravado no TimeManager); pausa e 1×/2×/3× são o `Time.timeScale` | `Partida/Jogo.cs`, `Partida/RelogioPartida.cs` |
+| **Cenas** (Menu e Jogo), Build Settings, `SceneManager` e o escurecer entre telas (`DontDestroyOnLoad`) | `Menu/Menu.unity`, `Partida/Jogo.unity`, `Compartilhado/Navegacao/` |
+| **Prefabs** (pássaro, porco, tiro, texto, efeitos) e **pool** de objetos | `Prefabs/` de cada assunto, `Compartilhado/Pool.cs` |
+| **ScriptableObjects** com os números do jogo, editáveis no Inspector (`[CreateAssetMenu]`) | `Dados/` de cada assunto (a classe e os `.asset`) |
 | **SpriteRenderer**, **Sorting Group** e o eixo de ordenação da câmera (Y) para a visão de cima | `Editor/ConstrutorPrefabs.cs`, `Editor/ConstrutorCenas.cs` |
-| **LineRenderer**: a trilha de terra, com textura repetida | `Scripts/Visual/VisualMapa.cs` |
+| **LineRenderer**: a trilha de terra, com textura repetida | `Mapa/Visual/VisualMapa.cs` |
 | **Gizmos** na Scene view (trilha, obstáculos, alcance do porco selecionado) | `VisualMapa.OnDrawGizmos`, `VisualPorco.OnDrawGizmosSelected` |
-| **ParticleSystem** (penas na cor de cada pássaro, poeira, brilho) com `Emit` | `Scripts/Visual/Efeitos.cs` |
-| **AudioSource** (vozes de efeito, música e ambiente em loop, volume) | `Scripts/Sons.cs` |
-| **uGUI**: Canvas e CanvasScaler 600×480, Button, Slider, CanvasGroup, Image Filled, eventos de ponteiro | `Scripts/UI/`, `Editor/ConstrutorUI.cs` |
-| **Input Manager** e `EventSystem.IsPointerOverGameObject` (clique na loja não vaza para o mapa) | `Scripts/Entrada/Controles.cs` |
-| **PlayerPrefs** (recorde, vitórias, dicas vistas, volumes) | `Scripts/Progresso.cs` |
+| **ParticleSystem** (penas na cor de cada pássaro, poeira, brilho) com `Emit` | `Compartilhado/Efeitos/Efeitos.cs` |
+| **AudioSource** (vozes de efeito, música e ambiente em loop, volume) | `Sons/Sons.cs`, `Sons/SonsDaPartida.cs` |
+| **uGUI**: Canvas e CanvasScaler 600×480, Button, Slider, CanvasGroup, Image Filled, eventos de ponteiro | `Interface/` de cada assunto, `Editor/ConstrutorUI.cs` |
+| **Input Manager** e `EventSystem.IsPointerOverGameObject` (clique na loja não vaza para o mapa) | `Partida/Entrada/Controles.cs` |
+| **PlayerPrefs** (recorde, vitórias, dicas vistas, volumes) | `Progresso/`, `Sons/Preferencias.cs` |
 | **Editor scripting**: menu Revoada (`MenuItem`), `AssetDatabase`, `PrefabUtility`, `EditorSceneManager`, `TextureImporter`, `SerializedObject` | `Editor/` |
-| **Unity Test Framework**: 93 testes EditMode (incluindo os robôs de balanceamento) e 3 testes PlayMode, que carregam a cena Jogo de verdade (pausa, escurecer entre cenas, fim de jogo) | `Testes/`, `TestesPlay/` |
+| **Unity Test Framework**: 101 testes EditMode (incluindo os robôs de balanceamento) e 3 testes PlayMode, que carregam a cena Jogo de verdade (pausa, escurecer entre cenas, fim de jogo) | `Testes/`, `TestesPlay/` |
 | **Build WebGL** (`BuildPipeline`) | `ConstrutorRevoada.BuildWebGL` |
 
 Durante o Play, selecione um pássaro ou um porco na Hierarchy: o Inspector mostra o estado dele ao vivo
@@ -102,8 +102,9 @@ com pouca folga, então depois de mexer em qualquer número rode os robôs (ou o
 
 ## Mexendo nos números
 
-- **No Inspector:** `Assets/Revoada/Dados/` tem um asset para cada pássaro e cada porco (com os upgrades), as
-  ondas (`Ondas.asset`), a economia (`Economia.asset`) e o mapa (`Fazenda.asset`). Mude e dê Play.
+- **No Inspector:** a pasta `Dados/` de cada assunto tem os assets: um para cada pássaro (`Passaros/Dados`) e
+  cada porco, com os upgrades (`Porcos/Dados`), as ondas (`Ondas/Dados/Ondas.asset`), a economia
+  (`Penas/Dados/Economia.asset`) e o mapa (`Mapa/Dados/Fazenda.asset`). Mude e dê Play.
 - **Menu Revoada:**
   - *Reconstruir tudo*: gera de novo prefabs e cenas a partir do código. Os números dos assets são mantidos.
   - *Restaurar números padrão*: volta os assets para os números de `Editor/DefinicoesPadrao.cs`.
@@ -123,25 +124,67 @@ creme contornado.
 
 ## Estrutura
 
+As pastas têm o nome do que o jogo **é** (pássaros, porcos, ondas, penas, Torre), e não do tipo de arquivo
+(*Screaming Architecture*): quem abre `Assets/Revoada` vê de cara que é um tower defense de pássaros contra
+porcos, e tudo sobre um assunto (regra, números, desenho, tela) fica junto.
+
 ```
 Assets/Revoada/
-├── Arte/      sprites PNG (gerados por Tools/gerar_arte.py; Arte/Fontes = urubu e arara do Iran)
-├── Audio/     sons e loops WAV (gerados por Tools/gerar_sons.py)
-├── Cenas/     Menu e Jogo
-├── Dados/     ScriptableObjects com todos os números
-├── Editor/    construtor (menu Revoada), números padrão e os robôs
-├── Prefabs/   pássaro, porco, tiro, texto flutuante e efeitos
-├── Scripts/   Nucleo/ (as regras, em C# puro), Visual/, UI/, Entrada/
-├── Testes/    testes EditMode (Window > General > Test Runner)
-└── TestesPlay/ testes PlayMode (carregam a cena Jogo e rodam quadros)
-Tools/         geradores de arte e som (Python 3 + Pillow)
+├── Passaros/      o pássaro na simulação, os tipos de pássaro, o desenho e a barra do chefe
+├── Porcos/        o porco, onde pode ficar, upgrades e auras; a loja, o painel e o porco fantasma
+├── Combate/       tiros, mira e golpes (lentidão, empurrão, explosão)
+├── Ondas/         o gerador de ondas, as 30 ondas e a prévia da próxima
+├── Penas/         a economia e o Ninho de Penas
+├── Mapa/          a trilha, os obstáculos e o desenho do mapa
+├── Torre/         a vida da Torre e a Torre apanhando
+├── Partida/       a simulação (estado e ordem do passo), o Jogo que monta a partida, relógio, seleção do
+│                  jogador, teclado e mouse, HUD, pausa e tela de fim; cena Jogo
+├── Menu/          a tela de título e os pássaros de enfeite; cena Menu
+├── Dicas/         os textos das dicas e o balão que as mostra
+├── Sons/          o Sons (vozes e loops), os sons da partida, os volumes e os clipes WAV
+├── Progresso/     recorde, vitórias e dicas vistas (PlayerPrefs)
+├── Compartilhado/ efeitos, pool, troca de cena, formatação de números, arte e materiais
+├── Editor/        o construtor (menu Revoada), os números padrão e os robôs
+├── Testes/        testes EditMode (Window > General > Test Runner)
+└── TestesPlay/    testes PlayMode (carregam a cena Jogo e rodam quadros)
+Tools/             geradores de arte (→ Compartilhado/Arte) e de som (→ Sons/Clipes), em Python 3 + Pillow
 ```
+
+Dentro de cada assunto, cada pasta cuida de uma coisa só (*separação de responsabilidades*):
+
+| Pasta | O que tem |
+|---|---|
+| `Regras/` | C# puro: o estado e as regras. A `Simulacao` é `partial` e cada assunto guarda a sua parte (`Simulacao.Ondas.cs`, `Simulacao.Torre.cs`...) |
+| `Dados/` | os ScriptableObjects: a classe e os `.asset` com os números |
+| `Visual/` | o que desenha no mapa |
+| `Interface/` | a barra lateral, as telas e os botões (uGUI) |
+| `Prefabs/` | os prefabs que o construtor gera |
+
+Todas as pastas `Regras/` compilam num assembly só, o `Revoada.Nucleo` (definido em `Partida/Regras`; as
+outras entram nele por um `.asmref`). Esse assembly não enxerga o resto do jogo, então o compilador não deixa
+uma regra depender de desenho, som ou tela: o resto (assembly `Revoada`) é que escuta os eventos da simulação.
+
+Na partida, cada responsabilidade é uma classe, e o `Jogo` só as junta:
+
+| Classe | Faz |
+|---|---|
+| `Simulacao` | as regras do jogo, sem Unity |
+| `Jogo` | monta a partida e chama o `Passo()` no `FixedUpdate` |
+| `RelogioPartida` | pausa e velocidade (`Time.timeScale`) |
+| `Selecao` | o que o jogador tem na mão (um porco da loja ou um porco selecionado) |
+| `Controles` | lê teclado e mouse e transforma em comandos |
+| `FantasmaColocacao` | desenha o porco que está sendo colocado |
+| `GerenteVisuais` | mantém um GameObject para cada pássaro, porco e tiro |
+| `VisualTorre` | a Torre tremendo quando apanha |
+| `SonsDaPartida` | os sons do que acontece no mapa |
+| `FimDePartida` | guarda o resultado no Progresso (a tela de fim só mostra) |
+| `Navegacao` | os nomes das cenas e as trocas de cena |
 
 ## Abrindo o projeto
 
 1. Unity **6000.6.4f1**
-2. Abra a pasta `New Unity Project` pelo Unity Hub
-3. Cena inicial: `Assets/Revoada/Cenas/Menu` (o jogo em si é `Jogo`)
+2. No Unity Hub, *Add project from disk* e escolha a pasta do repositório (a que tem `Assets/`)
+3. Cena inicial: `Assets/Revoada/Menu/Menu` (o jogo em si é `Assets/Revoada/Partida/Jogo`)
 4. Na Game view, escolha o tamanho **Revoada 600x480**
 
 O Fox Fling, o jogo anterior deste repositório, continua no histórico do git.

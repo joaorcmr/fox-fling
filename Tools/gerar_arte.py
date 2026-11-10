@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Gera toda a arte do Revoada em PNG (Assets/Revoada/Arte).
+"""Gera toda a arte do Revoada em PNG (Assets/Revoada/Compartilhado/Arte).
 
 Uso:  python3 Tools/gerar_arte.py [pasta_contato]
 
@@ -21,7 +21,7 @@ import sys
 from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SAIDA = os.path.join(RAIZ, "Assets", "Revoada", "Arte")
+SAIDA = os.path.join(RAIZ, "Assets", "Revoada", "Compartilhado", "Arte")
 FONTES = os.path.join(SAIDA, "Fontes")
 S = 4  # supersampling
 

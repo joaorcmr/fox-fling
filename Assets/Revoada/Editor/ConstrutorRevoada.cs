@@ -86,7 +86,7 @@ public static class ConstrutorRevoada
     static void RestaurarNumerosPadrao()
     {
         ConstrutorDados.GarantirDados(true);
-        Debug.Log("Revoada: números padrão restaurados (Assets/Revoada/Dados)");
+        Debug.Log("Revoada: números padrão restaurados (as pastas Dados de cada assunto)");
     }
 
     public static void ConfigurarProjeto()

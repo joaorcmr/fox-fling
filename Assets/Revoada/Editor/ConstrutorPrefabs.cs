@@ -2,23 +2,23 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-// Monta os prefabs por código (Assets/Revoada/Prefabs).
+// Monta os prefabs por código, cada um na pasta Prefabs do seu assunto.
 public static class ConstrutorPrefabs
 {
-    public const string Pasta = ConstrutorAssets.Raiz + "/Prefabs";
-    public const string PastaEfeitos = Pasta + "/Efeitos";
-    public const string CaminhoPassaro = Pasta + "/Passaro.prefab";
-    public const string CaminhoPorco = Pasta + "/Porco.prefab";
-    public const string CaminhoProjetil = Pasta + "/Projetil.prefab";
-    public const string CaminhoTexto = Pasta + "/TextoFlutuante.prefab";
+    const string Raiz = ConstrutorAssets.Raiz;
+    public const string PastaEfeitos = Raiz + "/Compartilhado/Efeitos/Prefabs";
+    public const string CaminhoPassaro = Raiz + "/Passaros/Prefabs/Passaro.prefab";
+    public const string CaminhoPorco = Raiz + "/Porcos/Prefabs/Porco.prefab";
+    public const string CaminhoProjetil = Raiz + "/Combate/Prefabs/Projetil.prefab";
+    public const string CaminhoTexto = PastaEfeitos + "/TextoFlutuante.prefab";
     public const string CaminhoLama = PastaEfeitos + "/Lama.prefab";
 
     public static string CaminhoParticulas(string nome) => $"{PastaEfeitos}/{nome}.prefab";
 
     public static void Tudo()
     {
-        ConstrutorAssets.GarantirPasta(Pasta);
-        ConstrutorAssets.GarantirPasta(PastaEfeitos);
+        foreach (var caminho in new[] { CaminhoPassaro, CaminhoPorco, CaminhoProjetil, CaminhoTexto })
+            ConstrutorAssets.GarantirPasta(caminho.Substring(0, caminho.LastIndexOf('/')));
         CriarPassaro();
         CriarPorco();
         CriarProjetil();

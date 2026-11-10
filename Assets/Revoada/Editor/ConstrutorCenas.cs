@@ -2,13 +2,12 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-// Monta as cenas (Assets/Revoada/Cenas) e as Build Settings: Menu (a
-// primeira, onde o jogo abre) e Jogo.
+// Monta as cenas e as Build Settings: Menu (Menu/Menu.unity, a primeira, onde
+// o jogo abre) e Jogo (Partida/Jogo.unity).
 public static class ConstrutorCenas
 {
-    public const string Pasta = ConstrutorAssets.Raiz + "/Cenas";
-    public const string CenaMenu = Pasta + "/Menu.unity";
-    public const string CenaJogo = Pasta + "/Jogo.unity";
+    public const string CenaMenu = ConstrutorAssets.Raiz + "/Menu/" + Navegacao.CenaMenu + ".unity";
+    public const string CenaJogo = ConstrutorAssets.Raiz + "/Partida/" + Navegacao.CenaJogo + ".unity";
 
     // A câmera do jogo mostra x de 0 a 18,75 e y de 0 a 15: o mapa (x até 14) e,
     // à direita, o espaço da barra lateral. A do menu fica centrada no mapa.
@@ -17,7 +16,8 @@ public static class ConstrutorCenas
 
     public static void Tudo()
     {
-        ConstrutorAssets.GarantirPasta(Pasta);
+        ConstrutorAssets.GarantirPasta(ConstrutorAssets.Raiz + "/Menu");
+        ConstrutorAssets.GarantirPasta(ConstrutorAssets.Raiz + "/Partida");
         CriarCenaJogo();
         CriarCenaMenu();
         ConfigurarBuild();
@@ -28,7 +28,7 @@ public static class ConstrutorCenas
         var cena = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
         var camera = CriarCamera(PosicaoCamera);
         camera.gameObject.AddComponent<TremorCamera>();
-        CriarSons();
+        var sons = CriarSons();
 
         var jogo = new GameObject("Jogo").AddComponent<Jogo>();
         jogo.passaros = ConstrutorDados.Passaros();
@@ -37,7 +37,13 @@ public static class ConstrutorCenas
         jogo.economia = ConstrutorDados.Economia();
         jogo.mapa = ConstrutorDados.Fazenda();
 
+        // Os sons do que acontece no mapa ficam junto do Sons da cena.
+        sons.gameObject.AddComponent<SonsDaPartida>().jogo = jogo;
+
         var mapa = CriarMapa(jogo.mapa);
+        var torre = new GameObject("Torre").AddComponent<VisualTorre>();
+        torre.jogo = jogo;
+        torre.torre = mapa.torreDesenhada;
 
         var efeitos = new GameObject("Efeitos").AddComponent<Efeitos>();
         efeitos.penas = Instanciar<ParticleSystem>(ConstrutorPrefabs.CaminhoParticulas("Penas"), efeitos.transform);
@@ -52,16 +58,18 @@ public static class ConstrutorCenas
         visuais.prefabPorco = AssetDatabase.LoadAssetAtPath<VisualPorco>(ConstrutorPrefabs.CaminhoPorco);
         visuais.prefabProjetil = AssetDatabase.LoadAssetAtPath<VisualProjetil>(ConstrutorPrefabs.CaminhoProjetil);
         visuais.efeitos = efeitos;
-        visuais.torre = mapa.torreDesenhada;
 
         var controles = new GameObject("Controles").AddComponent<Controles>();
         controles.jogo = jogo;
         controles.cam = camera;
-        controles.fantasma = ConstrutorPrefabs.Sprite(controles.transform, "Fantasma", null, 40);
-        controles.circuloFantasma = ConstrutorPrefabs.Circulo(controles.transform, "CirculoFantasma");
+        var fantasma = new GameObject("FantasmaColocacao").AddComponent<FantasmaColocacao>();
+        fantasma.transform.SetParent(controles.transform, false);
+        fantasma.jogo = jogo;
+        fantasma.sprite = ConstrutorPrefabs.Sprite(fantasma.transform, "Fantasma", null, 40);
+        fantasma.circulo = ConstrutorPrefabs.Circulo(fantasma.transform, "CirculoFantasma");
+        controles.fantasma = fantasma;
 
         ConstrutorUI.CriarHud(null, jogo, controles, jogo.porcos, efeitos);
-        visuais.controles = controles;
 
         EditorSceneManager.SaveScene(cena, CenaJogo);
     }

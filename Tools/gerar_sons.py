@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Gera os efeitos sonoros do Revoada em WAV (Assets/Revoada/Audio).
+"""Gera os efeitos sonoros do Revoada em WAV (Assets/Revoada/Sons/Clipes).
 
 Uso:  python3 Tools/gerar_sons.py
 
@@ -14,7 +14,7 @@ import struct
 import wave
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SAIDA = os.path.join(RAIZ, "Assets", "Revoada", "Audio")
+SAIDA = os.path.join(RAIZ, "Assets", "Revoada", "Sons", "Clipes")
 TAXA = 22050
 
 

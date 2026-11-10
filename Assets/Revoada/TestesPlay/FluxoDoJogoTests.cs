@@ -17,8 +17,8 @@ public class FluxoDoJogoTests
     {
         // Dicas vistas, recorde e volumes ficam em chaves de teste: o progresso
         // de quem joga no Editor não muda.
-        prefixoOriginal = Progresso.Prefixo;
-        Progresso.Prefixo = "teste_revoada_";
+        prefixoOriginal = Salvamento.Prefixo;
+        Salvamento.Prefixo = "teste_revoada_";
         Progresso.Zerar();
     }
 
@@ -26,9 +26,9 @@ public class FluxoDoJogoTests
     public void Restaurar()
     {
         Progresso.Zerar();
-        PlayerPrefs.DeleteKey(Progresso.Prefixo + "volume_efeitos");
-        PlayerPrefs.DeleteKey(Progresso.Prefixo + "volume_musica");
-        Progresso.Prefixo = prefixoOriginal;
+        PlayerPrefs.DeleteKey(Salvamento.Prefixo + "volume_efeitos");
+        PlayerPrefs.DeleteKey(Salvamento.Prefixo + "volume_musica");
+        Salvamento.Prefixo = prefixoOriginal;
         Time.timeScale = 1f;
     }
 
@@ -50,10 +50,10 @@ public class FluxoDoJogoTests
         var jogo = Jogo.Atual;
         jogo.Sim.SoltarOnda();
         yield return new WaitForSeconds(0.2f);
-        jogo.ProximaVelocidade();
-        jogo.ProximaVelocidade();
-        Assert.AreEqual(3, jogo.Velocidade);
-        jogo.Pausar(true);
+        jogo.Relogio.ProximaVelocidade();
+        jogo.Relogio.ProximaVelocidade();
+        Assert.AreEqual(3, jogo.Relogio.Velocidade);
+        jogo.Relogio.Pausar(true);
     }
 
     [UnityTest]
@@ -63,7 +63,7 @@ public class FluxoDoJogoTests
         var jogo = Jogo.Atual;
         float tempo = jogo.Sim.Tempo;
 
-        jogo.Reiniciar();
+        Navegacao.ReiniciarPartida();
         yield return new WaitForSecondsRealtime(0.15f); // no meio do escurecer de 0,3 s
 
         Assert.AreSame(jogo, Jogo.Atual, "a cena trocou antes do fim do escurecer");
@@ -81,7 +81,7 @@ public class FluxoDoJogoTests
         var jogo = Jogo.Atual;
         float tempo = jogo.Sim.Tempo;
 
-        jogo.IrParaMenu();
+        Navegacao.IrParaMenu();
         yield return new WaitForSecondsRealtime(0.15f);
         Assert.AreEqual(tempo, jogo.Sim.Tempo, "o jogo andou durante o escurecer, com o menu de pausa na tela");
 
@@ -95,11 +95,12 @@ public class FluxoDoJogoTests
     {
         yield return CarregarJogo();
         var s = Jogo.Atual.Sim;
-        var controles = Object.FindFirstObjectByType<Controles>();
-        var hud = Object.FindFirstObjectByType<Hud>();
-        var tela = Object.FindFirstObjectByType<TelaFim>();
+        var selecao = Jogo.Atual.Selecao;
+        var controles = Object.FindAnyObjectByType<Controles>();
+        var hud = Object.FindAnyObjectByType<Hud>();
+        var tela = Object.FindAnyObjectByType<TelaFim>();
 
-        controles.IniciarColocacao(EspeciePorco.Estilingueiro); // com um porco na mão quando a Torre cai
+        selecao.IniciarColocacao(EspeciePorco.Estilingueiro); // com um porco na mão quando a Torre cai
         s.Auto = true;
         s.SoltarOnda();
         for (int i = 0; i < 60 * 60 * 15 && s.Estado != EstadoJogo.Derrota; i++) s.Passo(); // sem porcos, a Torre cai
@@ -109,7 +110,7 @@ public class FluxoDoJogoTests
         yield return null; // um quadro para a HUD se atualizar
 
         Assert.IsFalse(controles.enabled, "teclas e cliques no mapa continuam valendo depois do fim");
-        Assert.IsFalse(controles.Colocando.HasValue, "o fantasma do porco continua no mapa");
+        Assert.IsFalse(selecao.Colocando.HasValue, "o fantasma do porco continua no mapa");
         Assert.IsFalse(hud.botaoMenu.interactable, "o ☰ abre o menu de pausa por cima da tela de fim");
         Assert.IsFalse(hud.botaoPausa.interactable, "o ⏸ pausa um jogo que já acabou");
         Assert.IsFalse(hud.botaoVelocidade.interactable);

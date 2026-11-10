@@ -6,9 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Revoada/Cenas/Menu.unity
+    path: Assets/Revoada/Menu/Menu.unity
     guid: 31ed6889e02d945848d93a9cec1efba3
   - enabled: 1
-    path: Assets/Revoada/Cenas/Jogo.unity
+    path: Assets/Revoada/Partida/Jogo.unity
     guid: c3b00bd7ebfbe499cbe1268d0b1e28ac
   m_configObjects: {}

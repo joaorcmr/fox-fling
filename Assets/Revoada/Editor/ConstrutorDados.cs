@@ -4,14 +4,18 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-// Cria e lê os assets de dados (Assets/Revoada/Dados). Com sobrescrever =
+// Cria e lê os assets de dados, cada um na pasta Dados do seu assunto
+// (Passaros, Porcos, Ondas, Penas, Mapa). Com sobrescrever =
 // false, um asset que já existe não é tocado: os números que o João ajustou no
 // Inspector ficam. Os sprites são sempre religados (vêm da pasta de arte).
 public static class ConstrutorDados
 {
-    public const string Pasta = "Assets/Revoada/Dados";
-    const string PastaPassaros = Pasta + "/Passaros";
-    const string PastaPorcos = Pasta + "/Porcos";
+    const string Raiz = ConstrutorAssets.Raiz;
+    const string PastaPassaros = Raiz + "/Passaros/Dados";
+    const string PastaPorcos = Raiz + "/Porcos/Dados";
+    const string CaminhoOndas = Raiz + "/Ondas/Dados/Ondas.asset";
+    const string CaminhoEconomia = Raiz + "/Penas/Dados/Economia.asset";
+    const string CaminhoFazenda = Raiz + "/Mapa/Dados/Fazenda.asset";
 
     // Sprite e cor das penas de cada pássaro.
     static readonly Dictionary<EspeciePassaro, (string sprite, string cor)> VisualPassaro = new Dictionary<EspeciePassaro, (string, string)>
@@ -37,8 +41,8 @@ public static class ConstrutorDados
 
     public static void GarantirDados(bool sobrescrever)
     {
-        ConstrutorAssets.GarantirPasta(PastaPassaros);
-        ConstrutorAssets.GarantirPasta(PastaPorcos);
+        foreach (var pasta in new[] { PastaPassaros, PastaPorcos, Pasta(CaminhoOndas), Pasta(CaminhoEconomia), Pasta(CaminhoFazenda) })
+            ConstrutorAssets.GarantirPasta(pasta);
 
         foreach (var padrao in DefinicoesPadrao.Passaros())
         {
@@ -61,9 +65,9 @@ public static class ConstrutorDados
             EditorUtility.SetDirty(tipo);
         }
 
-        Unico<ListaOndas>($"{Pasta}/Ondas.asset", a => a.ondas = DefinicoesPadrao.Ondas(), sobrescrever);
-        Unico<ConfigEconomia>($"{Pasta}/Economia.asset", a => a.dados = DefinicoesPadrao.Economia(), sobrescrever);
-        Unico<Mapa>($"{Pasta}/Fazenda.asset", a => a.dados = DefinicoesPadrao.Fazenda(), sobrescrever);
+        Unico<ListaOndas>(CaminhoOndas, a => a.ondas = DefinicoesPadrao.Ondas(), sobrescrever);
+        Unico<ConfigEconomia>(CaminhoEconomia, a => a.dados = DefinicoesPadrao.Economia(), sobrescrever);
+        Unico<Mapa>(CaminhoFazenda, a => a.dados = DefinicoesPadrao.Fazenda(), sobrescrever);
         AssetDatabase.SaveAssets();
     }
 
@@ -88,9 +92,11 @@ public static class ConstrutorDados
 
     public static TipoPassaro[] Passaros() => Todos<TipoPassaro>(PastaPassaros).OrderBy(t => t.dados.especie).ToArray();
     public static TipoPorco[] Porcos() => Todos<TipoPorco>(PastaPorcos).OrderBy(t => t.dados.especie).ToArray();
-    public static ListaOndas Ondas() => AssetDatabase.LoadAssetAtPath<ListaOndas>($"{Pasta}/Ondas.asset");
-    public static ConfigEconomia Economia() => AssetDatabase.LoadAssetAtPath<ConfigEconomia>($"{Pasta}/Economia.asset");
-    public static Mapa Fazenda() => AssetDatabase.LoadAssetAtPath<Mapa>($"{Pasta}/Fazenda.asset");
+    public static ListaOndas Ondas() => AssetDatabase.LoadAssetAtPath<ListaOndas>(CaminhoOndas);
+    public static ConfigEconomia Economia() => AssetDatabase.LoadAssetAtPath<ConfigEconomia>(CaminhoEconomia);
+    public static Mapa Fazenda() => AssetDatabase.LoadAssetAtPath<Mapa>(CaminhoFazenda);
+
+    static string Pasta(string caminhoAsset) => caminhoAsset.Substring(0, caminhoAsset.LastIndexOf('/'));
 
     public static DadosJogo Carregar() => ConversorDados.Montar(Passaros(), Porcos(), Ondas(), Economia(), Fazenda());
 

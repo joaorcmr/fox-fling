@@ -122,7 +122,6 @@ public static class ConstrutorUI
         var t = canvas.transform;
         var hud = canvas.gameObject.AddComponent<Hud>();
         hud.jogo = jogo;
-        hud.controles = controles;
 
         // O fundo da barra bloqueia os cliques: o que cai nele não chega ao mapa.
         var barra = Imagem(t, "BarraLateral", Sprite("painel"), TopoDir, Vector2.zero,
@@ -157,9 +156,9 @@ public static class ConstrutorUI
             hud.cartoes[i] = CriarCartao(loja, porcos[i], posicao, new Vector2(64f, 68f));
             hud.cartoes[i].balao = balao;
         }
-        hud.cartaoNinho = CriarNinho(loja, jogo, controles, new Vector2(8f, -144f));
+        hud.cartaoNinho = CriarNinho(loja, jogo, new Vector2(8f, -144f));
         hud.previa = CriarPrevia(loja, jogo, new Vector2(8f, -206f));
-        hud.painelPorco = CriarPainelPorco(barra, jogo, controles, new Vector2(8f, -98f));
+        hud.painelPorco = CriarPainelPorco(barra, jogo, new Vector2(8f, -98f));
 
         hud.botaoAuto = Botao(barra, "BotaoAuto", null, BaixoEsq, new Vector2(8f, 58f), new Vector2(136f, 20f));
         hud.textoAuto = Texto(hud.botaoAuto.transform, "Texto", "Auto: desligado", 12, TextAnchor.MiddleCenter, Centro,
@@ -174,7 +173,7 @@ public static class ConstrutorUI
         hud.barraChefe = CriarBarraChefe(t);
         hud.textoAviso = Texto(t, "Aviso", "", 15, TextAnchor.MiddleCenter, BaixoEsq, new Vector2(CentroMapa - 200f, 14f),
             new Vector2(400f, 22f), Creme, contorno: true);
-        CriarDicas(t, jogo, controles);
+        CriarDicas(t, jogo);
         CriarTelaFim(t, jogo, efeitos);
         hud.menuPausa = CriarMenuPausa(t, jogo);
         controles.menuPausa = hud.menuPausa;
@@ -183,13 +182,12 @@ public static class ConstrutorUI
         return hud;
     }
 
-    static Dicas CriarDicas(Transform pai, Jogo jogo, Controles controles)
+    static Dicas CriarDicas(Transform pai, Jogo jogo)
     {
         var fundo = Imagem(pai, "Dica", Sprite("painel"), BaixoEsq, new Vector2(16f, 42f), new Vector2(330f, 50f), true);
         fundo.raycastTarget = false;
         var d = fundo.gameObject.AddComponent<Dicas>();
         d.jogo = jogo;
-        d.controles = controles;
         d.grupo = fundo.gameObject.AddComponent<CanvasGroup>();
         d.grupo.blocksRaycasts = false;
         Imagem(fundo.transform, "Icone", Sprite("icone_pena"), Esq, new Vector2(8f, 0f), new Vector2(22f, 22f)).raycastTarget = false;
@@ -258,12 +256,11 @@ public static class ConstrutorUI
         return slider;
     }
 
-    static CartaoNinho CriarNinho(Transform pai, Jogo jogo, Controles controles, Vector2 posicao)
+    static CartaoNinho CriarNinho(Transform pai, Jogo jogo, Vector2 posicao)
     {
         var fundo = Imagem(pai, "Ninho", Sprite("botao"), TopoEsq, posicao, new Vector2(136f, 58f), true);
         var c = fundo.gameObject.AddComponent<CartaoNinho>();
         c.jogo = jogo;
-        c.controles = controles;
         c.botao = fundo.gameObject.AddComponent<Button>();
         c.botao.targetGraphic = fundo;
         c.grupo = fundo.gameObject.AddComponent<CanvasGroup>();
@@ -303,12 +300,11 @@ public static class ConstrutorUI
         return p;
     }
 
-    static PainelPorco CriarPainelPorco(Transform pai, Jogo jogo, Controles controles, Vector2 posicao)
+    static PainelPorco CriarPainelPorco(Transform pai, Jogo jogo, Vector2 posicao)
     {
         var raiz = Retangulo(pai, "PainelPorco", TopoEsq, posicao, new Vector2(136f, 300f));
         var p = raiz.gameObject.AddComponent<PainelPorco>();
         p.jogo = jogo;
-        p.controles = controles;
         var r = raiz.transform;
 
         p.icone = Imagem(r, "Icone", null, TopoEsq, Vector2.zero, new Vector2(34f, 34f));
@@ -455,7 +451,7 @@ public static class ConstrutorUI
 
         ControleDeVolume(t, "Música", "musica", Baixo, new Vector2(-100f, 40f), Creme);
         ControleDeVolume(t, "Efeitos", "efeitos", Baixo, new Vector2(100f, 40f), Creme);
-        Texto(t, "Creditos", "Joao Ricardo Ribeiro · Insper", 12, TextAnchor.MiddleLeft, BaixoEsq, new Vector2(10f, 8f), new Vector2(260f, 20f), Creme, contorno: true);
+        Texto(t, "Creditos", "Insper", 12, TextAnchor.MiddleLeft, BaixoEsq, new Vector2(10f, 8f), new Vector2(260f, 20f), Creme, contorno: true);
         m.botaoZerar = Botao(t, "Zerar", null, BaixoDir, new Vector2(-10f, 8f), new Vector2(124f, 24f));
         Texto(m.botaoZerar.transform, "Texto", "Zerar progresso", 12, TextAnchor.MiddleCenter, Centro, Vector2.zero, new Vector2(124f, 24f), Creme, contorno: true);
 

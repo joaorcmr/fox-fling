@@ -6,9 +6,9 @@ using UnityEngine;
 public static class ConstrutorAssets
 {
     public const string Raiz = "Assets/Revoada";
-    public const string PastaArte = Raiz + "/Arte";
-    public const string PastaAudio = Raiz + "/Audio";
-    public const string PastaMateriais = Raiz + "/Materiais";
+    public const string PastaArte = Raiz + "/Compartilhado/Arte";
+    public const string PastaAudio = Raiz + "/Sons/Clipes";
+    public const string PastaMateriais = Raiz + "/Compartilhado/Materiais";
     public const int PixelsPorUnidade = 64; // a arte é desenhada em 2×: na tela, 1 unidade = 32 px
 
     // Ladrilhos que se repetem (grama em modo Tiled, terra ao longo da trilha).
