@@ -14,7 +14,7 @@ public static class CatalogoDicas
     {
         switch (id)
         {
-            case Inicio: return "Clique num porco da loja e depois no mapa para colocá-lo. Depois, solte a revoada.";
+            case Inicio: return "Clique num porco da loja e depois no mapa para colocá-lo. Depois, solte a onda.";
             case Arpao: return "O arpão atravessa os pássaros em fila: no fim de uma reta ele rende mais.";
             case Ninho: return "O Ninho de Penas faz cada pássaro render mais. Vale a pena agora?";
             case Couraca: return "Couraça: pedrinha e arpão só tiram metade. Bomba e Ponta de Ferro tiram tudo.";

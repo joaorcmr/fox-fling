@@ -165,7 +165,7 @@ public static class ConstrutorUI
             Vector2.zero, new Vector2(136f, 20f), Creme, contorno: true);
         hud.botaoSoltar = Botao(barra, "BotaoSoltar", null, BaixoEsq, new Vector2(8f, 10f), new Vector2(136f, 44f));
         Imagem(hud.botaoSoltar.transform, "Icone", Sprite("icone_play"), Esq, new Vector2(8f, 1f), new Vector2(26f, 26f)).raycastTarget = false;
-        hud.textoSoltar = Texto(hud.botaoSoltar.transform, "Texto", "Soltar a revoada", 13, TextAnchor.MiddleCenter, Esq,
+        hud.textoSoltar = Texto(hud.botaoSoltar.transform, "Texto", "Soltar a onda", 13, TextAnchor.MiddleCenter, Esq,
             new Vector2(36f, 1f), new Vector2(96f, 40f), Creme, contorno: true);
 
         // Por cima do mapa.
@@ -464,7 +464,7 @@ public static class ConstrutorUI
         Texto(quadro, "Titulo", "Como jogar", 22, TextAnchor.MiddleCenter, Topo, new Vector2(0f, -14f), new Vector2(420f, 30f), Marrom);
         Texto(quadro, "Regras",
             "• Clique num porco da loja (ou aperte 1 a 4) e depois no mapa para colocá-lo.\n" +
-            "• Solte a revoada no botão ▶ (ou Espaço). Com Auto ligado, as ondas seguem sozinhas.\n" +
+            "• Solte a onda no botão ▶ (ou Espaço). Com Auto ligado, as ondas seguem sozinhas.\n" +
             "• Pássaros estourados deixam penas. Gaste em porcos, em upgrades ou no Ninho de Penas, que faz cada pássaro render mais.\n" +
             "• O arpão atravessa a fila: ponha o Arpoador no fim de uma reta. A bomba de lama pega bandos e ignora a couraça do urubu.\n" +
             "• Porcos dentro do círculo do Tamboreiro atiram mais rápido. Clique num porco para melhorar (U), mudar a mira ou vender (Delete).\n" +

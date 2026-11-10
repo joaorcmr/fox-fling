@@ -1,4 +1,4 @@
-# Revoada
+# Fox Tower
 
 Tower defense 2D com visão de cima, feito em **Unity 6**. Bandos de pássaros voam por uma trilha até a
 **Torre dos Porcos**. Você compra **porcos verdes** com **penas**, que caem dos pássaros estourados, e
@@ -15,7 +15,7 @@ depois?
 | Ação | Como |
 |---|---|
 | Comprar e colocar um porco | Clique no porco da loja (ou aperte **1** a **4**) e depois no mapa. Verde = pode, vermelho = não pode |
-| Soltar a onda | Botão **▶ Soltar a revoada** ou **Espaço**. Com **Auto** ligado, as ondas seguem sozinhas |
+| Soltar a onda | Botão **▶ Soltar a onda** ou **Espaço**. Com **Auto** ligado, as ondas seguem sozinhas |
 | Ver e melhorar um porco | Clique nele: o painel mostra os números, o próximo upgrade (**U**), a mira e **Vender** (**Delete**) |
 | Pausar / acelerar | **P** ou ⏸ · **F** ou o botão 1×/2×/3× |
 | Menu | **Esc** (sem nada selecionado) ou ☰ |
@@ -75,7 +75,7 @@ ver [Estrutura](#estrutura)) chamadas pelos componentes do Unity a cada passo. R
 | **uGUI**: Canvas e CanvasScaler 600×480, Button, Slider, CanvasGroup, Image Filled, eventos de ponteiro | `Interface/` de cada assunto, `Editor/ConstrutorUI.cs` |
 | **Input Manager** e `EventSystem.IsPointerOverGameObject` (clique na loja não vaza para o mapa) | `Partida/Entrada/Controles.cs` |
 | **PlayerPrefs** (recorde, vitórias, dicas vistas, volumes) | `Progresso/`, `Sons/Preferencias.cs` |
-| **Editor scripting**: menu Revoada (`MenuItem`), `AssetDatabase`, `PrefabUtility`, `EditorSceneManager`, `TextureImporter`, `SerializedObject` | `Editor/` |
+| **Editor scripting**: menu Fox Tower (`MenuItem`), `AssetDatabase`, `PrefabUtility`, `EditorSceneManager`, `TextureImporter`, `SerializedObject` | `Editor/` |
 | **Unity Test Framework**: 101 testes EditMode (incluindo os robôs de balanceamento) e 3 testes PlayMode, que carregam a cena Jogo de verdade (pausa, escurecer entre cenas, fim de jogo) | `Testes/`, `TestesPlay/` |
 | **Build WebGL** (`BuildPipeline`) | `ConstrutorRevoada.BuildWebGL` |
 
@@ -85,7 +85,7 @@ Durante o Play, selecione um pássaro ou um porco na Hierarchy: o Inspector most
 ## Balanceamento: robôs que jogam o jogo
 
 "Difícil na medida certa" é medido. Robôs jogam partidas inteiras com os números de verdade, sem desenhar
-nada (menu **Revoada > Balanceamento (robôs)**, ou os testes de `BalanceamentoTests`). Três deles seguem a
+nada (menu **Fox Tower > Balanceamento (robôs)**, ou os testes de `BalanceamentoTests`). Três deles seguem a
 mesma ordem de construção e só mudam o que fazem com o Ninho:
 
 | Robô | O que faz | Resultado |
@@ -105,7 +105,7 @@ com pouca folga, então depois de mexer em qualquer número rode os robôs (ou o
 - **No Inspector:** a pasta `Dados/` de cada assunto tem os assets: um para cada pássaro (`Passaros/Dados`) e
   cada porco, com os upgrades (`Porcos/Dados`), as ondas (`Ondas/Dados/Ondas.asset`), a economia
   (`Penas/Dados/Economia.asset`) e o mapa (`Mapa/Dados/Fazenda.asset`). Mude e dê Play.
-- **Menu Revoada:**
+- **Menu Fox Tower:**
   - *Reconstruir tudo*: gera de novo prefabs e cenas a partir do código. Os números dos assets são mantidos.
   - *Restaurar números padrão*: volta os assets para os números de `Editor/DefinicoesPadrao.cs`.
   - *Balanceamento (robôs)*: escreve no Console a tabela acima com os números atuais.
@@ -144,7 +144,7 @@ Assets/Revoada/
 ├── Sons/          o Sons (vozes e loops), os sons da partida, os volumes e os clipes WAV
 ├── Progresso/     recorde, vitórias e dicas vistas (PlayerPrefs)
 ├── Compartilhado/ efeitos, pool, troca de cena, formatação de números, arte e materiais
-├── Editor/        o construtor (menu Revoada), os números padrão e os robôs
+├── Editor/        o construtor (menu Fox Tower), os números padrão e os robôs
 ├── Testes/        testes EditMode (Window > General > Test Runner)
 └── TestesPlay/    testes PlayMode (carregam a cena Jogo e rodam quadros)
 Tools/             geradores de arte (→ Compartilhado/Arte) e de som (→ Sons/Clipes), em Python 3 + Pillow
@@ -185,6 +185,8 @@ Na partida, cada responsabilidade é uma classe, e o `Jogo` só as junta:
 1. Unity **6000.6.4f1**
 2. No Unity Hub, *Add project from disk* e escolha a pasta do repositório (a que tem `Assets/`)
 3. Cena inicial: `Assets/Revoada/Menu/Menu` (o jogo em si é `Assets/Revoada/Partida/Jogo`)
-4. Na Game view, escolha o tamanho **Revoada 600x480**
+4. Na Game view, escolha o tamanho **Fox Tower 600x480**
 
-O Fox Fling, o jogo anterior deste repositório, continua no histórico do git.
+O jogo já se chamou **Revoada**: a pasta `Assets/Revoada`, os assemblies `Revoada.*` e o `ConstrutorRevoada`
+guardam esse nome, que é só de código (o nome que o jogador vê fica em `Compartilhado/Identidade.cs`). O Fox
+Fling, o jogo anterior deste repositório, continua no histórico do git.

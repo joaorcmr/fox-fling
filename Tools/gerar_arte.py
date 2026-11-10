@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
-"""Gera toda a arte do Revoada em PNG (Assets/Revoada/Compartilhado/Arte).
+"""Gera toda a arte do Fox Tower em PNG (Assets/Revoada/Compartilhado/Arte).
 
-Uso:  python3 Tools/gerar_arte.py [pasta_contato]
+Uso:  python3 Tools/gerar_arte.py [--so nome1,nome2] [pasta_contato]
+
+Com --so, gera só as imagens pedidas (ex.: --so logo,icone_vida) e não mexe
+nas outras: útil para não regravar a arte inteira por causa de um ícone.
 
 Escala: 64 pixels = 1 unidade do Unity (PPU 64). Na tela de 600×480 uma
 unidade ocupa 32 px, então tudo é desenhado com o dobro da resolução em que
@@ -27,7 +30,23 @@ S = 4  # supersampling
 
 CONTORNO = (43, 29, 20, 255)
 BRANCO = (255, 255, 255, 255)
-FONTE = "/System/Library/Fonts/Supplemental/Arial Rounded Bold.ttf"
+# Arial Rounded Bold: o caminho do macOS e, depois, o do Windows.
+FONTES_TITULO = (
+    "/System/Library/Fonts/Supplemental/Arial Rounded Bold.ttf",
+    "C:/Windows/Fonts/ARLRDBD.TTF",
+    "C:/Windows/Fonts/arialbd.ttf",
+)
+FONTES_TEXTO = ("/System/Library/Fonts/Supplemental/Arial.ttf", "C:/Windows/Fonts/arial.ttf")
+
+
+def fonte(caminhos, tamanho):
+    """A primeira fonte da lista que existir neste computador."""
+    for caminho in caminhos:
+        try:
+            return ImageFont.truetype(caminho, tamanho)
+        except OSError:
+            pass
+    return ImageFont.load_default()
 
 
 def hexc(h, a=255):
@@ -111,7 +130,12 @@ class Tela:
         return self.img.resize((self.w, self.h), Image.LANCZOS)
 
 
+SO = None  # com --so, os nomes das únicas imagens que serão gravadas
+
+
 def salvar(img, nome, feitos):
+    if SO is not None and nome not in SO:
+        return
     img.save(os.path.join(SAIDA, nome + ".png"))
     feitos.append(nome)
 
@@ -812,20 +836,23 @@ def medalha(cor):
 
 
 def logo():
-    """Título "Revoada" com contorno grosso e um porquinho e um pardal nas pontas."""
+    """Título "Fox Tower" com contorno grosso e um porquinho e um pardal nas pontas."""
     W, H = 512, 136
     img = Image.new("RGBA", (W * S, H * S), (0, 0, 0, 0))
-    try:
-        fonte = ImageFont.truetype(FONTE, 92 * S)
-    except OSError:
-        fonte = ImageFont.load_default()
-    texto = "Revoada"
-    caixa_txt = ImageDraw.Draw(img).textbbox((0, 0), texto, font=fonte)
-    pos = ((W * S - (caixa_txt[2] - caixa_txt[0])) / 2 - caixa_txt[0], (H * S - (caixa_txt[3] - caixa_txt[1])) / 2 - caixa_txt[1] - 6 * S)
+    texto = "Fox Tower"
+    # A maior letra que cabe entre o porquinho e o pardal.
+    tamanho = 92
+    while True:
+        letra = fonte(FONTES_TITULO, tamanho * S)
+        caixa_txt = ImageDraw.Draw(img).textbbox((0, 0), texto, font=letra)
+        if caixa_txt[2] - caixa_txt[0] <= 392 * S or tamanho <= 40:
+            break
+        tamanho -= 2
+    pos = ((W * S - (caixa_txt[2] - caixa_txt[0])) / 2 - caixa_txt[0], (H * S - (caixa_txt[3] - caixa_txt[1])) / 2 - caixa_txt[1] - 2 * S)
     borda = Image.new("L", img.size, 0)
-    ImageDraw.Draw(borda).text(pos, texto, font=fonte, fill=255, stroke_width=9 * S, stroke_fill=255)
+    ImageDraw.Draw(borda).text(pos, texto, font=letra, fill=255, stroke_width=8 * S, stroke_fill=255)
     letras = Image.new("L", img.size, 0)
-    ImageDraw.Draw(letras).text(pos, texto, font=fonte, fill=255)
+    ImageDraw.Draw(letras).text(pos, texto, font=letra, fill=255)
     img.paste(Image.new("RGBA", img.size, CONTORNO), mask=borda)
     grad = Image.new("RGBA", img.size)
     gd = ImageDraw.Draw(grad)
@@ -835,10 +862,10 @@ def logo():
         gd.line([(0, y), (W * S, y)], fill=cor)
     img.paste(grad, mask=letras)
     final = img.resize((W, H), Image.LANCZOS)
-    p = porco(chapeu_palha).resize((88, 88), Image.LANCZOS)
-    final.alpha_composite(p, (0, 44))
-    b = pardal().resize((70, 70), Image.LANCZOS)
-    final.alpha_composite(b, (W - 72, 4))
+    p = porco(chapeu_palha).resize((80, 80), Image.LANCZOS)
+    final.alpha_composite(p, (0, 50))
+    b = pardal().resize((64, 64), Image.LANCZOS)
+    final.alpha_composite(b, (W - 64, 2))
     return final
 
 
@@ -904,10 +931,7 @@ def contato(feitos, pasta):
     """Folha de contato: tudo lado a lado sobre grama, com o nome embaixo."""
     os.makedirs(pasta, exist_ok=True)
     imgs = [(n, Image.open(os.path.join(SAIDA, n + ".png")).convert("RGBA")) for n in feitos]
-    try:
-        fonte = ImageFont.truetype("/System/Library/Fonts/Supplemental/Arial.ttf", 11)
-    except OSError:
-        fonte = ImageFont.load_default()
+    letra = fonte(FONTES_TEXTO, 11)
     colunas, cel = 8, 150
     linhas = math.ceil(len(imgs) / colunas)
     folha = Image.new("RGBA", (colunas * cel, linhas * cel), hexc("#79BC57"))
@@ -917,17 +941,25 @@ def contato(feitos, pasta):
         esc = min(1.0, (cel - 24) / max(img.width, img.height))
         mini = img.resize((max(1, int(img.width * esc)), max(1, int(img.height * esc))), Image.LANCZOS)
         folha.alpha_composite(mini, (x + (cel - mini.width) // 2, y + (cel - 18 - mini.height) // 2))
-        d.text((x + 4, y + cel - 16), n, fill=(20, 30, 10, 255), font=fonte)
+        d.text((x + 4, y + cel - 16), n, fill=(20, 30, 10, 255), font=letra)
     caminho = os.path.join(pasta, "contato.png")
     folha.save(caminho)
     return caminho
 
 
 def main():
+    global SO
+    args = sys.argv[1:]
+    if "--so" in args:
+        i = args.index("--so")
+        SO = set(args[i + 1].split(","))
+        del args[i:i + 2]
     feitos = gerar()
     print("%d imagens em %s" % (len(feitos), SAIDA))
-    if len(sys.argv) > 1:
-        print("folha de contato:", contato(feitos, sys.argv[1]))
+    if SO is not None and SO - set(feitos):
+        print("não existem:", ", ".join(sorted(SO - set(feitos))))
+    if args:
+        print("folha de contato:", contato(feitos, args[0]))
 
 
 if __name__ == "__main__":

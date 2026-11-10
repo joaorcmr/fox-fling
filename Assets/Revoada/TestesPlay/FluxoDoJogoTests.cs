@@ -18,7 +18,7 @@ public class FluxoDoJogoTests
         // Dicas vistas, recorde e volumes ficam em chaves de teste: o progresso
         // de quem joga no Editor não muda.
         prefixoOriginal = Salvamento.Prefixo;
-        Salvamento.Prefixo = "teste_revoada_";
+        Salvamento.Prefixo = "teste_foxtower_";
         Progresso.Zerar();
     }
 

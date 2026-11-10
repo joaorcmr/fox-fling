@@ -3,7 +3,7 @@
 // testes usarem chaves próprias e não apagarem o que fica salvo para quem joga.
 public static class Salvamento
 {
-    public static string Prefixo = "revoada_";
+    public static string Prefixo = "foxtower_";
 
     public static string Chave(string nome) => Prefixo + nome;
 }

@@ -4,14 +4,14 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-// Monta o Revoada inteiro a partir do código: configurações, dados, prefabs e
-// cenas. Menu "Revoada" no Editor. Cada task do plano acrescenta uma etapa em
+// Monta o Fox Tower inteiro a partir do código: configurações, dados, prefabs e
+// cenas. Menu "Fox Tower" no Editor. Cada task do plano acrescenta uma etapa em
 // ReconstruirTudo.
 public static class ConstrutorRevoada
 {
     public const int Largura = 600, Altura = 480; // regra da disciplina
 
-    [MenuItem("Revoada/Reconstruir tudo")]
+    [MenuItem(Identidade.NomeDoJogo + "/Reconstruir tudo")]
     static void ReconstruirTudoPeloMenu()
     {
         if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
@@ -29,19 +29,19 @@ public static class ConstrutorRevoada
         ConstrutorCenas.Tudo();
         AssetDatabase.SaveAssets();
         var d = ConstrutorDados.Carregar();
-        return $"Revoada reconstruído: {d.passaros.Count} pássaros, {d.porcos.Count} porcos, {d.ondas.Count} ondas";
+        return $"{Identidade.NomeDoJogo} reconstruído: {d.passaros.Count} pássaros, {d.porcos.Count} porcos, {d.ondas.Count} ondas";
     }
 
-    [MenuItem("Revoada/Balanceamento (robôs)")]
+    [MenuItem(Identidade.NomeDoJogo + "/Balanceamento (robôs)")]
     static void Balanceamento() => Debug.Log(Robos.Relatorio(ConstrutorDados.Carregar()));
 
     // No Play: o robô Equilibrado joga até a onda 18 (a revoada densa), para ver de perto.
-    [MenuItem("Revoada/Pular para a onda 18 (robô)")]
+    [MenuItem(Identidade.NomeDoJogo + "/Pular para a onda 18 (robô)")]
     static void PularParaOnda18()
     {
         if (!Application.isPlaying || Jogo.Atual == null)
         {
-            Debug.Log("Revoada: dê Play primeiro.");
+            Debug.Log(Identidade.NomeDoJogo + ": dê Play primeiro.");
             return;
         }
         Robos.AvancarAteOnda(Jogo.Atual.Sim, 18);
@@ -49,7 +49,7 @@ public static class ConstrutorRevoada
 
     // O jogo para navegador, em Builds/WebGL (precisa do módulo Web Build
     // Support). Pelo terminal: unity build --target WebGL --execute-method ConstrutorRevoada.BuildWebGL
-    [MenuItem("Revoada/Build WebGL (itch.io)")]
+    [MenuItem(Identidade.NomeDoJogo + "/Build WebGL (itch.io)")]
     public static void BuildWebGL()
     {
         ConstrutorCenas.ConfigurarBuild();
@@ -77,21 +77,21 @@ public static class ConstrutorRevoada
         });
 
         var s = relatorio.summary;
-        Debug.Log($"[Revoada] Build WebGL: {s.result} | {s.totalSize / (1024f * 1024f):F1} MB | " +
+        Debug.Log($"[{Identidade.NomeDoJogo}] Build WebGL: {s.result} | {s.totalSize / (1024f * 1024f):F1} MB | " +
                   $"{s.totalTime:mm\\:ss} | erros={s.totalErrors} | pasta={pasta}");
         if (Application.isBatchMode && s.result != UnityEditor.Build.Reporting.BuildResult.Succeeded) EditorApplication.Exit(1);
     }
 
-    [MenuItem("Revoada/Restaurar números padrão")]
+    [MenuItem(Identidade.NomeDoJogo + "/Restaurar números padrão")]
     static void RestaurarNumerosPadrao()
     {
         ConstrutorDados.GarantirDados(true);
-        Debug.Log("Revoada: números padrão restaurados (as pastas Dados de cada assunto)");
+        Debug.Log(Identidade.NomeDoJogo + ": números padrão restaurados (as pastas Dados de cada assunto)");
     }
 
     public static void ConfigurarProjeto()
     {
-        PlayerSettings.productName = "Revoada";
+        PlayerSettings.productName = Identidade.NomeDoJogo;
         PlayerSettings.companyName = "joaorcmr";
         PlayerSettings.defaultScreenWidth = Largura;
         PlayerSettings.defaultScreenHeight = Altura;
@@ -141,7 +141,7 @@ public static class ConstrutorRevoada
             var grupoAtual = tipoSizes.GetProperty("currentGroupType").GetValue(sizes);
             var grupo = tipoSizes.GetMethod("GetGroup").Invoke(sizes, new[] { grupoAtual });
 
-            const string nome = "Revoada 600x480";
+            const string nome = Identidade.NomeDoJogo + " 600x480";
             var textos = (string[])grupo.GetType().GetMethod("GetDisplayTexts").Invoke(grupo, null);
             int indice = Array.FindIndex(textos, t => t.StartsWith(nome));
             if (indice < 0)
@@ -164,7 +164,7 @@ public static class ConstrutorRevoada
         }
         catch (Exception e)
         {
-            Debug.Log("Revoada: não consegui configurar a Game view para 600x480 (" + e.GetType().Name + ").");
+            Debug.Log(Identidade.NomeDoJogo + ": não consegui configurar a Game view para 600x480 (" + e.GetType().Name + ").");
         }
     }
 }

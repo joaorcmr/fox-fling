@@ -4,17 +4,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## O projeto
 
-**Revoada** é um tower defense 2D com visão de cima, feito em Unity **6000.6.4f1**. A raiz do repositório é o próprio projeto Unity. Pássaros voam por uma trilha até a Torre dos Porcos. O jogador compra porcos com penas e decide entre defesa e o Ninho de Penas (income). É um trabalho de Jogos Digitais do Insper: a resolução é fixa em **600×480** (regra da disciplina) e o build é WebGL para o itch.io. As regras, os números, os porcos e os pássaros estão descritos no `README.md`.
+**Fox Tower** é um tower defense 2D com visão de cima, feito em Unity **6000.6.4f1**. A raiz do repositório é o próprio projeto Unity. Pássaros voam por uma trilha até a Torre dos Porcos. O jogador compra porcos com penas e decide entre defesa e o Ninho de Penas (income). É um trabalho de Jogos Digitais do Insper: a resolução é fixa em **600×480** (regra da disciplina) e o build é WebGL para o itch.io. As regras, os números, os porcos e os pássaros estão descritos no `README.md`.
 
 Código, comentários, interface e commits são em **português**, e os identificadores também (sem acento: `Passaro`, `Simulacao`). Não há namespaces: todas as classes ficam no namespace global. Os arquivos são UTF-8 sem BOM, com quebra de linha CRLF. Os commits seguem o padrão `feat: ...`, `fix: ...`, `docs: ...`, `chore: ...`.
 
-O repositório se chama `fox-fling` porque abrigava um jogo anterior, o Fox Fling, que hoje só existe no histórico do git.
+O repositório se chama `fox-fling` porque abrigava um jogo anterior, o Fox Fling, que hoje só existe no histórico do git. O jogo atual já se chamou **Revoada**: a pasta `Assets/Revoada`, os assemblies `Revoada.*` e a classe `ConstrutorRevoada` guardam esse nome de propósito (é nome de código; renomear mexeria em todos os caminhos). O nome que o jogador e o Editor mostram vem de `Compartilhado/Identidade.cs` (`Identidade.NomeDoJogo`); o logo é imagem e sai de `Tools/gerar_arte.py`.
 
 ## Comandos
 
 Não há linter nem build fora do Unity: tudo passa pelo Editor.
 
-**Menu `Revoada` do Editor** (`Editor/ConstrutorRevoada.cs`):
+**Menu `Fox Tower` do Editor** (`Editor/ConstrutorRevoada.cs`):
 - *Reconstruir tudo*: gera de novo os prefabs e as duas cenas a partir do código e reimporta a arte. Mantém os números dos assets de dados que já existem.
 - *Restaurar números padrão*: sobrescreve os assets de dados com os valores de `Editor/DefinicoesPadrao.cs`.
 - *Balanceamento (robôs)*: escreve no Console a tabela dos robôs com os números atuais.
@@ -33,14 +33,14 @@ unity --no-banner command --result-only test run --mode EditMode --filter Seleca
 unity --no-banner command --result-only test run --mode PlayMode --async_tests true      # PlayMode só roda assíncrono...
 unity --no-banner command --result-only test status                                      # ...e o resultado sai aqui
 unity --no-banner command --result-only console status                                   # compilou? quantos erros?
-unity --no-banner command editor invoke_menu --path "Revoada/Reconstruir tudo"
+unity --no-banner command editor invoke_menu --path "Fox Tower/Reconstruir tudo"
 ```
 
 Com o Editor fechado (o Unity não abre o mesmo projeto duas vezes), use o modo batch padrão do Unity:
 `Unity.exe -batchmode -projectPath . -runTests -testPlatform EditMode -testResults Temp/resultados.xml [-testFilter SelecaoTests]`.
 
 **Arte e sons** são gerados por código:
-- `python3 Tools/gerar_arte.py` precisa do Pillow e escreve em `Assets/Revoada/Compartilhado/Arte`. O urubu e a arara saem dos originais em `Compartilhado/Arte/Fontes`, que o importador do Unity ignora. O script usa fontes do macOS (`/System/Library/Fonts/...`); em outro sistema, o texto do logo sai com a fonte padrão.
+- `python3 Tools/gerar_arte.py` precisa do Pillow e escreve em `Assets/Revoada/Compartilhado/Arte`. O urubu e a arara saem dos originais em `Compartilhado/Arte/Fontes`, que o importador do Unity ignora. O logo usa a Arial Rounded Bold (procura o caminho do macOS e o do Windows; sem ela, sai com a fonte padrão). Com `--so logo,icone_vida` o script grava só as imagens pedidas, sem regravar o resto.
 - `python3 Tools/gerar_sons.py` usa só a biblioteca padrão e escreve em `Assets/Revoada/Sons/Clipes`.
 
 ## Arquitetura
@@ -81,7 +81,7 @@ As responsabilidades estão separadas de propósito; não junte de volta:
 - `SonsDaPartida` toca os sons dos eventos do mapa. Os sons de interface ficam nos próprios botões e telas.
 - `VisualTorre` anima a Torre apanhando.
 - `TelaFim` só mostra o resultado; quem grava é o `FimDePartida`.
-- `Progresso` (recorde, vitórias e dicas vistas) e `Preferencias` (volumes) gravam em PlayerPrefs através do `Salvamento`. O prefixo é `revoada_`; os testes trocam `Salvamento.Prefixo` por `teste_revoada_`.
+- `Progresso` (recorde, vitórias e dicas vistas) e `Preferencias` (volumes) gravam em PlayerPrefs através do `Salvamento`. O prefixo é `foxtower_`; os testes trocam `Salvamento.Prefixo` por `teste_foxtower_`.
 
 ### Cenas e prefabs são gerados por código
 

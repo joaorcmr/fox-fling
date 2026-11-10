@@ -3707,7 +3707,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "\u2022 Clique num porco da loja (ou aperte 1 a 4) e depois no mapa para coloc\xE1-lo.\n\u2022 Solte a revoada no bot\xE3o \u25B6 (ou Espa\xE7o). Com Auto ligado, as ondas seguem sozinhas.\n\u2022 P\xE1ssaros estourados deixam penas. Gaste em porcos, em upgrades ou no Ninho de Penas, que faz cada p\xE1ssaro render mais.\n\u2022 O arp\xE3o atravessa a fila: ponha o Arpoador no fim de uma reta. A bomba de lama pega bandos e ignora a coura\xE7a do urubu.\n\u2022 Porcos dentro do c\xEDrculo do Tamboreiro atiram mais r\xE1pido. Clique num porco para melhorar (U), mudar a mira ou vender (Delete).\n\u2022 P pausa, F acelera (1\xD7, 2\xD7, 3\xD7), Esc abre o menu. Os 100 de vida da Torre s\xE3o a sua margem de erro."
+  m_Text: "\u2022 Clique num porco da loja (ou aperte 1 a 4) e depois no mapa para coloc\xE1-lo.\n\u2022 Solte a onda no bot\xE3o \u25B6 (ou Espa\xE7o). Com Auto ligado, as ondas seguem sozinhas.\n\u2022 P\xE1ssaros estourados deixam penas. Gaste em porcos, em upgrades ou no Ninho de Penas, que faz cada p\xE1ssaro render mais.\n\u2022 O arp\xE3o atravessa a fila: ponha o Arpoador no fim de uma reta. A bomba de lama pega bandos e ignora a coura\xE7a do urubu.\n\u2022 Porcos dentro do c\xEDrculo do Tamboreiro atiram mais r\xE1pido. Clique num porco para melhorar (U), mudar a mira ou vender (Delete).\n\u2022 P pausa, F acelera (1\xD7, 2\xD7, 3\xD7), Esc abre o menu. Os 100 de vida da Torre s\xE3o a sua margem de erro."
 --- !u!222 &949877541
 CanvasRenderer:
   m_ObjectHideFlags: 0

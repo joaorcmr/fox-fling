@@ -4,7 +4,7 @@ using static EspeciePassaro;
 
 // Os números PADRÃO do jogo, de onde nascem os assets das pastas Dados de cada assunto.
 // Depois de criados, os assets são a fonte da verdade: o que o João mudar no
-// Inspector fica valendo. "Revoada > Restaurar números padrão" volta para cá.
+// Inspector fica valendo. "Fox Tower > Restaurar números padrão" volta para cá.
 // As ondas são o ponto de partida do balanceamento (ajustado pelos robôs).
 public static class DefinicoesPadrao
 {

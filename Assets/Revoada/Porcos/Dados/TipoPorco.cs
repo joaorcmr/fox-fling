@@ -2,7 +2,7 @@ using UnityEngine;
 
 // Um tipo de porco como asset (nesta pasta, Porcos/Dados): custo, números de
 // cada nível e das duas especializações, e os sprites.
-[CreateAssetMenu(menuName = "Revoada/Tipo de porco")]
+[CreateAssetMenu(menuName = Identidade.NomeDoJogo + "/Tipo de porco")]
 public class TipoPorco : ScriptableObject
 {
     public DadosPorco dados = new DadosPorco();

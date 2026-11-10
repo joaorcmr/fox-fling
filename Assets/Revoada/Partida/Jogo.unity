@@ -9182,7 +9182,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Soltar a revoada
+  m_Text: Soltar a onda
 --- !u!114 &1022807626
 MonoBehaviour:
   m_ObjectHideFlags: 0

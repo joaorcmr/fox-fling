@@ -11,7 +11,7 @@ public class FimDePartidaTests
     public void Isolar()
     {
         prefixoOriginal = Salvamento.Prefixo;
-        Salvamento.Prefixo = "teste_revoada_";
+        Salvamento.Prefixo = "teste_foxtower_";
         Progresso.Zerar();
     }
 

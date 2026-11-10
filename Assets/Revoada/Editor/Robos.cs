@@ -3,7 +3,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-// Robôs que jogam o Revoada inteiro sem desenhar nada, para medir o
+// Robôs que jogam o Fox Tower inteiro sem desenhar nada, para medir o
 // balanceamento. Os três "mistos" (DefesaPura, Ganancioso, Equilibrado) seguem
 // a MESMA ordem de construção; só muda o que fazem com o Ninho de Penas. Assim,
 // se um vence e outro perde, a diferença é a decisão de investir em penas.
@@ -283,7 +283,7 @@ public static class Robos
 
     public static string Relatorio(DadosJogo dados)
     {
-        var texto = new StringBuilder("Balanceamento do Revoada (robôs):\n");
+        var texto = new StringBuilder($"Balanceamento do {Identidade.NomeDoJogo} (robôs):\n");
         foreach (Estrategia e in System.Enum.GetValues(typeof(Estrategia)))
         {
             var r = Jogar(dados, e);

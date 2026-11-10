@@ -123,7 +123,7 @@ public class Hud : MonoBehaviour
 
         bool podeSoltar = s.Estado == EstadoJogo.Preparando || s.Estado == EstadoJogo.Intervalo;
         botaoSoltar.interactable = podeSoltar;
-        textoSoltar.text = podeSoltar ? "Soltar a revoada" : s.Estado == EstadoJogo.EmOnda ? "Onda em andamento" : "Fim de jogo";
+        textoSoltar.text = podeSoltar ? "Soltar a onda" : s.Estado == EstadoJogo.EmOnda ? "Onda em andamento" : "Fim de jogo";
 
         if (textoAviso.text.Length > 0 && Time.unscaledTime > fimAviso) textoAviso.text = "";
     }
