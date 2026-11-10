@@ -21,4 +21,19 @@ public class SonsTests
         Assert.IsFalse(Sons.PodeComecarLoop(false, false, AudioDataLoadState.Loaded)); // sem clipe no campo
         Assert.IsFalse(Sons.PodeComecarLoop(false, true, AudioDataLoadState.Failed));
     }
+
+    // Uma voz sozinha toca no volume cheio (uma revoada pequena não muda nada);
+    // muitas vozes ao mesmo tempo vão cedendo espaço, pra soma não virar chiado.
+    [Test]
+    public void FatorPolifonia_UmaVozTocaCheio_MuitasVozesCedemEspaco()
+    {
+        Assert.AreEqual(1f, Sons.FatorPolifonia(0));
+        Assert.AreEqual(1f, Sons.FatorPolifonia(1));
+
+        float com8 = Sons.FatorPolifonia(8);
+        float com16 = Sons.FatorPolifonia(16);
+        Assert.Less(com8, 1f, "muitas vozes juntas precisam ceder espaço");
+        Assert.Less(com16, com8, "quanto mais vozes, mais cada uma cede");
+        Assert.Greater(com16, 0f, "nunca pode silenciar de vez");
+    }
 }

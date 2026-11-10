@@ -61,6 +61,27 @@ public static class ConstrutorAssets
         }
     }
 
+    // Os clipes nunca tinham a importação configurada: ficavam no Vorbis
+    // (com compressão) padrão do Unity, que o editor usa pra todo áudio sem
+    // dono. Vorbis lida mal com ruído filtrado curto e percussivo (estouro,
+    // tiro, explosão são exatamente isso) e esse tipo de artefato de
+    // compressão soa como chiado. PCM sem compressão não tem esse problema, e
+    // os clipes são curtos e mono o bastante pra não pesar no build.
+    public static void ImportarAudio()
+    {
+        foreach (var guid in AssetDatabase.FindAssets("t:AudioClip", new[] { PastaAudio }))
+        {
+            string caminho = AssetDatabase.GUIDToAssetPath(guid);
+            var imp = (AudioImporter)AssetImporter.GetAtPath(caminho);
+            var s = imp.defaultSampleSettings;
+            s.loadType = AudioClipLoadType.DecompressOnLoad;
+            s.compressionFormat = AudioCompressionFormat.PCM;
+            imp.defaultSampleSettings = s;
+            imp.forceToMono = true;
+            imp.SaveAndReimport();
+        }
+    }
+
     // Material comum de sprite (para LineRenderer e partículas).
     public static Material MaterialSprite(string nome, Texture textura)
     {

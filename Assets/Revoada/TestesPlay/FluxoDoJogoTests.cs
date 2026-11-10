@@ -235,4 +235,32 @@ public class FluxoDoJogoTests
         hud.botaoSoltar.onClick.Invoke();
         Assert.AreEqual(EstadoJogo.EmOnda, s.Estado, "o botão continua soltando a onda normalmente");
     }
+
+    // O balão da loja tinha altura fixa e descrições compridas (a do
+    // Bombardeiro, por exemplo) podiam vazar pra fora dele — o quanto depende
+    // da fonte de cada plataforma, então o teste força um texto grande o
+    // bastante pra precisar de mais espaço em qualquer fonte, em vez de
+    // confiar no tamanho exato de uma descrição real.
+    [UnityTest]
+    public IEnumerator BalaoDaLoja_CrescePraCaberDescricoesCompridas()
+    {
+        yield return CarregarJogo();
+        var cartao = Object.FindObjectsByType<CartaoPorcoLoja>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+
+        CartaoPorcoLoja algum = null;
+        foreach (var c in cartao) algum = c;
+        Assert.IsNotNull(algum);
+        var balao = algum.balao; // o balão fica desativado até o mouse passar em cima: FindAnyObjectByType não o acha
+
+        string textoComprido = string.Join(" ", System.Linq.Enumerable.Repeat("palavra", 40));
+        balao.Mostrar("Título", textoComprido, (RectTransform)algum.transform);
+        float alturaComprida = balao.caixa.sizeDelta.y;
+        Assert.That(alturaComprida, Is.GreaterThanOrEqualTo(balao.texto.preferredHeight + 29f),
+            "o balão precisa ser alto o bastante pro texto comprido inteiro");
+        Assert.That(alturaComprida, Is.GreaterThan(62f), "o texto escolhido precisa realmente exigir mais altura (senão o teste não prova nada)");
+
+        balao.Mostrar("Título", "Uma linha.", (RectTransform)algum.transform);
+        float alturaCurta = balao.caixa.sizeDelta.y;
+        Assert.That(alturaCurta, Is.LessThan(alturaComprida), "um texto de uma linha não devia manter o balão esticado");
+    }
 }

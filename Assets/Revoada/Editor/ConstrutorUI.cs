@@ -386,7 +386,7 @@ public static class ConstrutorUI
 
     static PreviaOnda CriarPrevia(Transform pai, Jogo jogo, Vector2 posicao)
     {
-        var fundo = Imagem(pai, "Previa", Sprite("painel"), TopoEsq, posicao, new Vector2(136f, 86f), true);
+        var fundo = Imagem(pai, "Previa", Sprite("painel"), TopoEsq, posicao, new Vector2(136f, 104f), true);
         fundo.color = new Color(0.93f, 0.86f, 0.7f);
         var p = fundo.gameObject.AddComponent<PreviaOnda>();
         p.jogo = jogo;
@@ -406,9 +406,11 @@ public static class ConstrutorUI
             p.quantidades[i] = Texto(fundo.transform, "Quantidade" + i, "×0", 13, TextAnchor.MiddleLeft, TopoEsq,
                 new Vector2(x + 24f, y - 2f), new Vector2(38f, 18f), Marrom);
         }
-        // Centrado: longe dos cantos arredondados do painel.
+        // Centrado: longe dos cantos arredondados do painel. Caixa alta o
+        // bastante pra "Novo: <pássaro> (rápido/couraça/solta filhotes)"
+        // quebrar em 2 linhas sem vazar pra fora do cartão.
         p.aviso = Texto(fundo.transform, "Aviso", "", 12, TextAnchor.MiddleCenter, Topo, new Vector2(0f, -67f),
-            new Vector2(128f, 16f), new Color(0.72f, 0.2f, 0.16f));
+            new Vector2(128f, 30f), new Color(0.72f, 0.2f, 0.16f));
         return p;
     }
 

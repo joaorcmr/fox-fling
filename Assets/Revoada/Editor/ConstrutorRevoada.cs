@@ -24,6 +24,7 @@ public static class ConstrutorRevoada
     {
         ConfigurarProjeto();
         ConstrutorAssets.ImportarArte();
+        ConstrutorAssets.ImportarAudio();
         ConstrutorDados.GarantirDados(false);
         ConstrutorPrefabs.Tudo();
         ConstrutorCenas.Tudo();

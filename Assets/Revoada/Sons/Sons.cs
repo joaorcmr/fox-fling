@@ -33,7 +33,10 @@ public class Sons : MonoBehaviour
     AudioSource fonteAmbiente, fonteMusica;
     bool ambienteComecou, musicaComecou;
     int proxima;
-    readonly Dictionary<AudioClip, float> ultimaVez = new Dictionary<AudioClip, float>();
+    // A chave normal é o próprio AudioClip; o estouro usa uma chave única pra
+    // valer pras 3 variações juntas (ver TocarEstouro e ChaveEstouro).
+    readonly Dictionary<object, float> ultimaVez = new Dictionary<object, float>();
+    static readonly object ChaveEstouro = new object();
 
     void Awake()
     {
@@ -106,27 +109,42 @@ public class Sons : MonoBehaviour
 
     public static void Tocar(AudioClip clip, float volume = 1f, float variacaoTom = 0.08f)
     {
-        if (Instancia != null && clip != null) Instancia.TocarAqui(clip, volume, variacaoTom);
+        if (Instancia != null && clip != null) Instancia.TocarAqui(clip, volume, variacaoTom, clip);
     }
 
+    // As 3 variações de estouro contam como UM som só pro cronômetro de
+    // repetição: antes, cada variação tinha o cronômetro próprio, então uma
+    // revoada densa tocava as 3 em cima uma da outra (cada voz soma volume: o
+    // resultado é o chiado de áudio saturando, não 3 estouros distintos).
     public static void TocarEstouro(float volume = 0.6f)
     {
         if (Instancia == null || Instancia.estouros == null || Instancia.estouros.Length == 0) return;
-        Tocar(Instancia.estouros[Random.Range(0, Instancia.estouros.Length)], volume);
+        var clip = Instancia.estouros[Random.Range(0, Instancia.estouros.Length)];
+        Instancia.TocarAqui(clip, volume, 0.08f, ChaveEstouro);
     }
 
-    void TocarAqui(AudioClip clip, float volume, float variacaoTom)
+    // Quantas vozes tocando ao mesmo tempo já pedem pra baixar o volume de uma
+    // voz nova, pra soma de todas não estourar (clipar) e virar chiado. Uma
+    // voz sozinha toca no volume cheio; a partir de ~5 ao mesmo tempo (uma
+    // revoada densa estourando perto uma da outra) cada uma vai cedendo um
+    // pouco de espaço pras outras.
+    public static float FatorPolifonia(int vozesTocando) => Mathf.Min(1f, 2.2f / Mathf.Sqrt(Mathf.Max(1, vozesTocando + 1)));
+
+    void TocarAqui(AudioClip clip, float volume, float variacaoTom, object chave)
     {
         if (clip.loadState != AudioDataLoadState.Loaded) return; // no navegador, ainda decodificando
         float agora = Time.unscaledTime;
-        if (ultimaVez.TryGetValue(clip, out float antes) && agora - antes < intervaloMinimo) return;
-        ultimaVez[clip] = agora;
+        if (ultimaVez.TryGetValue(chave, out float antes) && agora - antes < intervaloMinimo) return;
+        ultimaVez[chave] = agora;
+
+        int vozesTocando = 0;
+        foreach (var fonte in fontes) if (fonte.isPlaying) vozesTocando++;
 
         var f = fontes[proxima];
         proxima = (proxima + 1) % fontes.Length;
         f.clip = clip;
         f.pitch = 1f + Random.Range(-variacaoTom, variacaoTom); // repetir com tom igual cansa o ouvido
-        f.volume = volume * VolumeEfeitos;
+        f.volume = volume * VolumeEfeitos * FatorPolifonia(vozesTocando);
         f.Play();
     }
 
