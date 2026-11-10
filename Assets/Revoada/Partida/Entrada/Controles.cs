@@ -18,6 +18,8 @@ public class Controles : MonoBehaviour
     public Camera cam;
     public FantasmaColocacao fantasma;
     public MenuPausa menuPausa;
+    [Tooltip("Durante a troca de fase (quadro na tela), nada no mapa nem no teclado responde.")]
+    public TrocaDeFase trocaDeFase;
 
     Simulacao Sim => jogo.Sim;
     Selecao Selecao => jogo.Selecao;
@@ -36,6 +38,7 @@ public class Controles : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Escape)) menuPausa.Fechar();
             return;
         }
+        if (trocaDeFase != null && trocaDeFase.Ativa) return; // quem responde é o quadro da troca de fase
 
         Vector2 mundo = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10f));
         bool sobreUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();

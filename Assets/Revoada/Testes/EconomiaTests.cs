@@ -81,6 +81,19 @@ public class EconomiaTests
         Assert.AreEqual(157, e.ValorVenda(225));
     }
 
+    // Na troca de fase os porcos voltam pelo valor inteiro (fracaoTrocaDeFase = 1).
+    [Test]
+    public void ValorTrocaDeFase_DevolveTudoPorPadrao_EArredondaParaBaixo()
+    {
+        Assert.AreEqual(220, new Economia(Dados()).ValorTrocaDeFase(220));
+
+        var d = Dados();
+        d.fracaoTrocaDeFase = 0.7f;
+        Assert.AreEqual(84, new Economia(d).ValorTrocaDeFase(120), "0,7 × 120 dá 83,99999 no float: a folga não perde a moeda");
+        d.fracaoTrocaDeFase = 0.5f;
+        Assert.AreEqual(112, new Economia(d).ValorTrocaDeFase(225));
+    }
+
     [Test]
     public void OndasParaPagar()
     {

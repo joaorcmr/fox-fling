@@ -1,10 +1,12 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 // Escuta os eventos da simulação e mantém um GameObject para cada coisa viva
 // (pássaros, porcos, tiros), pegando e devolvendo do pool. Também dispara os
 // efeitos: peninhas a cada golpe, nuvem de penas e "+N" no estouro, poeira
-// quando um porco cai no mapa, lama na explosão. No Update, cada visual se
+// quando um porco cai no mapa, lama na explosão, o "+N" verde do reparo na
+// Torre e, na troca de fase, os porcos virando moedas um por um. No Update, cada visual se
 // atualiza com a interpolação entre o último passo fixo e o atual (alfa), para
 // o movimento ficar liso mesmo numa tela de 120 Hz.
 //
@@ -12,6 +14,7 @@ using UnityEngine;
 public class GerenteVisuais : MonoBehaviour
 {
     static readonly Color CorTextoMoedas = new Color(1f, 0.86f, 0.35f);
+    static readonly Color CorTextoReparo = new Color(0.6f, 1f, 0.5f);
 
     public Jogo jogo;
     public VisualPassaro prefabPassaro;
@@ -66,6 +69,15 @@ public class GerenteVisuais : MonoBehaviour
         {
             efeitos.Brilho(p.Posicao);
             if (selecionado != null && selecionado.Porco == p) selecionado.MostrarAlcance(true); // o alcance pode ter crescido
+        };
+        // Troca de fase: os porcos continuam na tela por um instante e somem um
+        // depois do outro, cada um com o "+N" que voltou para a carteira.
+        sim.PorcosRecolhidos += (lista, moedas) => StartCoroutine(Recolher(new List<Porco>(lista)));
+        sim.TorreReparada += cura =>
+        {
+            var torre = sim.Dados.mapa.torre;
+            efeitos.Brilho(torre);
+            efeitos.Texto(torre + Vector2.up * 0.9f, "+" + cura, CorTextoReparo);
         };
 
         sim.TiroDisparado += (porco, tiro) =>
@@ -123,6 +135,19 @@ public class GerenteVisuais : MonoBehaviour
         if (v == selecionado) selecionado = null;
         v.MostrarAlcance(false);
         poolPorcos.Devolver(v);
+    }
+
+    IEnumerator Recolher(List<Porco> lista)
+    {
+        float intervalo = Mathf.Min(0.08f, 0.9f / Mathf.Max(1, lista.Count));
+        foreach (var p in lista)
+        {
+            efeitos.Poeira(p.Posicao);
+            efeitos.Brilho(p.Posicao);
+            efeitos.Texto(p.Posicao, "+" + jogo.Sim.ValorTrocaDeFase(p), CorTextoMoedas);
+            RemoverPorco(p);
+            yield return new WaitForSecondsRealtime(intervalo);
+        }
     }
 
     void CriarTiro(Projetil t)

@@ -11,7 +11,7 @@ public class Porco
     public int Especializacao = -1;  // -1 nenhuma, 0 = A, 1 = B
     public ModoAlvo Modo = ModoAlvo.Primeiro;
     public float Recarga;            // segundos até poder atirar de novo
-    public int Gasto;                // tudo o que já foi gasto nele (a venda devolve 70%)
+    public int Gasto;                // tudo o que já foi gasto nele (a venda devolve 70%; a troca de fase, tudo)
     public Vector2 Mira = Vector2.right; // para onde atirou por último (a arma gira para cá)
     public Atributos Atributos;      // os números do nível atual
 

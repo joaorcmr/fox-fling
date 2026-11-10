@@ -7,7 +7,8 @@ using static CenarioTeste;
 // O jogo se divide em 3 fases (10 ondas cada), um mapa (caminho) e um turno do
 // dia diferentes por fase (issue #14). Os mapas de verdade (Fazenda, Pomar,
 // Floresta) usam as mesmas regras de posição dos testes de DadosTests: a
-// trilha dentro do mapa, os obstáculos longe dela, a Torre no fim dela.
+// trilha dentro do mapa, os obstáculos longe dela, a Torre no fim dela. Na
+// troca de fase, todos os porcos voltam para a carteira pelo valor inteiro.
 public class FasesTests
 {
     static IEnumerable<DadosMapa> MapasDeVerdade()
@@ -120,31 +121,113 @@ public class FasesTests
         Assert.Less(s.Trilha.DistanciaAte(new Vector2(7f, 3f)), 0.1f);
     }
 
-    [Test]
-    public void TrocaDeFase_SoRemoveQuemFicaEmCimaDaTrilhaNova_EDevolve70PorCento()
+    // Sem bônus de onda: só o gasto e o que volta na troca mexem nas moedas.
+    static DadosJogo ComPorcosQueNaoAtiram(int moedas)
     {
         var d = ComTresFasesDeUmaOnda();
-        d.economia.moedasIniciais = 200;
+        d.economia.moedasIniciais = moedas;
         d.economia.bonusOndaBase = 0;
-        d.economia.bonusOndaPorOnda = 0; // isola o teste: só o gasto e o reembolso da venda devem mexer nas moedas
+        d.economia.bonusOndaPorOnda = 0;
         d.porcos[EspeciePorco.Estilingueiro] = Porco(EspeciePorco.Estilingueiro, 100, Tiro(TipoTiro.Pedrinha, alcance: 0.01f));
-        var s = new Simulacao(d);
+        return d;
+    }
 
+    [Test]
+    public void TrocaDeFase_RecolheTodosOsPorcos_EDevolveTudoOQueFoiGasto()
+    {
+        var s = new Simulacao(ComPorcosQueNaoAtiram(moedas: 1000));
         // A trilha da Fase A vai de (0,7.5) a (14,7.5); a da Fase B, de (0,3) a (14,3).
-        Assert.AreEqual(Resultado.Ok, s.Comprar(EspeciePorco.Estilingueiro, new Vector2(7f, 10f), out var longe));   // longe das duas trilhas
+        Assert.AreEqual(Resultado.Ok, s.Comprar(EspeciePorco.Estilingueiro, new Vector2(7f, 10f), out var longe));    // continuaria valendo na Fase B
         Assert.AreEqual(Resultado.Ok, s.Comprar(EspeciePorco.Estilingueiro, new Vector2(2f, 3.3f), out var naFaseB)); // em cima da trilha da Fase B
-        Porco removido = null;
-        s.PorcoVendido += p => removido = p;
+        Assert.AreEqual(Resultado.Ok, s.Melhorar(longe));                                                             // +100: a melhoria também volta
+        Assert.AreEqual(700, s.Moedas);
+
+        IReadOnlyList<Porco> recolhidos = null;
+        int devolvido = -1;
+        bool vendeu = false;
+        s.PorcosRecolhidos += (lista, moedas) =>
+        {
+            recolhidos = lista;
+            devolvido = moedas;
+        };
+        s.PorcoVendido += p => vendeu = true;
 
         AcabarOnda(s, soltar: true); // onda 1
         Assert.AreEqual(2, s.Porcos.Count, "ainda na mesma fase: os dois continuam no mapa");
+        Assert.IsNull(recolhidos);
 
         AcabarOnda(s, soltar: true); // onda 2: última da fase 1 — troca ao terminar
 
-        CollectionAssert.Contains(s.Porcos, longe, "longe da trilha nova: continua no mesmo lugar, nível e tudo");
-        CollectionAssert.DoesNotContain(s.Porcos, naFaseB, "em cima da trilha nova: não tem mais onde ficar");
-        Assert.AreSame(naFaseB, removido);
-        Assert.AreEqual(70, s.Moedas, "devolve 70% do gasto (100) só de quem foi removido");
+        Assert.AreEqual(0, s.Porcos.Count, "na troca de fase todos os porcos saem do mapa, até os que ainda caberiam");
+        CollectionAssert.AreEquivalent(new[] { longe, naFaseB }, recolhidos);
+        Assert.AreEqual(300, devolvido, "compra (100 + 100) e melhoria (100): tudo volta");
+        Assert.AreEqual(1000, s.Moedas, "a carteira volta a ter tudo o que foi gasto nos porcos");
+        Assert.IsFalse(vendeu, "recolher não é vender (vender devolve só 70%)");
+    }
+
+    [Test]
+    public void TrocaDeFase_ComFracaoMenor_DevolveSoAFracao()
+    {
+        var d = ComPorcosQueNaoAtiram(moedas: 100);
+        d.economia.fracaoTrocaDeFase = 0.5f;
+        var s = new Simulacao(d);
+        s.Comprar(EspeciePorco.Estilingueiro, new Vector2(7f, 10f), out _);
+
+        AcabarOnda(s, soltar: true);
+        AcabarOnda(s, soltar: true); // troca de fase
+
+        Assert.AreEqual(50, s.Moedas, "metade dos 100 gastos");
+    }
+
+    [Test]
+    public void TrocaDeFase_SemPorcos_NaoAvisaRecolhimento()
+    {
+        var s = new Simulacao(ComPorcosQueNaoAtiram(moedas: 100));
+        bool avisou = false;
+        s.PorcosRecolhidos += (lista, moedas) => avisou = true;
+
+        AcabarOnda(s, soltar: true);
+        AcabarOnda(s, soltar: true); // troca de fase
+
+        Assert.AreEqual(2, s.Fase);
+        Assert.IsFalse(avisou);
+        Assert.AreEqual(100, s.Moedas);
+    }
+
+    [Test]
+    public void TrocaDeFase_NadaFicaSelecionado()
+    {
+        var s = new Simulacao(ComPorcosQueNaoAtiram(moedas: 1000));
+        var selecao = new Selecao(s);
+        s.Comprar(EspeciePorco.Estilingueiro, new Vector2(7f, 10f), out var porco);
+        selecao.Selecionar(porco);
+
+        AcabarOnda(s, soltar: true);
+        AcabarOnda(s, soltar: true); // troca de fase
+
+        Assert.IsNull(selecao.Selecionado, "o porco selecionado saiu do mapa");
+    }
+
+    [Test]
+    public void FaseDaOnda_EUltimaOndaDaFase()
+    {
+        var s = new Simulacao(ComTresFasesDeUmaOnda()); // 6 ondas, 3 fases de 2
+
+        CollectionAssert.AreEqual(new[] { 1, 1, 2, 2, 3, 3 }, Enumerable.Range(1, 6).Select(s.FaseDaOnda).ToArray());
+        CollectionAssert.AreEqual(new[] { false, true, false, true, false, false },
+            Enumerable.Range(1, 6).Select(s.UltimaOndaDaFase).ToArray(), "a última onda do jogo não troca de mapa");
+    }
+
+    [Test]
+    public void SemFases_SempreFase1()
+    {
+        var d = Basico();
+        d.ondas.Add(Onda(Grupo(EspeciePassaro.Pardal, 1)));
+        d.ondas.Add(Onda(Grupo(EspeciePassaro.Pardal, 1)));
+        var s = new Simulacao(d);
+
+        Assert.AreEqual(1, s.FaseDaOnda(2));
+        Assert.IsFalse(s.UltimaOndaDaFase(1));
     }
 
     // Solta a próxima onda (se soltar) e avança até ela terminar.

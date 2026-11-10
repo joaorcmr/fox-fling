@@ -61,19 +61,11 @@ public class TelaFim : MonoBehaviour
         {
             clarao.color = new Color(1f, 0.95f, 0.75f, 0.6f * (1f - Mathf.Clamp01(t * 3.5f))); // clarão de 0,1 s
             grupo.alpha = Mathf.Clamp01(t * 2f);
-            painel.localScale = Vector3.one * VoltaComQuique(t);
+            painel.localScale = Vector3.one * Curvas.VoltaComQuique(t);
             yield return null;
         }
         clarao.color = new Color(1f, 0.95f, 0.75f, 0f);
         grupo.alpha = 1f;
         painel.localScale = Vector3.one;
-    }
-
-    // "OutBack": passa um pouco de 1 e volta, como algo que cai e quica.
-    static float VoltaComQuique(float t)
-    {
-        const float c1 = 1.70158f, c3 = c1 + 1f;
-        float x = t - 1f;
-        return 1f + c3 * x * x * x + c1 * x * x;
     }
 }

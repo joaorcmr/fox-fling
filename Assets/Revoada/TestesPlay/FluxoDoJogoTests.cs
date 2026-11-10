@@ -164,6 +164,59 @@ public class FluxoDoJogoTests
         Assert.AreEqual(vidaEmOnda, s.Vida, "com a onda em andamento, o botão não pode curar nada");
     }
 
+    // A troca de fase é um momento claro, para o jogador não se perder: os
+    // porcos voltam como moedas pelo valor inteiro, o mapa escurece e um quadro
+    // anuncia a fase nova e espera; enquanto isso, a loja e o mapa não recebem
+    // cliques. Só depois de "Ver o mapa novo" o jogo volta a responder — e a
+    // próxima onda continua esperando o jogador soltar.
+    [UnityTest]
+    public IEnumerator TrocaDeFase_DevolveOsPorcos_MostraOQuadro_ETravaAteOJogadorVerOMapa()
+    {
+        yield return CarregarJogo();
+        var s = Jogo.Atual.Sim;
+        var troca = Object.FindAnyObjectByType<TrocaDeFase>();
+
+        // Moedas de sobra e Bombardeiros no máximo espalhados: a fase 1 passa sem a Torre cair.
+        s.Economia.Creditar(200000);
+        for (float x = 1f; x < 14f; x += 1.5f)
+            for (float y = 1f; y < 15f; y += 1.5f)
+                if (s.Porcos.Count < 25 && s.Comprar(EspeciePorco.Bombardeiro, new Vector2(x, y), out var p) == Resultado.Ok)
+                {
+                    s.Melhorar(p);
+                    s.Melhorar(p);
+                    s.Especializar(p, 0);
+                }
+        Assert.Greater(s.Porcos.Count, 5, "não achou lugar para os porcos");
+        int gasto = 0;
+        foreach (var p in s.Porcos) gasto += p.Gasto;
+        int moedasAntes = s.Moedas;
+
+        for (int onda = 1; onda <= 10 && s.Estado != EstadoJogo.Derrota; onda++)
+        {
+            s.SoltarOnda();
+            for (int i = 0; i < 60 * 60 * 5 && s.Estado == EstadoJogo.EmOnda; i++) s.Passo();
+        }
+        Assert.AreEqual(2, s.Fase, "a fase 1 devia ter acabado");
+        Assert.AreEqual(0, s.Porcos.Count, "na troca, os porcos saem do mapa");
+        Assert.GreaterOrEqual(s.Moedas, moedasAntes + gasto, "o valor inteiro dos porcos voltou para a carteira");
+        Assert.IsTrue(troca.Ativa, "a troca de fase não começou");
+        Assert.IsTrue(troca.grupo.blocksRaycasts, "durante a troca, a loja e o mapa ainda recebem cliques");
+
+        // O quadro aparece depois de os porcos virarem moedas e de o mapa escurecer.
+        float limite = Time.realtimeSinceStartup + 5f;
+        while (!troca.quadro.gameObject.activeSelf && Time.realtimeSinceStartup < limite) yield return null;
+        Assert.IsTrue(troca.quadro.gameObject.activeSelf, "o quadro da fase nova não apareceu");
+        StringAssert.Contains("Fase 2", troca.titulo.text);
+        Assert.IsTrue(troca.Ativa, "o quadro espera o jogador");
+
+        troca.botaoContinuar.onClick.Invoke();
+        limite = Time.realtimeSinceStartup + 5f;
+        while (troca.Ativa && Time.realtimeSinceStartup < limite) yield return null;
+        Assert.IsFalse(troca.Ativa, "depois de ver o mapa novo, o jogo volta a responder");
+        Assert.IsFalse(troca.grupo.blocksRaycasts);
+        Assert.AreEqual(EstadoJogo.Intervalo, s.Estado, "nenhuma onda começa sozinha depois da troca");
+    }
+
     // A Esthefanny pediu para tirar o Auto: nenhuma onda pode começar sozinha,
     // só quando o jogador soltar (botão ou Espaço).
     [UnityTest]

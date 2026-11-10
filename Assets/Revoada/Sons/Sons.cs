@@ -16,7 +16,7 @@ public class Sons : MonoBehaviour
     public AudioClip[] estouros;
     public AudioClip tiroEstilingue, tiroArpao, tiroBomba, explosao;
     public AudioClip compra, upgrade, venda, erro, clique;
-    public AudioClip onda, chefe, torre, vitoria, derrota;
+    public AudioClip onda, chefe, torre, vitoria, derrota, fase;
 
     [Header("Fundo (em loop)")]
     public AudioClip ambiente;

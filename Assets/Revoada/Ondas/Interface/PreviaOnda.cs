@@ -2,8 +2,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // A prévia da próxima onda: quem vem e quantos, e um aviso quando estreia um
-// tipo novo ("Novo: Urubu (couraça)") ou vem chefe. Ver o que vem é o que
-// permite decidir se dá para gastar em income agora.
+// tipo novo ("Novo: Urubu (couraça)"), vem chefe ou a próxima onda já é num
+// mapa novo ("Mapa novo: Pomar", durante a última onda de uma fase). Ver o que
+// vem é o que permite decidir se dá para gastar em income agora.
 public class PreviaOnda : MonoBehaviour
 {
     public Jogo jogo;
@@ -12,18 +13,20 @@ public class PreviaOnda : MonoBehaviour
     public Text[] quantidades;
     public Text aviso;
 
-    int mostrando = -1;
+    int mostrando = -1, faseMostrada = -1;
 
     void Update()
     {
         int proxima = jogo.Sim.Onda + 1;
-        if (proxima != mostrando) Mostrar(proxima);
+        // A fase também conta: o aviso de "mapa novo" sai assim que o mapa troca.
+        if (proxima != mostrando || jogo.Sim.Fase != faseMostrada) Mostrar(proxima);
     }
 
     public void Mostrar(int numero)
     {
         mostrando = numero;
         var s = jogo.Sim;
+        faseMostrada = s.Fase;
         if (numero > s.TotalOndas)
         {
             titulo.text = "Última onda!";
@@ -45,9 +48,12 @@ public class PreviaOnda : MonoBehaviour
 
         bool chefe = resumo.Exists(k => s.Dados.passaros[k.Key].chefe);
         var novos = s.Estreias(numero);
+        int faseDaOnda = s.FaseDaOnda(numero);
         if (chefe) aviso.text = "CHEFE!";
+        else if (faseDaOnda != s.Fase) aviso.text = "Mapa novo: " + s.Dados.fases[faseDaOnda - 1].nome;
         else if (novos.Count > 0 && numero > 1) aviso.text = "Novo: " + Descrever(s.Dados.passaros[novos[0]]); // na onda 1 tudo é novo
         else aviso.text = "";
+        aviso.fontStyle = chefe ? FontStyle.Bold : FontStyle.Normal; // em negrito, "Novo: Urubu (couraça)" não cabia na linha
     }
 
     static string Descrever(DadosPassaro p)

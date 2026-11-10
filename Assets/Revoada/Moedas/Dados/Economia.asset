@@ -18,7 +18,9 @@ MonoBehaviour:
     bonusOndaBase: 25
     bonusOndaPorOnda: 5
     fracaoVenda: 0.7
+    fracaoTrocaDeFase: 1
     esperaAuto: 2
+    esperaAutoNovaFase: 8
     cofrinho:
     - multiplicador: 1.25
       custo: 120
@@ -30,3 +32,6 @@ MonoBehaviour:
       custo: 750
     - multiplicador: 2.5
       custo: 1200
+    custoReparoBase: 80
+    custoReparoIncremento: 40
+    curaPorReparo: 20

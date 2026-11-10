@@ -62,6 +62,16 @@ public static class ConstrutorUI
         return rt;
     }
 
+    // Muda o pivô para o centro sem mexer em onde o elemento aparece: para
+    // animar a escala em volta do meio (pulsar, bater), e não de um canto.
+    public static RectTransform CentralizarPivo(RectTransform rt)
+    {
+        var centro = new Vector2(0.5f, 0.5f);
+        rt.anchoredPosition += Vector2.Scale(centro - rt.pivot, rt.sizeDelta);
+        rt.pivot = centro;
+        return rt;
+    }
+
     public static Text Texto(Transform pai, string nome, string conteudo, int tamanho, TextAnchor alinhamento,
         Vector2 ancora, Vector2 posicao, Vector2 caixa, Color cor, bool contorno = false, bool negrito = true)
     {
@@ -116,7 +126,8 @@ public static class ConstrutorUI
     // ------------------------------------------------------------------
     const float CentroMapa = 224f; // o mapa ocupa os 448 px da esquerda
 
-    public static Hud CriarHud(Transform pai, Jogo jogo, Controles controles, TipoPorco[] porcos, Efeitos efeitos)
+    public static Hud CriarHud(Transform pai, Jogo jogo, Controles controles, TipoPorco[] porcos, Efeitos efeitos,
+        VisualMapa mapa, RevelarTrilha revelar)
     {
         var canvas = Canvas(pai, "HUD", 10);
         var t = canvas.transform;
@@ -137,38 +148,41 @@ public static class ConstrutorUI
         hud.textoVida = Texto(barra, "Vida", "100", 22, TextAnchor.MiddleLeft, TopoEsq, new Vector2(40f, -8f), new Vector2(72f, 26f), Marrom);
         Imagem(barra, "IconeMoeda", Sprite("icone_moeda"), TopoEsq, new Vector2(10f, -38f), new Vector2(26f, 26f)).raycastTarget = false;
         hud.textoMoedas = Texto(barra, "Moedas", "300", 22, TextAnchor.MiddleLeft, TopoEsq, new Vector2(40f, -38f), new Vector2(72f, 26f), Marrom);
-        hud.textoOnda = Texto(barra, "Onda", "Onda 1/30", 14, TextAnchor.MiddleLeft, TopoEsq, new Vector2(10f, -68f), new Vector2(104f, 22f), Marrom);
+        hud.textoOnda = Texto(barra, "Onda", "Onda 1/30", 14, TextAnchor.MiddleLeft, TopoEsq, new Vector2(10f, -68f), new Vector2(80f, 22f), Marrom);
+        // A fase ao lado da onda: o jogador sempre sabe em que mapa está.
+        hud.textoFase = Texto(barra, "Fase", "Fase 1/3", 12, TextAnchor.MiddleRight, TopoDir, new Vector2(-10f, -68f), new Vector2(56f, 22f),
+            Marrom, negrito: false);
 
         hud.botaoVelocidade = Botao(barra, "BotaoVelocidade", null, TopoEsq, new Vector2(114f, -8f), new Vector2(28f, 28f));
         hud.textoVelocidade = Texto(hud.botaoVelocidade.transform, "Texto", "1×", 13, TextAnchor.MiddleCenter, Centro,
             new Vector2(0f, 1f), new Vector2(28f, 28f), Creme, contorno: true);
         hud.botaoMenu = Botao(barra, "BotaoMenu", Sprite("icone_menu"), TopoEsq, new Vector2(114f, -38f), new Vector2(28f, 28f));
-        // Mesma coluna dos ícones de cima, no espaço que sobra ao lado do texto da onda.
-        hud.botaoReparo = Botao(barra, "BotaoReparo", Sprite("icone_reparo"), TopoEsq, new Vector2(114f, -68f), new Vector2(28f, 22f));
 
-        // A loja (porcos, Cofrinho e prévia) e, no mesmo lugar, o painel do porco selecionado.
-        var loja = Retangulo(barra, "Loja", TopoEsq, new Vector2(0f, -98f), new Vector2(LarguraBarra, 304f));
+        // A loja e, no mesmo lugar, o painel do porco selecionado. Tudo o que se
+        // compra tem a mesma cara (consistência): os 4 porcos, o Reparo da Torre
+        // e o Cofrinho são cartões iguais, 2 por linha; embaixo do Cofrinho, a
+        // linha de "se paga em ~N ondas"; depois, a prévia da próxima onda.
+        var loja = Retangulo(barra, "Loja", TopoEsq, new Vector2(0f, -96f), new Vector2(LarguraBarra, 314f));
         hud.grupoLoja = loja.gameObject;
         var balao = CriarBalao(t);
-        var reparo = hud.botaoReparo.gameObject.AddComponent<CartaoReparo>();
-        reparo.jogo = jogo;
-        reparo.botao = hud.botaoReparo;
-        reparo.grupo = hud.botaoReparo.gameObject.AddComponent<CanvasGroup>();
-        reparo.balao = balao;
         hud.cartoes = new CartaoPorcoLoja[porcos.Length];
         for (int i = 0; i < porcos.Length; i++)
         {
-            var posicao = new Vector2(10f + (i % 2) * 68f, -(i / 2) * 72f);
-            hud.cartoes[i] = CriarCartao(loja, porcos[i], posicao, new Vector2(64f, 68f));
+            hud.cartoes[i] = CriarCartao(loja, porcos[i], PosicaoCartao(i));
             hud.cartoes[i].balao = balao;
         }
-        hud.cartaoCofrinho = CriarCofrinho(loja, jogo, new Vector2(8f, -144f));
-        hud.previa = CriarPrevia(loja, jogo, new Vector2(8f, -206f));
+        hud.cartaoReparo = CriarReparo(loja, jogo, PosicaoCartao(porcos.Length));
+        hud.cartaoReparo.balao = balao;
+        hud.botaoReparo = hud.cartaoReparo.botao;
+        hud.cartaoCofrinho = CriarCofrinho(loja, jogo, PosicaoCartao(porcos.Length + 1));
+        hud.cartaoCofrinho.balao = balao;
+        hud.previa = CriarPrevia(loja, jogo, new Vector2(8f, PosicaoCartao(porcos.Length + 2).y - 28f));
         hud.painelPorco = CriarPainelPorco(barra, jogo, new Vector2(8f, -98f));
 
         // Sem Auto: o jogador decide toda vez quando a próxima onda começa.
-        // "Soltar a onda" ocupa o espaço inteiro que sobrou.
-        hud.botaoSoltar = Botao(barra, "BotaoSoltar", null, BaixoEsq, new Vector2(8f, 10f), new Vector2(136f, 68f));
+        // Depois de uma troca de fase, ele pulsa (em volta do centro) até a próxima onda.
+        hud.botaoSoltar = Botao(barra, "BotaoSoltar", null, BaixoEsq, new Vector2(8f, 10f), new Vector2(136f, 52f));
+        CentralizarPivo((RectTransform)hud.botaoSoltar.transform);
         Imagem(hud.botaoSoltar.transform, "Icone", Sprite("icone_play"), Esq, new Vector2(8f, 1f), new Vector2(26f, 26f)).raycastTarget = false;
         hud.textoSoltar = Texto(hud.botaoSoltar.transform, "Texto", "Soltar a onda", 13, TextAnchor.MiddleCenter, Esq,
             new Vector2(36f, 1f), new Vector2(96f, 40f), Creme, contorno: true);
@@ -179,12 +193,68 @@ public static class ConstrutorUI
         hud.textoAviso = Texto(t, "Aviso", "", 15, TextAnchor.MiddleCenter, BaixoEsq, new Vector2(CentroMapa - 200f, 14f),
             new Vector2(400f, 22f), Creme, contorno: true);
         CriarDicas(t, jogo);
+        int totalFases = jogo.fases != null ? jogo.fases.mapas.Count : 0;
+        controles.trocaDeFase = CriarTrocaDeFase(t, jogo, hud, mapa, revelar, totalFases);
         CriarTelaFim(t, jogo, efeitos);
         hud.menuPausa = CriarMenuPausa(t, jogo);
         controles.menuPausa = hud.menuPausa;
 
         SistemaDeEventos(pai);
         return hud;
+    }
+
+    // Os cartões da loja, em 2 colunas: 0–3 os porcos, 4 o Reparo, 5 o Cofrinho.
+    static readonly Vector2 TamanhoCartao = new Vector2(64f, 64f);
+
+    static Vector2 PosicaoCartao(int i) => new Vector2(10f + (i % 2) * 68f, -(i / 2) * 68f);
+
+    // A troca de fase (TrocaDeFase): a cortina sobre o mapa, o véu sobre a barra
+    // (os dois bloqueiam os cliques enquanto a troca acontece) e o quadro que
+    // anuncia a fase nova, no meio do mapa.
+    static TrocaDeFase CriarTrocaDeFase(Transform pai, Jogo jogo, Hud hud, VisualMapa mapa, RevelarTrilha revelar, int totalFases)
+    {
+        var raiz = Esticar(Retangulo(pai, "TrocaDeFase", Centro, Vector2.zero, Vector2.zero));
+        var f = raiz.gameObject.AddComponent<TrocaDeFase>();
+        f.jogo = jogo;
+        f.hud = hud;
+        f.mapa = mapa;
+        f.revelar = revelar;
+        f.grupo = raiz.gameObject.AddComponent<CanvasGroup>();
+        f.grupo.blocksRaycasts = false;
+
+        var escuro = new Color(0.17f, 0.11f, 0.08f, 0f); // o marrom mais escuro da paleta, não preto
+        f.cortina = Imagem(raiz, "Cortina", null, Centro, Vector2.zero, Vector2.zero);
+        Esticar(f.cortina.rectTransform).offsetMax = new Vector2(-LarguraBarra, 0f); // só o mapa
+        f.cortina.color = escuro;
+        f.veuBarra = Imagem(raiz, "VeuBarra", null, Centro, Vector2.zero, Vector2.zero);
+        var veu = Esticar(f.veuBarra.rectTransform);
+        veu.anchorMin = new Vector2(1f, 0f);
+        veu.offsetMin = new Vector2(-LarguraBarra, 0f); // só a barra
+        f.veuBarra.color = escuro;
+
+        var quadro = Imagem(f.cortina.transform, "Quadro", Sprite("painel"), Centro, Vector2.zero, new Vector2(340f, 262f), true);
+        f.quadro = quadro.rectTransform;
+        f.grupoQuadro = quadro.gameObject.AddComponent<CanvasGroup>();
+        var q = quadro.transform;
+        f.titulo = Texto(q, "Titulo", "Fase 2 de 3", 24, TextAnchor.MiddleCenter, Topo, new Vector2(0f, -14f), new Vector2(310f, 30f), Marrom);
+        f.pontoCheio = Sprite("ponto_nivel");
+        f.pontoVazio = Sprite("ponto_nivel_vazio");
+        int n = Mathf.Max(1, totalFases);
+        f.pontosFase = new Image[n];
+        for (int i = 0; i < n; i++)
+        {
+            f.pontosFase[i] = Imagem(q, "Ponto" + (i + 1), f.pontoVazio, Topo, new Vector2((i - (n - 1) / 2f) * 20f, -46f), new Vector2(14f, 14f));
+            f.pontosFase[i].raycastTarget = false;
+        }
+        f.lugar = Texto(q, "Lugar", "Pomar, à tarde", 16, TextAnchor.MiddleCenter, Topo, new Vector2(0f, -64f), new Vector2(310f, 22f),
+            new Color(0.31f, 0.5f, 0.21f));
+        f.detalhes = Texto(q, "Detalhes", "", 13, TextAnchor.UpperLeft, Topo, new Vector2(0f, -94f), new Vector2(304f, 104f), Marrom, negrito: false);
+        f.botaoContinuar = Botao(q, "Continuar", null, Baixo, new Vector2(0f, 14f), new Vector2(200f, 40f));
+        CentralizarPivo((RectTransform)f.botaoContinuar.transform);
+        Texto(f.botaoContinuar.transform, "Texto", "Ver o mapa novo", 16, TextAnchor.MiddleCenter, Centro, new Vector2(0f, 1f),
+            new Vector2(200f, 40f), Creme, contorno: true);
+        quadro.gameObject.SetActive(false);
+        return f;
     }
 
     static Dicas CriarDicas(Transform pai, Jogo jogo)
@@ -261,47 +331,82 @@ public static class ConstrutorUI
         return slider;
     }
 
+    // Um cartão da loja: o fundo verde de botão, o ícone grande em cima e a
+    // moeda com o preço embaixo. Porcos, Reparo e Cofrinho usam este mesmo.
+    static Image CartaoLoja(Transform pai, string nome, Sprite icone, Vector2 posicao, out Button botao, out CanvasGroup grupo,
+        out Image imagemIcone, out Text preco)
+    {
+        var fundo = Imagem(pai, nome, Sprite("botao"), TopoEsq, posicao, TamanhoCartao, true);
+        botao = fundo.gameObject.AddComponent<Button>();
+        botao.targetGraphic = fundo;
+        grupo = fundo.gameObject.AddComponent<CanvasGroup>();
+        imagemIcone = Imagem(fundo.transform, "Icone", icone, Topo, new Vector2(0f, -3f), new Vector2(40f, 40f));
+        imagemIcone.raycastTarget = false;
+        imagemIcone.preserveAspect = true;
+        Imagem(fundo.transform, "IconeMoeda", Sprite("icone_moeda"), Baixo, new Vector2(-17f, 4f), new Vector2(16f, 16f)).raycastTarget = false;
+        preco = Texto(fundo.transform, "Preco", "", 13, TextAnchor.MiddleLeft, Baixo, new Vector2(8f, 3f), new Vector2(36f, 18f), Creme, contorno: true);
+        return fundo;
+    }
+
+    // O selo no canto do cartão: o que a compra dá ("+20" de vida, "×1,5" moedas).
+    static Text Selo(Transform cartao, string conteudo, Color cor)
+    {
+        var t = Texto(cartao, "Selo", conteudo, 12, TextAnchor.UpperRight, TopoDir, new Vector2(-4f, -2f), new Vector2(44f, 16f), cor, contorno: true);
+        t.horizontalOverflow = HorizontalWrapMode.Overflow;
+        return t;
+    }
+
+    static CartaoReparo CriarReparo(Transform pai, Jogo jogo, Vector2 posicao)
+    {
+        var fundo = CartaoLoja(pai, "CartaoReparo", Sprite("icone_reparo"), posicao, out var botao, out var grupo, out var icone, out var preco);
+        var c = fundo.gameObject.AddComponent<CartaoReparo>();
+        c.jogo = jogo;
+        c.botao = botao;
+        c.grupo = grupo;
+        c.preco = preco;
+        c.icone = CentralizarPivo(icone.rectTransform); // o coração bate em volta do centro
+        c.cura = Selo(fundo.transform, "+20", new Color(1f, 0.84f, 0.84f));
+        return c;
+    }
+
     static CartaoCofrinho CriarCofrinho(Transform pai, Jogo jogo, Vector2 posicao)
     {
-        var fundo = Imagem(pai, "Cofrinho", Sprite("botao"), TopoEsq, posicao, new Vector2(136f, 58f), true);
+        var fundo = CartaoLoja(pai, "CartaoCofrinho", Sprite("icone_cofrinho"), posicao, out var botao, out var grupo, out _, out var preco);
         var c = fundo.gameObject.AddComponent<CartaoCofrinho>();
         c.jogo = jogo;
-        c.botao = fundo.gameObject.AddComponent<Button>();
-        c.botao.targetGraphic = fundo;
-        c.grupo = fundo.gameObject.AddComponent<CanvasGroup>();
-        Imagem(fundo.transform, "Icone", Sprite("icone_cofrinho"), TopoEsq, new Vector2(4f, -4f), new Vector2(26f, 26f)).raycastTarget = false;
-        c.multiplicador = Texto(fundo.transform, "Multiplicador", "×1 → ×1,25", 13, TextAnchor.MiddleLeft, TopoEsq,
-            new Vector2(32f, -4f), new Vector2(102f, 16f), Creme, contorno: true);
-        c.multiplicador.horizontalOverflow = HorizontalWrapMode.Overflow;
-        Imagem(fundo.transform, "IconeMoeda", Sprite("icone_moeda"), TopoEsq, new Vector2(34f, -22f), new Vector2(14f, 14f)).raycastTarget = false;
-        c.custo = Texto(fundo.transform, "Custo", "250", 13, TextAnchor.MiddleLeft, TopoEsq, new Vector2(50f, -21f), new Vector2(80f, 16f), Creme, contorno: true);
-        c.retorno = Texto(fundo.transform, "Retorno", "se paga em ~3 ondas", 12, TextAnchor.MiddleLeft, TopoEsq,
-            new Vector2(6f, -38f), new Vector2(128f, 16f), Creme, contorno: true);
+        c.botao = botao;
+        c.grupo = grupo;
+        c.custo = preco;
+        c.multiplicador = Selo(fundo.transform, "×1,25", new Color(1f, 0.9f, 0.45f));
+        // Logo embaixo do cartão, em duas linhas: em quantas ondas o próximo nível se paga.
+        c.retorno = Texto(pai, "Retorno", "se paga em ~3 ondas", 12, TextAnchor.UpperCenter, TopoEsq,
+            new Vector2(posicao.x - 4f, posicao.y - TamanhoCartao.y - 1f), new Vector2(TamanhoCartao.x + 8f, 28f), Marrom, negrito: false);
         return c;
     }
 
     static PreviaOnda CriarPrevia(Transform pai, Jogo jogo, Vector2 posicao)
     {
-        var fundo = Imagem(pai, "Previa", Sprite("painel"), TopoEsq, posicao, new Vector2(136f, 92f), true);
+        var fundo = Imagem(pai, "Previa", Sprite("painel"), TopoEsq, posicao, new Vector2(136f, 86f), true);
         fundo.color = new Color(0.93f, 0.86f, 0.7f);
         var p = fundo.gameObject.AddComponent<PreviaOnda>();
         p.jogo = jogo;
         p.titulo = Texto(fundo.transform, "Titulo", "Próxima: onda 1", 13, TextAnchor.MiddleLeft, TopoEsq,
-            new Vector2(8f, -6f), new Vector2(122f, 16f), Marrom);
+            new Vector2(8f, -5f), new Vector2(122f, 16f), Marrom);
         p.icones = new Image[4];
         p.quantidades = new Text[4];
         for (int i = 0; i < 4; i++)
         {
             var x = 6f + (i % 2) * 64f;
-            var y = -24f - (i / 2) * 24f;
+            var y = -22f - (i / 2) * 23f;
             p.icones[i] = Imagem(fundo.transform, "Icone" + i, null, TopoEsq, new Vector2(x, y), new Vector2(22f, 22f));
             p.icones[i].preserveAspect = true;
             p.icones[i].raycastTarget = false;
             p.quantidades[i] = Texto(fundo.transform, "Quantidade" + i, "×0", 13, TextAnchor.MiddleLeft, TopoEsq,
                 new Vector2(x + 24f, y - 2f), new Vector2(38f, 18f), Marrom);
         }
-        p.aviso = Texto(fundo.transform, "Aviso", "", 12, TextAnchor.MiddleLeft, TopoEsq, new Vector2(8f, -72f),
-            new Vector2(124f, 16f), new Color(0.72f, 0.2f, 0.16f));
+        // Centrado: longe dos cantos arredondados do painel.
+        p.aviso = Texto(fundo.transform, "Aviso", "", 12, TextAnchor.MiddleCenter, Topo, new Vector2(0f, -67f),
+            new Vector2(128f, 16f), new Color(0.72f, 0.2f, 0.16f));
         return p;
     }
 
@@ -460,26 +565,73 @@ public static class ConstrutorUI
         m.botaoZerar = Botao(t, "Zerar", null, BaixoDir, new Vector2(-10f, 8f), new Vector2(124f, 24f));
         Texto(m.botaoZerar.transform, "Texto", "Zerar progresso", 12, TextAnchor.MiddleCenter, Centro, Vector2.zero, new Vector2(124f, 24f), Creme, contorno: true);
 
-        // "Como jogar": um quadro com as regras e os atalhos.
+        // "Como jogar": as regras em tópicos, com bullets, em duas colunas (tudo
+        // à vista de uma vez, sem rolar nem trocar de página). Os números vêm
+        // dos assets de dados, então o texto acompanha o balanceamento.
         var escuro = Imagem(t, "ComoJogar", null, Centro, Vector2.zero, Vector2.zero);
         Esticar(escuro.rectTransform);
         escuro.color = new Color(0.17f, 0.11f, 0.08f, 0.55f);
         m.painelComoJogar = escuro.gameObject;
-        var quadro = Imagem(escuro.transform, "Quadro", Sprite("painel"), Centro, Vector2.zero, new Vector2(460f, 360f), true).transform;
-        Texto(quadro, "Titulo", "Como jogar", 22, TextAnchor.MiddleCenter, Topo, new Vector2(0f, -14f), new Vector2(420f, 30f), Marrom);
-        Texto(quadro, "Regras",
-            "• Clique num porco da loja (ou aperte 1 a 4) e depois no mapa para colocá-lo. Só dá pra comprar entre ondas.\n" +
-            "• Solte a onda no botão ▶ (ou Espaço). Nenhuma onda começa sozinha: é sempre você quem decide a hora.\n" +
-            "• Pássaros estourados deixam moedas. Gaste em porcos, em upgrades, no Cofrinho (rende mais) ou no ♥+ (repara a Torre).\n" +
-            "• O arpão atravessa a fila: ponha o Arpoador no fim de uma reta. A bomba de lama pega bandos e ignora a couraça do urubu.\n" +
-            "• Porcos dentro do círculo do Tamboreiro atiram mais rápido. Clique num porco para melhorar (U), mudar a mira ou vender (Delete).\n" +
-            "• A cada 10 ondas o mapa muda, com um caminho novo até a Torre.\n" +
-            "• P pausa, F acelera (1×, 2×, 3×), Esc abre o menu.",
-            12, TextAnchor.UpperLeft, Topo, new Vector2(0f, -50f), new Vector2(420f, 250f), Marrom, negrito: false);
-        m.botaoFecharComoJogar = BotaoTexto(quadro, "Fechar", "Fechar", new Vector2(0f, -150f));
+        var quadro = Imagem(escuro.transform, "Quadro", Sprite("painel"), Centro, Vector2.zero, new Vector2(572f, 452f), true).transform;
+        Texto(quadro, "Titulo", "Como jogar", 22, TextAnchor.MiddleCenter, Topo, new Vector2(0f, -12f), new Vector2(520f, 30f), Marrom);
+        var dados = ConstrutorDados.Carregar();
+        Texto(quadro, "RegrasEsquerda", RegrasEsquerda(dados), 12, TextAnchor.UpperLeft, TopoEsq, new Vector2(24f, -46f),
+            new Vector2(254f, 340f), Marrom, negrito: false);
+        Texto(quadro, "RegrasDireita", RegrasDireita(dados), 12, TextAnchor.UpperLeft, TopoDir, new Vector2(-24f, -46f),
+            new Vector2(254f, 340f), Marrom, negrito: false);
+        m.botaoFecharComoJogar = BotaoTexto(quadro, "Fechar", "Fechar", new Vector2(0f, -196f));
 
         m.painelConfirmarZerar = CriarConfirmarZerar(t, out m.botaoCancelarZerar, out m.botaoConfirmarZerar);
         return m;
+    }
+
+    // Os tópicos do "Como jogar". Só caracteres que a fonte padrão tem em
+    // qualquer plataforma (no WebGL não há fonte do sistema para completar).
+    static string Topico(string titulo) => $"<size=14><b><color=#4F7F35>{titulo}</color></b></size>\n";
+
+    static string RegrasEsquerda(DadosJogo d)
+    {
+        var e = d.economia;
+        return Topico("Objetivo") +
+            $"• Proteja a Torre dos Porcos por {d.ondas.Count} ondas.\n" +
+            "• Cada pássaro que chega na Torre tira vida. Com 0, ela cai.\n" +
+            $"• Chefes (gavião-real) nas ondas {OndasDeChefe(d)}.\n\n" +
+            Topico("Ondas") +
+            "• Nenhuma onda começa sozinha: aperte Soltar a onda (ou Espaço).\n" +
+            "• A prévia, na barra, mostra quem vem na próxima.\n\n" +
+            Topico("Loja e moedas") +
+            "• Pássaros estourados e ondas vencidas dão moedas.\n" +
+            "• Só dá para comprar entre ondas.\n" +
+            "• Porco: clique no cartão (ou 1 a 4) e depois no mapa.\n" +
+            $"• Reparo (coração): +{e.curaPorReparo} de vida na Torre; fica mais caro a cada uso.\n" +
+            "• Cofrinho: cada pássaro passa a render mais moedas.";
+    }
+
+    // "10, 20 e 30": as ondas que trazem um pássaro chefe.
+    static string OndasDeChefe(DadosJogo d)
+    {
+        var ondas = new System.Collections.Generic.List<string>();
+        for (int i = 0; i < d.ondas.Count; i++)
+            if (d.ondas[i].grupos.Exists(g => d.passaros.TryGetValue(g.especie, out var p) && p.chefe)) ondas.Add((i + 1).ToString());
+        if (ondas.Count <= 1) return string.Join("", ondas);
+        return string.Join(", ", ondas.GetRange(0, ondas.Count - 1)) + " e " + ondas[ondas.Count - 1];
+    }
+
+    static string RegrasDireita(DadosJogo d)
+    {
+        var e = d.economia;
+        int ondasPorFase = d.fases.Count > 1 ? d.ondas.Count / d.fases.Count : d.ondas.Count;
+        string devolve = e.fracaoTrocaDeFase >= 0.999f ? "pelo valor inteiro" : $"com {Formato.Porcento(e.fracaoTrocaDeFase)} do que custaram";
+        return Topico("Fases e mapas") +
+            $"• A cada {ondasPorFase} ondas o mapa muda e os pássaros vêm por outro caminho.\n" +
+            $"• Na troca, todos os porcos voltam para a carteira {devolve}: monte a defesa de novo.\n\n" +
+            Topico("Porcos") +
+            $"• Clique num porco para melhorar (U), mudar a mira ou vender (Delete, devolve {Formato.Porcento(e.fracaoVenda)}).\n" +
+            "• O arpão atravessa a fila; a bomba pega bandos e a couraça do urubu.\n" +
+            "• No círculo do Tamboreiro, os porcos atiram mais rápido.\n\n" +
+            Topico("Atalhos") +
+            "• P pausa · F acelera (1×, 2×, 3×)\n" +
+            "• Esc abre o menu · clique direito cancela";
     }
 
     // "Zerar progresso" apaga para sempre (recorde, vitórias e dicas vistas); perguntar
@@ -507,22 +659,17 @@ public static class ConstrutorUI
         return b;
     }
 
-    static CartaoPorcoLoja CriarCartao(Transform pai, TipoPorco tipo, Vector2 posicao, Vector2 tamanho)
+    static CartaoPorcoLoja CriarCartao(Transform pai, TipoPorco tipo, Vector2 posicao)
     {
-        var fundo = Imagem(pai, "Cartao" + tipo.dados.especie, Sprite("botao"), TopoEsq, posicao, tamanho, true);
+        var fundo = CartaoLoja(pai, "Cartao" + tipo.dados.especie, tipo.corpo, posicao, out var botao, out var grupo, out var icone, out var preco);
         var cartao = fundo.gameObject.AddComponent<CartaoPorcoLoja>();
         cartao.tipo = tipo;
         cartao.fundo = fundo;
-        cartao.botao = fundo.gameObject.AddComponent<Button>();
-        cartao.botao.targetGraphic = fundo;
-        cartao.grupo = fundo.gameObject.AddComponent<CanvasGroup>();
-
-        cartao.icone = Imagem(fundo.transform, "Icone", tipo.corpo, Topo, new Vector2(0f, -2f), new Vector2(46f, 46f));
-        cartao.icone.raycastTarget = false;
-        cartao.icone.preserveAspect = true;
-        Imagem(fundo.transform, "IconeMoeda", Sprite("icone_moeda"), Baixo, new Vector2(-17f, 4f), new Vector2(16f, 16f)).raycastTarget = false;
-        cartao.preco = Texto(fundo.transform, "Preco", tipo.dados.custo.ToString(), 13, TextAnchor.MiddleLeft, Baixo,
-            new Vector2(8f, 3f), new Vector2(36f, 18f), Creme, contorno: true);
+        cartao.botao = botao;
+        cartao.grupo = grupo;
+        cartao.icone = icone;
+        cartao.preco = preco;
+        preco.text = tipo.dados.custo.ToString();
         return cartao;
     }
 }

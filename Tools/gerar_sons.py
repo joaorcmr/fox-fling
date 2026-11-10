@@ -181,6 +181,13 @@ def sons():
                            queda=0.3 if k < 3 else 0.8), 0.3 * k)
           for k, f in enumerate((392.0, 369.99, 349.23, 329.63))],
     )
+    # Troca de fase: um sopro que cresce (a cortina fechando) e uma fanfarra
+    # curta subindo (mapa novo, fase nova).
+    s["fase"] = misturar(
+        envelope(ruido_varrido(0.6, 0.04, 0.45, vol=0.4, semente=7), ataque=0.3, queda=0.25),
+        *[atrasar(envelope(seno(f, 0.4, vol=0.55, harmonicos=corneta, vibrato=0.01), ataque=0.02, queda=0.35), 0.32 + 0.11 * k)
+          for k, f in enumerate((392.0, 523.25, 659.25, 783.99))],
+    )
     s["clique"] = envelope(seno(1500, 0.05, 900, vol=0.6), queda=0.02)
     return s
 

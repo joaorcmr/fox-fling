@@ -31,14 +31,16 @@ public class BalanceamentoTests
         Assert.LessOrEqual(r.ondaAlcancada, 5, r.ToString());
     }
 
-    // As 3 fases (#14) trocam de mapa a cada 10 ondas: quem estava com a
-    // posição em cima da trilha nova perde o porco ali (devolve 70%, a taxa de
-    // vender) e precisa recompor, mais fraco por um tempo logo depois da troca
-    // (ondas 11 e 21). Isso empurrou estas metas um pouco: SoEstilingue e
-    // DefesaPura aguentam mais rodadas de recompra (os robôs reconstroem com o
-    // que sobrou), e o Equilibrado ainda vence a onda 30, só que com menos
-    // folga. Rode os robôs (Revoada > Balanceamento) depois de mexer em
-    // qualquer número de onda, mapa ou fase.
+    // As 3 fases (#14) trocam de mapa a cada 10 ondas, e na troca TODOS os
+    // porcos voltam para a carteira pelo valor inteiro: o robô remonta a
+    // defesa do zero no mapa novo (EstadoRobo.RecomecarOrdem), antes de pensar
+    // no Cofrinho. Como todo mundo começa cada fase com a defesa no lugar
+    // certo, as ondas da fase 3 vêm com 25% a mais de vida
+    // (DefinicoesPadrao.VidaExtraFase3); sem isso, até o Defesa pura vencia a
+    // onda 30. Com os números de agora: Só Estilingue cai na 24, Defesa pura
+    // na 22 e o Equilibrado vence com 40 de vida. Rode os robôs
+    // (Fox Tower > Balanceamento) depois de mexer em qualquer número de onda,
+    // mapa ou fase.
     [Test]
     public void SoEstilingue_PerdeEntre20e27()
     {
@@ -75,8 +77,7 @@ public class BalanceamentoTests
     public void Equilibrado_SemPicos()
     {
         var r = Jogar(Estrategia.Equilibrado);
-        // Picos maiores que antes: logo depois de uma troca de fase, o
-        // Equilibrado ainda está recompondo o que perdeu no mapa anterior.
+        // O maior pico é a onda 19 (urubus de couraça, logo antes do chefe 2).
         Assert.LessOrEqual(r.danoPorOnda.Max(), 40, r.ToString());
     }
 

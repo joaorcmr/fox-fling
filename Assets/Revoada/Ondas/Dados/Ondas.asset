@@ -118,228 +118,228 @@ MonoBehaviour:
       quantidade: 10
       intervalo: 1.2
       atraso: 0
-      multiplicadorVida: 1.08
+      multiplicadorVida: 1.07
     - especie: 0
       quantidade: 30
       intervalo: 0.3
       atraso: 2
-      multiplicadorVida: 1.08
+      multiplicadorVida: 1.07
   - grupos:
     - especie: 4
       quantidade: 4
       intervalo: 2.5
       atraso: 0
-      multiplicadorVida: 1.16
+      multiplicadorVida: 1.14
     - especie: 1
       quantidade: 15
       intervalo: 0.6
       atraso: 1
-      multiplicadorVida: 1.16
+      multiplicadorVida: 1.14
   - grupos:
     - especie: 2
       quantidade: 15
       intervalo: 0.5
       atraso: 0
-      multiplicadorVida: 1.24
+      multiplicadorVida: 1.21
     - especie: 3
       quantidade: 8
       intervalo: 1.2
       atraso: 4
-      multiplicadorVida: 1.24
+      multiplicadorVida: 1.21
   - grupos:
     - especie: 4
       quantidade: 8
       intervalo: 1.6
       atraso: 0
-      multiplicadorVida: 1.3199999
+      multiplicadorVida: 1.28
     - especie: 3
       quantidade: 10
       intervalo: 1.2
       atraso: 2
-      multiplicadorVida: 1.3199999
+      multiplicadorVida: 1.28
   - grupos:
     - especie: 6
       quantidade: 3
       intervalo: 4
       atraso: 0
-      multiplicadorVida: 1.4
+      multiplicadorVida: 1.35
     - especie: 1
       quantidade: 20
       intervalo: 0.5
       atraso: 1
-      multiplicadorVida: 1.4
+      multiplicadorVida: 1.35
   - grupos:
     - especie: 6
       quantidade: 8
       intervalo: 2.5
       atraso: 0
-      multiplicadorVida: 1.48
+      multiplicadorVida: 1.42
     - especie: 2
       quantidade: 25
       intervalo: 0.45
       atraso: 2
-      multiplicadorVida: 1.48
+      multiplicadorVida: 1.42
   - grupos:
     - especie: 4
       quantidade: 12
       intervalo: 1.2
       atraso: 0
-      multiplicadorVida: 1.56
+      multiplicadorVida: 1.49
     - especie: 3
       quantidade: 12
       intervalo: 1
       atraso: 3
-      multiplicadorVida: 1.56
+      multiplicadorVida: 1.49
   - grupos:
     - especie: 0
       quantidade: 80
       intervalo: 0.12
       atraso: 0
-      multiplicadorVida: 1.64
+      multiplicadorVida: 1.56
     - especie: 2
       quantidade: 20
       intervalo: 0.35
       atraso: 4
-      multiplicadorVida: 1.64
+      multiplicadorVida: 1.56
   - grupos:
     - especie: 6
       quantidade: 13
       intervalo: 1.8
       atraso: 0
-      multiplicadorVida: 1.72
+      multiplicadorVida: 1.63
     - especie: 4
       quantidade: 10
       intervalo: 1.4
       atraso: 3
-      multiplicadorVida: 1.72
+      multiplicadorVida: 1.63
   - grupos:
     - especie: 6
       quantidade: 4
       intervalo: 3
       atraso: 0
-      multiplicadorVida: 1.8
+      multiplicadorVida: 1.7
     - especie: 7
       quantidade: 1
       intervalo: 1
       atraso: 3
-      multiplicadorVida: 3.96
+      multiplicadorVida: 3.7400002
   - grupos:
     - especie: 3
       quantidade: 25
       intervalo: 0.6
       atraso: 0
-      multiplicadorVida: 1.88
+      multiplicadorVida: 2.2125
     - especie: 1
       quantidade: 30
       intervalo: 0.3
       atraso: 2
-      multiplicadorVida: 1.88
+      multiplicadorVida: 2.2125
   - grupos:
     - especie: 6
       quantidade: 10
       intervalo: 1.2
       atraso: 0
-      multiplicadorVida: 1.96
+      multiplicadorVida: 2.3
     - especie: 2
       quantidade: 30
       intervalo: 0.35
       atraso: 3
-      multiplicadorVida: 1.96
+      multiplicadorVida: 2.3
   - grupos:
     - especie: 4
       quantidade: 16
       intervalo: 0.8
       atraso: 0
-      multiplicadorVida: 2.04
+      multiplicadorVida: 2.3875
     - especie: 3
       quantidade: 20
       intervalo: 0.7
       atraso: 2
-      multiplicadorVida: 2.04
+      multiplicadorVida: 2.3875
   - grupos:
     - especie: 6
       quantidade: 14
       intervalo: 1
       atraso: 0
-      multiplicadorVida: 2.12
+      multiplicadorVida: 2.475
     - especie: 0
       quantidade: 40
       intervalo: 0.15
       atraso: 4
-      multiplicadorVida: 2.12
+      multiplicadorVida: 2.475
   - grupos:
     - especie: 1
       quantidade: 60
       intervalo: 0.15
       atraso: 0
-      multiplicadorVida: 2.2
+      multiplicadorVida: 2.5625
     - especie: 2
       quantidade: 40
       intervalo: 0.2
       atraso: 3
-      multiplicadorVida: 2.2
+      multiplicadorVida: 2.5625
   - grupos:
     - especie: 6
       quantidade: 18
       intervalo: 0.8
       atraso: 0
-      multiplicadorVida: 2.28
+      multiplicadorVida: 2.6499999
     - especie: 4
       quantidade: 12
       intervalo: 1
       atraso: 4
-      multiplicadorVida: 2.28
+      multiplicadorVida: 2.6499999
   - grupos:
     - especie: 3
       quantidade: 30
       intervalo: 0.4
       atraso: 0
-      multiplicadorVida: 2.36
+      multiplicadorVida: 2.7375002
     - especie: 4
       quantidade: 20
       intervalo: 0.6
       atraso: 3
-      multiplicadorVida: 2.36
+      multiplicadorVida: 2.7375002
   - grupos:
     - especie: 6
       quantidade: 22
       intervalo: 0.6
       atraso: 0
-      multiplicadorVida: 2.44
+      multiplicadorVida: 2.825
     - especie: 2
       quantidade: 50
       intervalo: 0.2
       atraso: 3
-      multiplicadorVida: 2.44
+      multiplicadorVida: 2.825
   - grupos:
     - especie: 6
       quantidade: 25
       intervalo: 0.5
       atraso: 0
-      multiplicadorVida: 2.52
+      multiplicadorVida: 2.9125
     - especie: 4
       quantidade: 25
       intervalo: 0.5
       atraso: 2
-      multiplicadorVida: 2.52
+      multiplicadorVida: 2.9125
     - especie: 3
       quantidade: 30
       intervalo: 0.4
       atraso: 6
-      multiplicadorVida: 2.52
+      multiplicadorVida: 2.9125
   - grupos:
     - especie: 6
       quantidade: 20
       intervalo: 0.8
       atraso: 0
-      multiplicadorVida: 2.6
+      multiplicadorVida: 3
     - especie: 3
       quantidade: 30
       intervalo: 0.5
       atraso: 5
-      multiplicadorVida: 2.6
+      multiplicadorVida: 3
     - especie: 7
       quantidade: 1
       intervalo: 1
       atraso: 8
-      multiplicadorVida: 15.599999
+      multiplicadorVida: 18

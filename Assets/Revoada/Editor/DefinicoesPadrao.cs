@@ -119,11 +119,17 @@ public static class DefinicoesPadrao
     }
 
     // Curva de dificuldade: a partir da onda 11, os pássaros de cada onda têm
-    // 8% a mais de vida por onda (onda 20 = ×1,8; onda 30 = ×2,6). É o número
-    // que mais mexe no "difícil na medida certa": a renda do jogador cresce
-    // rápido no fim, e a vida dos pássaros acompanha.
-    public const float CrescimentoVidaPorOnda = 0.08f;
+    // 7% a mais de vida por onda (onda 20 = ×1,7; onda 30 = ×2,4), e as ondas
+    // da fase 3 (21 a 30) vêm com mais 25% por cima. É o que mais mexe no
+    // "difícil na medida certa": a renda do jogador cresce rápido no fim, e a
+    // vida dos pássaros acompanha. O extra da fase 3 existe porque, na troca
+    // de fase, os porcos voltam pelo valor inteiro e o jogador começa a fase
+    // com a defesa toda remontada no lugar certo; sem ele, até quem nunca
+    // compra o Cofrinho (o robô Defesa pura) vencia a onda 30.
+    public const float CrescimentoVidaPorOnda = 0.07f;
     public const int OndaInicioCrescimento = 10;
+    public const float VidaExtraFase3 = 0.25f;
+    public const int OndaInicioFase3 = 21;
 
     public static List<DadosOnda> Ondas()
     {
@@ -132,7 +138,9 @@ public static class DefinicoesPadrao
         {
             int numero = i + 1;
             if (numero <= OndaInicioCrescimento) continue;
-            foreach (var g in ondas[i].grupos) g.multiplicadorVida *= 1f + CrescimentoVidaPorOnda * (numero - OndaInicioCrescimento);
+            float multiplicador = 1f + CrescimentoVidaPorOnda * (numero - OndaInicioCrescimento);
+            if (numero >= OndaInicioFase3) multiplicador *= 1f + VidaExtraFase3;
+            foreach (var g in ondas[i].grupos) g.multiplicadorVida *= multiplicador;
         }
         return ondas;
     }
@@ -193,6 +201,7 @@ public static class DefinicoesPadrao
             bonusOndaBase = 25,
             bonusOndaPorOnda = 5,
             fracaoVenda = 0.7f,
+            fracaoTrocaDeFase = 1f, // troca de fase: os porcos voltam pelo valor inteiro
             esperaAuto = 2f,
             esperaAutoNovaFase = 8f,
             custoReparoBase = 80,

@@ -47,6 +47,25 @@ public static class ConstrutorRevoada
         Robos.AvancarAteOnda(Jogo.Atual.Sim, 18);
     }
 
+    // No Play: o robô Equilibrado joga a fase 1 inteira, até a troca de mapa
+    // (para ver de perto os porcos virando moedas, o quadro e o caminho novo).
+    [MenuItem(Identidade.NomeDoJogo + "/Pular para a troca de fase (robô)")]
+    static void PularParaTrocaDeFase()
+    {
+        if (!Application.isPlaying || Jogo.Atual == null)
+        {
+            Debug.Log(Identidade.NomeDoJogo + ": dê Play primeiro.");
+            return;
+        }
+        var sim = Jogo.Atual.Sim;
+        if (sim.Fase >= sim.TotalFases)
+        {
+            Debug.Log(Identidade.NomeDoJogo + ": já está na última fase.");
+            return;
+        }
+        Robos.AvancarAteFase(sim, sim.Fase + 1);
+    }
+
     // O jogo para navegador, em Builds/WebGL (precisa do módulo Web Build
     // Support). Pelo terminal: unity build --target WebGL --execute-method ConstrutorRevoada.BuildWebGL
     [MenuItem(Identidade.NomeDoJogo + "/Build WebGL (itch.io)")]

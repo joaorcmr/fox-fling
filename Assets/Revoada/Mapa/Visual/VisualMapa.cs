@@ -7,15 +7,15 @@ using UnityEngine;
 // a trilha nova na hora; clique com o botão direito no componente →
 // "Redesenhar" para atualizar os sprites.
 //
-// Com jogo e fases preenchidos (cena Jogo de verdade), o mapa troca sozinho
-// quando a Simulacao muda de fase (Jogo.Sim.FaseComecou): redesenha com o
-// mapa novo e tinge o cenário para o turno do dia (a Torre fica de fora, para
-// não brigar com o flash de "apanhando" do VisualTorre).
+// Com as fases preenchidas (cena Jogo de verdade), MostrarFase troca para o
+// mapa da fase: redesenha e tinge o cenário para o turno do dia (a Torre fica
+// de fora, para não brigar com o flash de "apanhando" do VisualTorre). Quem
+// decide a hora é a TrocaDeFase, com a tela escura, para o jogador não ver o
+// mapa trocando aos pedaços.
 public class VisualMapa : MonoBehaviour
 {
     public Mapa mapa;
-    [Tooltip("Opcional: com isto e 'fases' preenchidos, o mapa troca sozinho a cada fase nova.")]
-    public Jogo jogo;
+    [Tooltip("Os mapas das fases, na ordem (o primeiro é o da fase 1).")]
     public Mapa[] fases;
 
     [Header("Arte")]
@@ -39,14 +39,9 @@ public class VisualMapa : MonoBehaviour
     static readonly Color FundoTarde = new Color(0.32f, 0.2f, 0.11f);
     static readonly Color FundoNoite = new Color(0.04f, 0.05f, 0.1f);
 
-    void Start()
+    public void MostrarFase(int fase)
     {
-        if (jogo != null && fases != null && fases.Length > 0) jogo.Sim.FaseComecou += TrocarFase;
-    }
-
-    void TrocarFase(int fase)
-    {
-        if (fase < 1 || fase > fases.Length) return;
+        if (fases == null || fase < 1 || fase > fases.Length) return;
         mapa = fases[fase - 1];
         Desenhar();
     }

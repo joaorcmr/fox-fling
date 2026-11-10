@@ -22,6 +22,9 @@ public class DadosEconomia
     public int bonusOndaPorOnda = 5;
     [Tooltip("Fração do que foi gasto que volta ao vender um porco.")]
     public float fracaoVenda = 0.7f;
+    [Tooltip("Fração do que foi gasto nos porcos (compra, melhorias e especialização) que volta para a " +
+        "carteira quando o mapa troca de fase e todos os porcos saem do mapa. 1 = tudo.")]
+    public float fracaoTrocaDeFase = 1f;
     [Tooltip("Segundos entre uma onda e a próxima com o Auto ligado.")]
     public float esperaAuto = 2f;
     [Tooltip("Segundos de espera do Auto quando a próxima onda é a primeira de uma fase nova (mapa " +

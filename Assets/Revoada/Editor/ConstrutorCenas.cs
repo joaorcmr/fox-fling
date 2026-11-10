@@ -45,7 +45,13 @@ public static class ConstrutorCenas
         var mapa = CriarMapa(jogo.mapa, jogo);
         var torre = new GameObject("Torre").AddComponent<VisualTorre>();
         torre.jogo = jogo;
-        torre.torre = mapa.torreDesenhada;
+        torre.mapa = mapa;
+
+        // O caminho novo se desenhando com setas depois de uma troca de fase.
+        var revelar = new GameObject("RevelarTrilha").AddComponent<RevelarTrilha>();
+        revelar.seta = ConstrutorAssets.Sprite("icone_play");
+        revelar.anel = ConstrutorAssets.Sprite("anel");
+        revelar.material = ConstrutorAssets.MaterialSprite("Revelar", null);
 
         var efeitos = new GameObject("Efeitos").AddComponent<Efeitos>();
         efeitos.penas = Instanciar<ParticleSystem>(ConstrutorPrefabs.CaminhoParticulas("Penas"), efeitos.transform);
@@ -71,7 +77,7 @@ public static class ConstrutorCenas
         fantasma.circulo = ConstrutorPrefabs.Circulo(fantasma.transform, "CirculoFantasma");
         controles.fantasma = fantasma;
 
-        ConstrutorUI.CriarHud(null, jogo, controles, jogo.porcos, efeitos);
+        ConstrutorUI.CriarHud(null, jogo, controles, jogo.porcos, efeitos, mapa, revelar);
 
         EditorSceneManager.SaveScene(cena, CenaJogo);
     }
@@ -99,8 +105,8 @@ public static class ConstrutorCenas
         EditorSceneManager.SaveScene(cena, CenaMenu);
     }
 
-    // Com "jogo" preenchido (cena Jogo), liga o mapa às fases dele: ao trocar
-    // de fase, o mapa redesenha sozinho com o mapa novo (ver VisualMapa).
+    // Com "jogo" preenchido (cena Jogo), o mapa recebe os mapas das fases: na
+    // troca de fase, a TrocaDeFase pede para ele redesenhar (VisualMapa.MostrarFase).
     static VisualMapa CriarMapa(Mapa dados, Jogo jogo = null)
     {
         var mapa = new GameObject("Mapa").AddComponent<VisualMapa>();
@@ -113,11 +119,7 @@ public static class ConstrutorCenas
         mapa.flores = new[] { ConstrutorAssets.Sprite("flor_1"), ConstrutorAssets.Sprite("flor_2") };
         mapa.materialTerra = ConstrutorAssets.MaterialSprite("Terra", ConstrutorAssets.Textura("terra"));
         mapa.materialBorda = ConstrutorAssets.MaterialSprite("TerraBorda", ConstrutorAssets.Textura("terra_borda"));
-        if (jogo != null && jogo.fases != null)
-        {
-            mapa.jogo = jogo;
-            mapa.fases = jogo.fases.mapas.ToArray();
-        }
+        if (jogo != null && jogo.fases != null) mapa.fases = jogo.fases.mapas.ToArray();
         mapa.Desenhar();
         return mapa;
     }
@@ -140,6 +142,7 @@ public static class ConstrutorCenas
         s.torre = ConstrutorAssets.Som("torre");
         s.vitoria = ConstrutorAssets.Som("vitoria");
         s.derrota = ConstrutorAssets.Som("derrota");
+        s.fase = ConstrutorAssets.Som("fase");
         s.ambiente = ConstrutorAssets.Som("ambiente");
         s.musica = ConstrutorAssets.Som("musica");
         return s;

@@ -30,6 +30,12 @@ public class Selecao
             if (p == Selecionado) Selecionar(null);
         };
         sim.OndaComecou += _ => CancelarColocacao();
+        // Troca de fase: todos os porcos saem do mapa, então nada fica na mão.
+        sim.PorcosRecolhidos += (porcos, moedas) =>
+        {
+            CancelarColocacao();
+            Selecionar(null);
+        };
         // Acabou: nada fica na mão do jogador (daqui em diante só a tela de fim responde).
         sim.FimDeJogo += _ =>
         {

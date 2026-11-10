@@ -64,6 +64,9 @@ public class Economia
     // 0,7f vezes 120 dá 83,99999 no float: a folga evita perder uma moeda na venda.
     public int ValorVenda(int gasto) => Mathf.FloorToInt(gasto * dados.fracaoVenda + 1e-3f);
 
+    // Na troca de fase todos os porcos voltam para a carteira (por padrão, tudo o que foi gasto neles).
+    public int ValorTrocaDeFase(int gasto) => Mathf.FloorToInt(gasto * dados.fracaoTrocaDeFase + 1e-3f);
+
     // Em quantas ondas o PRÓXIMO nível do Cofrinho se paga, contando a partir de
     // proximaOnda (1 = primeira). As moedas-base de cada onda são conhecidas de
     // antemão, então a conta é exata. null = não se paga mais até a última onda.

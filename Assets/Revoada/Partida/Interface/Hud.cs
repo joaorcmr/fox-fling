@@ -3,7 +3,9 @@ using UnityEngine.UI;
 
 // A barra lateral e os avisos por cima do mapa. Ela só LÊ a simulação a cada
 // quadro (é barato e a tela nunca fica fora de sincronia com o jogo) e escuta
-// alguns eventos para anunciar coisas (onda começou, chefe chegou).
+// alguns eventos para anunciar coisas (onda começou, chefe chegou). Depois de
+// uma troca de fase, o "Soltar a onda" pulsa até a próxima onda começar: é o
+// próximo passo do jogador no mapa novo.
 public class Hud : MonoBehaviour
 {
     static readonly Color CorOnda = new Color(0.32f, 0.55f, 0.25f, 0.95f);
@@ -16,14 +18,16 @@ public class Hud : MonoBehaviour
     public Text textoVida;
     public Text textoMoedas;
     public Text textoOnda;
+    public Text textoFase;
     public Button botaoVelocidade;
     public Text textoVelocidade;
     public Button botaoMenu;
-    public Button botaoReparo;
 
     [Header("Loja (some quando um porco está selecionado)")]
     public GameObject grupoLoja;
     public CartaoPorcoLoja[] cartoes;
+    public CartaoReparo cartaoReparo;
+    public Button botaoReparo;
     public CartaoCofrinho cartaoCofrinho;
     public PreviaOnda previa;
     public PainelPorco painelPorco;
@@ -41,6 +45,7 @@ public class Hud : MonoBehaviour
     float fimAviso;
     float moedasNaTela;   // conta até o valor de verdade em vez de pular (número que anima)
     float pulsoVida;     // 1 logo depois de a Torre apanhar, cai até 0
+    bool chamarSoltar;   // mapa novo: o "Soltar a onda" pulsa até a próxima onda
     Color corTexto;
 
     void Start()
@@ -70,7 +75,12 @@ public class Hud : MonoBehaviour
         moedasNaTela = s.Moedas;
         corTexto = textoVida.color;
 
-        s.OndaComecou += n => faixa.Mostrar("Onda " + n, CorOnda, 1.6f);
+        s.OndaComecou += n =>
+        {
+            faixa.Mostrar("Onda " + n, CorOnda, 1.6f);
+            chamarSoltar = false;
+        };
+        s.FaseComecou += fase => chamarSoltar = true;
         s.OndaTerminou += (n, bonus) => Avisar($"Onda {n} vencida! +{bonus} moedas de bônus");
         s.PassaroNasceu += p =>
         {
@@ -83,10 +93,10 @@ public class Hud : MonoBehaviour
         textoAviso.text = "";
     }
 
-    public void Avisar(string texto)
+    public void Avisar(string texto, float duracao = 1.8f)
     {
         textoAviso.text = texto;
-        fimAviso = Time.unscaledTime + 1.8f;
+        fimAviso = Time.unscaledTime + duracao;
     }
 
     void Update()
@@ -110,12 +120,15 @@ public class Hud : MonoBehaviour
         bool ondaAtual = s.Estado == EstadoJogo.EmOnda || s.Estado == EstadoJogo.Derrota;
         int numero = ondaAtual ? s.Onda : Mathf.Min(s.Onda + 1, s.TotalOndas);
         textoOnda.text = $"Onda {numero}/{s.TotalOndas}";
+        textoFase.text = s.TotalFases > 1 ? $"Fase {s.Fase}/{s.TotalFases}" : "";
 
         textoVelocidade.text = jogo.Relogio.Velocidade + "×";
 
         bool podeSoltar = s.Estado == EstadoJogo.Preparando || s.Estado == EstadoJogo.Intervalo;
         botaoSoltar.interactable = podeSoltar;
         textoSoltar.text = podeSoltar ? "Soltar a onda" : s.Estado == EstadoJogo.EmOnda ? "Onda em andamento" : "Fim de jogo";
+        float pulso = chamarSoltar && podeSoltar ? 0.05f * Mathf.Abs(Mathf.Sin(Time.unscaledTime * 3.5f)) : 0f;
+        botaoSoltar.transform.localScale = Vector3.one * (1f + pulso);
 
         if (textoAviso.text.Length > 0 && Time.unscaledTime > fimAviso) textoAviso.text = "";
     }

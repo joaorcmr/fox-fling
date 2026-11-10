@@ -28,8 +28,23 @@ public class ResultadoPartida
 public class EstadoRobo
 {
     public int proximaAcao;        // posição na ordem de construção
+    public int reconstruirAte;     // depois de uma troca de fase: até onde refazer a ordem antes de pensar no Cofrinho
     public int vazouNaUltimaOnda;  // pássaros que chegaram na Torre na última onda
     public int vazouNestaOnda;
+
+    // Na troca de fase todos os porcos voltam como moedas: o robô recomeça a
+    // ordem de construção do início, no mapa novo, e remonta a defesa que
+    // tinha ANTES de pensar no Cofrinho, como um jogador faria (o "a defesa
+    // está segurando" do Equilibrado era sobre o mapa velho).
+    public void RecomecarOrdem()
+    {
+        reconstruirAte = proximaAcao;
+        proximaAcao = 0;
+    }
+
+    public bool Reconstruindo => proximaAcao < reconstruirAte;
+
+    public void Acompanhar(Simulacao sim) => sim.FaseComecou += fase => RecomecarOrdem();
 }
 
 public static class Robos
@@ -94,6 +109,7 @@ public static class Robos
     {
         var sim = new Simulacao(dados) { Auto = true };
         var estado = new EstadoRobo();
+        estado.Acompanhar(sim);
         var r = new ResultadoPartida { estrategia = estrategia };
         int vidaNoInicio = sim.Vida, moedasNaOnda = 0;
 
@@ -146,7 +162,7 @@ public static class Robos
         }
 
         var cofrinho = sim.Economia.ProximoCofrinho;
-        if (cofrinho != null)
+        if (cofrinho != null && !estado.Reconstruindo)
         {
             // Ganancioso: depois dos 2 primeiros Estilingueiros, guarda tudo para o Cofrinho.
             if (estrategia == Estrategia.Ganancioso && estado.proximaAcao >= 2)
@@ -266,18 +282,28 @@ public static class Robos
     // ------------------------------------------------------------------
     // Joga como o Equilibrado, sem desenhar, até a onda pedida começar (para
     // os prints de ondas avançadas). Funciona na simulação ao vivo do Play.
-    public static void AvancarAteOnda(Simulacao sim, int onda)
+    public static void AvancarAteOnda(Simulacao sim, int onda) =>
+        Avancar(sim, () => sim.Onda >= onda && sim.Estado == EstadoJogo.EmOnda, onda);
+
+    // Joga como o Equilibrado até a troca para a fase pedida (para ver a troca
+    // de fase de perto: os porcos virando moedas, o aviso e o caminho novo).
+    public static void AvancarAteFase(Simulacao sim, int fase) => Avancar(sim, () => sim.Fase >= fase, int.MaxValue);
+
+    static void Avancar(Simulacao sim, System.Func<bool> chegou, int ondaAlvo)
     {
         var estado = new EstadoRobo();
+        System.Action<int> recomecar = fase => estado.RecomecarOrdem();
+        sim.FaseComecou += recomecar;
         bool autoAntes = sim.Auto;
         sim.Auto = true;
-        for (int passo = 0; passo < 60 * 60 * 90 && !Acabou(sim) && !(sim.Onda >= onda && sim.Estado == EstadoJogo.EmOnda); passo++)
+        for (int passo = 0; passo < 60 * 60 * 90 && !Acabou(sim) && !chegou(); passo++)
         {
             if (passo % PassosEntreDecisoes == 0) Decidir(sim, Estrategia.Equilibrado, estado);
             if (sim.Estado == EstadoJogo.Preparando) sim.SoltarOnda();
-            if (sim.Onda + 1 >= onda && sim.Estado == EstadoJogo.Intervalo) sim.SoltarOnda();
+            if (sim.Onda + 1 >= ondaAlvo && sim.Estado == EstadoJogo.Intervalo) sim.SoltarOnda();
             sim.Passo();
         }
+        sim.FaseComecou -= recomecar;
         sim.Auto = autoAntes;
     }
 

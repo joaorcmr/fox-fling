@@ -90,8 +90,8 @@ public partial class Simulacao
             // aqui: o jogador vê o mapa novo e tem o Intervalo inteiro (ou a
             // espera do Auto) para se preparar, em vez de levar a onda em cima
             // sem ter colocado porco nenhum. Com o Auto ligado, essa espera é
-            // mais longa que o normal (mudou o mapa: os porcos de antes já
-            // foram, dá tempo de recolocar antes de a onda chegar).
+            // mais longa que o normal (mudou o mapa: os porcos de antes
+            // voltaram como moedas, dá tempo de recolocar antes de a onda chegar).
             int faseAntes = Fase;
             AtualizarFase(Onda + 1);
             Estado = EstadoJogo.Intervalo;

@@ -61,7 +61,10 @@ public class MoedasTests
         d.passaros[EspeciePassaro.Pardal] = Passaro(EspeciePassaro.Pardal, moedas: 4f);
         var s = ComPassarosParados(d, EspeciePassaro.Pardal, 5f);
 
+        int? nivel = null;
+        s.CofrinhoComprado += n => nivel = n;
         Assert.AreEqual(Resultado.Ok, s.ComprarCofrinho()); // ×1,25 por 250
+        Assert.AreEqual(1, nivel, "avisa o nível novo (é o que toca o som da compra)");
         s.Atingir(s.Passaros[0], 1f, false);
 
         Assert.AreEqual(5, s.Moedas);
