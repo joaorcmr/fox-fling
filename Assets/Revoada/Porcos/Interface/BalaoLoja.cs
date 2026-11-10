@@ -13,8 +13,11 @@ public class BalaoLoja : MonoBehaviour
 
     void Awake() => gameObject.SetActive(false);
 
+    // Só o número, sem a palavra "moedas": com o nome mais comprido
+    // (Estilingueiro) e "moedas", o título não cabia numa linha só e
+    // invadia o texto do papel do porco embaixo.
     public void Mostrar(TipoPorco tipo, RectTransform cartao) =>
-        Mostrar($"{tipo.dados.nome} · {tipo.dados.custo} moedas", tipo.dados.papel, cartao);
+        Mostrar($"{tipo.dados.nome} · {tipo.dados.custo}", tipo.dados.papel, cartao);
 
     public void Mostrar(string titulo2, string texto2, RectTransform cartao)
     {
