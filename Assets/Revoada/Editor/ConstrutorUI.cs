@@ -547,22 +547,33 @@ public static class ConstrutorUI
         veu.color = new Color(0.17f, 0.11f, 0.08f, 0.35f);
         veu.raycastTarget = false;
 
-        var logo = Imagem(t, "Logo", Sprite("logo"), Topo, new Vector2(0f, -132f), new Vector2(420f, 112f));
+        var logo = Imagem(t, "Logo", Sprite("logo"), Topo, new Vector2(0f, -108f), new Vector2(420f, 112f));
         logo.raycastTarget = false;
         m.logo = logo.rectTransform;
+
+        // Issue #16: a tela de início ficava com tudo solto sobre o mapa de
+        // enfeite (texto direto em cima da trilha e dos bichos andando), o que
+        // deixava a leitura difícil. Dois cartões (o mesmo "painel" do resto da
+        // interface) agrupam o conteúdo: um para jogar, outro para os ajustes.
+        var quadroJogar = Imagem(t, "QuadroJogar", Sprite("painel"), Centro, new Vector2(0f, -73f), new Vector2(460f, 212f), true);
+        quadroJogar.raycastTarget = false;
+        m.cartaoJogar = quadroJogar.rectTransform;
         Texto(t, "Subtitulo", "Defenda a Torre dos Porcos", 16, TextAnchor.MiddleCenter, Topo, new Vector2(0f, -238f),
-            new Vector2(400f, 22f), Creme, contorno: true);
+            new Vector2(400f, 22f), Marrom);
 
         m.botaoJogar = Botao(t, "Jogar", null, Centro, new Vector2(0f, -58f), new Vector2(200f, 54f));
         Texto(m.botaoJogar.transform, "Texto", "Jogar", 24, TextAnchor.MiddleCenter, Centro, new Vector2(0f, 1f), new Vector2(200f, 54f), Creme, contorno: true);
         m.botaoComoJogar = Botao(t, "ComoJogar", null, Centro, new Vector2(0f, -104f), new Vector2(160f, 34f));
         Texto(m.botaoComoJogar.transform, "Texto", "Como jogar", 15, TextAnchor.MiddleCenter, Centro, new Vector2(0f, 1f), new Vector2(160f, 34f), Creme, contorno: true);
-        m.textoRecorde = Texto(t, "Recorde", "", 14, TextAnchor.MiddleCenter, Centro, new Vector2(0f, -142f), new Vector2(440f, 22f), Creme, contorno: true);
+        m.textoRecorde = Texto(t, "Recorde", "", 14, TextAnchor.MiddleCenter, Centro, new Vector2(0f, -142f), new Vector2(440f, 22f), Marrom);
 
-        ControleDeVolume(t, "Música", "musica", Baixo, new Vector2(-100f, 40f), Creme);
-        ControleDeVolume(t, "Efeitos", "efeitos", Baixo, new Vector2(100f, 40f), Creme);
-        Texto(t, "Creditos", "Insper", 12, TextAnchor.MiddleLeft, BaixoEsq, new Vector2(10f, 8f), new Vector2(260f, 20f), Creme, contorno: true);
-        m.botaoZerar = Botao(t, "Zerar", null, BaixoDir, new Vector2(-10f, 8f), new Vector2(124f, 24f));
+        var quadroAjustes = Imagem(t, "QuadroAjustes", Sprite("painel"), Baixo, new Vector2(0f, 4f), new Vector2(580f, 72f), true);
+        quadroAjustes.raycastTarget = false;
+        m.cartaoAjustes = quadroAjustes.rectTransform;
+        ControleDeVolume(t, "Música", "musica", Baixo, new Vector2(-100f, 44f), Marrom);
+        ControleDeVolume(t, "Efeitos", "efeitos", Baixo, new Vector2(100f, 44f), Marrom);
+        Texto(t, "Creditos", "Insper", 12, TextAnchor.MiddleLeft, BaixoEsq, new Vector2(18f, 12f), new Vector2(260f, 20f), Marrom);
+        m.botaoZerar = Botao(t, "Zerar", null, BaixoDir, new Vector2(-18f, 12f), new Vector2(124f, 24f));
         Texto(m.botaoZerar.transform, "Texto", "Zerar progresso", 12, TextAnchor.MiddleCenter, Centro, Vector2.zero, new Vector2(124f, 24f), Creme, contorno: true);
 
         // "Como jogar": as regras em tópicos, com bullets, em duas colunas (tudo

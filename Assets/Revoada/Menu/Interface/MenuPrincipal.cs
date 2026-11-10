@@ -17,6 +17,11 @@ public class MenuPrincipal : MonoBehaviour
     public GameObject painelConfirmarZerar;
     public Text textoRecorde;
     public RectTransform logo;
+    // Os dois cartões que agrupam a tela (issue #16): um para jogar, outro
+    // para os ajustes. Só existem para os testes conferirem que o conteúdo
+    // continua dentro deles.
+    public RectTransform cartaoJogar;
+    public RectTransform cartaoAjustes;
 
     Vector2 posicaoLogo;
 
