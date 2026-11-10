@@ -48,7 +48,7 @@ Com o Editor fechado (o Unity não abre o mesmo projeto duas vezes), use o modo 
 ### Simulação em C# puro; o Unity só escuta
 
 O jogo inteiro roda na classe `Simulacao`, que não é `MonoBehaviour`:
-- Avança em passos fixos de 1/60 s (`Passo()`), sempre na mesma ordem: nascimentos → pássaros andam → porcos atiram → tiros voam → limpeza → fim de onda → Auto.
+- Avança em passos fixos de 1/60 s (`Passo()`), sempre na mesma ordem: nascimentos → pássaros andam → porcos atiram → tiros voam → limpeza → fim de onda → Auto. `Simulacao.Auto` (soltar a próxima onda sozinho) não tem botão na interface de propósito: a Esthefanny pediu que nenhuma onda comece sem o jogador soltar (2026-11-10). Fica só para os robôs de balanceamento (`Robos.Jogar` liga `Auto = true` para jogar partidas inteiras sem intervenção).
 - Avisa por eventos o que aconteceu (`PassaroEstourou`, `TorreAtingida`, `FimDeJogo`...).
 - Não depende de quadros, de física nem de sorte. Por isso os testes e os robôs jogam partidas inteiras sem dar Play.
 - Os comandos do jogador (`Comprar`, `Melhorar`, `Vender`, `SoltarOnda`) são imediatos e devolvem um `Resultado`, por isso funcionam com o jogo pausado.

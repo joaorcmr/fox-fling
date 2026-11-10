@@ -166,10 +166,9 @@ public static class ConstrutorUI
         hud.previa = CriarPrevia(loja, jogo, new Vector2(8f, -206f));
         hud.painelPorco = CriarPainelPorco(barra, jogo, new Vector2(8f, -98f));
 
-        hud.botaoAuto = Botao(barra, "BotaoAuto", null, BaixoEsq, new Vector2(8f, 58f), new Vector2(136f, 20f));
-        hud.textoAuto = Texto(hud.botaoAuto.transform, "Texto", "Auto: desligado", 12, TextAnchor.MiddleCenter, Centro,
-            Vector2.zero, new Vector2(136f, 20f), Creme, contorno: true);
-        hud.botaoSoltar = Botao(barra, "BotaoSoltar", null, BaixoEsq, new Vector2(8f, 10f), new Vector2(136f, 44f));
+        // Sem Auto: o jogador decide toda vez quando a próxima onda começa.
+        // "Soltar a onda" ocupa o espaço inteiro que sobrou.
+        hud.botaoSoltar = Botao(barra, "BotaoSoltar", null, BaixoEsq, new Vector2(8f, 10f), new Vector2(136f, 68f));
         Imagem(hud.botaoSoltar.transform, "Icone", Sprite("icone_play"), Esq, new Vector2(8f, 1f), new Vector2(26f, 26f)).raycastTarget = false;
         hud.textoSoltar = Texto(hud.botaoSoltar.transform, "Texto", "Soltar a onda", 13, TextAnchor.MiddleCenter, Esq,
             new Vector2(36f, 1f), new Vector2(96f, 40f), Creme, contorno: true);
@@ -470,7 +469,7 @@ public static class ConstrutorUI
         Texto(quadro, "Titulo", "Como jogar", 22, TextAnchor.MiddleCenter, Topo, new Vector2(0f, -14f), new Vector2(420f, 30f), Marrom);
         Texto(quadro, "Regras",
             "• Clique num porco da loja (ou aperte 1 a 4) e depois no mapa para colocá-lo. Só dá pra comprar entre ondas.\n" +
-            "• Solte a onda no botão ▶ (ou Espaço). Com Auto ligado, as ondas seguem sozinhas.\n" +
+            "• Solte a onda no botão ▶ (ou Espaço). Nenhuma onda começa sozinha: é sempre você quem decide a hora.\n" +
             "• Pássaros estourados deixam moedas. Gaste em porcos, em upgrades, no Cofrinho (rende mais) ou no ♥+ (repara a Torre).\n" +
             "• O arpão atravessa a fila: ponha o Arpoador no fim de uma reta. A bomba de lama pega bandos e ignora a couraça do urubu.\n" +
             "• Porcos dentro do círculo do Tamboreiro atiram mais rápido. Clique num porco para melhorar (U), mudar a mira ou vender (Delete).\n" +

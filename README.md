@@ -16,7 +16,7 @@ depois?
 |---|---|
 | Comprar e colocar um porco | Clique no porco da loja (ou aperte **1** a **4**) e depois no mapa. Verde = pode, vermelho = não pode. Só entre ondas |
 | Reparar a Torre | Ícone **♥+** na barra (cura uma parte da vida perdida; cada reparo custa mais que o anterior). Só entre ondas |
-| Soltar a onda | Botão **▶ Soltar a onda** ou **Espaço**. Com **Auto** ligado, as ondas seguem sozinhas |
+| Soltar a onda | Botão **▶ Soltar a onda** ou **Espaço**. Nenhuma onda começa sozinha |
 | Ver e melhorar um porco | Clique nele: o painel mostra os números, o próximo upgrade (**U**), a mira e **Vender** (**Delete**) |
 | Pausar / acelerar | **P** · **F** ou o botão 1×/2×/3× |
 | Menu | **Esc** (sem nada selecionado) ou ☰ |
@@ -54,8 +54,8 @@ A partir da onda 11, os pássaros ganham **8% de vida por onda** (onda 20 = ×1,
 
 As 30 ondas se dividem em **3 fases de 10**, cada uma com o seu mapa (outro caminho até a Torre) e o seu
 turno do dia: a Fazenda de dia (fase 1), o Pomar à tarde (fase 2) e a Floresta de noite (fase 3). A troca
-acontece ao fim da 10ª e da 20ª onda, com o Intervalo inteiro (ou uma espera maior do Auto) para você ver o
-mapa novo e se preparar antes de a próxima onda chegar nele.
+acontece ao fim da 10ª e da 20ª onda, e como nenhuma onda começa sozinha, você vê o mapa novo e se prepara
+no seu tempo antes de soltar a próxima.
 
 Porco que fica em cima da trilha nova (ou perto demais da Torre ou de um obstáculo novo) sai do mapa — devolve
 70% do que foi gasto nele, a mesma taxa de vender; quem continua num lugar válido fica exatamente como estava,

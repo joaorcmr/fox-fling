@@ -4253,7 +4253,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "\u2022 Clique num porco da loja (ou aperte 1 a 4) e depois no mapa para coloc\xE1-lo. S\xF3 d\xE1 pra comprar entre ondas.\n\u2022 Solte a onda no bot\xE3o \u25B6 (ou Espa\xE7o). Com Auto ligado, as ondas seguem sozinhas.\n\u2022 P\xE1ssaros estourados deixam moedas. Gaste em porcos, em upgrades, no Cofrinho (rende mais) ou no \u2665+ (repara a Torre).\n\u2022 O arp\xE3o atravessa a fila: ponha o Arpoador no fim de uma reta. A bomba de lama pega bandos e ignora a coura\xE7a do urubu.\n\u2022 Porcos dentro do c\xEDrculo do Tamboreiro atiram mais r\xE1pido. Clique num porco para melhorar (U), mudar a mira ou vender (Delete).\n\u2022 A cada 10 ondas o mapa muda, com um caminho novo at\xE9 a Torre.\n\u2022 P pausa, F acelera (1\xD7, 2\xD7, 3\xD7), Esc abre o menu."
+  m_Text: "\u2022 Clique num porco da loja (ou aperte 1 a 4) e depois no mapa para coloc\xE1-lo. S\xF3 d\xE1 pra comprar entre ondas.\n\u2022 Solte a onda no bot\xE3o \u25B6 (ou Espa\xE7o). Nenhuma onda come\xE7a sozinha: \xE9 sempre voc\xEA quem decide a hora.\n\u2022 P\xE1ssaros estourados deixam moedas. Gaste em porcos, em upgrades, no Cofrinho (rende mais) ou no \u2665+ (repara a Torre).\n\u2022 O arp\xE3o atravessa a fila: ponha o Arpoador no fim de uma reta. A bomba de lama pega bandos e ignora a coura\xE7a do urubu.\n\u2022 Porcos dentro do c\xEDrculo do Tamboreiro atiram mais r\xE1pido. Clique num porco para melhorar (U), mudar a mira ou vender (Delete).\n\u2022 A cada 10 ondas o mapa muda, com um caminho novo at\xE9 a Torre.\n\u2022 P pausa, F acelera (1\xD7, 2\xD7, 3\xD7), Esc abre o menu."
 --- !u!222 &949877541
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6131,6 +6131,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Revoada::VisualMapa
   mapa: {fileID: 11400000, guid: de9e204abf83544a58d392ffc858ef8f, type: 2}
+  jogo: {fileID: 0}
+  fases: []
   grama: {fileID: 21300000, guid: fa338ff149d6247ccb49e5cb913b3772, type: 3}
   arvore: {fileID: 21300000, guid: 4dd1308abf2254fca913a0dd909a3407, type: 3}
   pedra: {fileID: 21300000, guid: ed63f3ed0156d476c8bd026c1ff2fcbb, type: 3}

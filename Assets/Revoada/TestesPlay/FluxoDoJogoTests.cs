@@ -163,4 +163,23 @@ public class FluxoDoJogoTests
         hud.botaoReparo.onClick.Invoke();
         Assert.AreEqual(vidaEmOnda, s.Vida, "com a onda em andamento, o botão não pode curar nada");
     }
+
+    // A Esthefanny pediu para tirar o Auto: nenhuma onda pode começar sozinha,
+    // só quando o jogador soltar (botão ou Espaço).
+    [UnityTest]
+    public IEnumerator Hud_NaoTemBotaoAuto_OndaSoComecaAoSoltar()
+    {
+        yield return CarregarJogo();
+        var hud = Object.FindAnyObjectByType<Hud>();
+        var s = Jogo.Atual.Sim;
+
+        Assert.IsNull(hud.transform.Find("BarraLateral/BotaoAuto"), "ainda existe um botão de Auto na barra");
+        Assert.IsFalse(s.Auto, "a simulação não devia nascer com o Auto ligado");
+
+        for (int i = 0; i < 300; i++) s.Passo(); // 5 s sem ninguém soltar a onda
+        Assert.AreEqual(EstadoJogo.Preparando, s.Estado, "a onda começou sozinha");
+
+        hud.botaoSoltar.onClick.Invoke();
+        Assert.AreEqual(EstadoJogo.EmOnda, s.Estado, "o botão continua soltando a onda normalmente");
+    }
 }

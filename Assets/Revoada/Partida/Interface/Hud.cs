@@ -29,8 +29,6 @@ public class Hud : MonoBehaviour
     public PainelPorco painelPorco;
 
     [Header("Onda")]
-    public Button botaoAuto;
-    public Text textoAuto;
     public Button botaoSoltar;
     public Text textoSoltar;
 
@@ -50,7 +48,6 @@ public class Hud : MonoBehaviour
         var s = jogo.Sim;
         foreach (var c in cartoes) c.Configurar(jogo);
         botaoSoltar.onClick.AddListener(() => s.SoltarOnda());
-        botaoAuto.onClick.AddListener(() => s.Auto = !s.Auto);
         botaoVelocidade.onClick.AddListener(() => jogo.Relogio.ProximaVelocidade());
         botaoMenu.onClick.AddListener(() => menuPausa.Abrir());
 
@@ -115,7 +112,6 @@ public class Hud : MonoBehaviour
         textoOnda.text = $"Onda {numero}/{s.TotalOndas}";
 
         textoVelocidade.text = jogo.Relogio.Velocidade + "×";
-        textoAuto.text = s.Auto ? "Auto: ligado" : "Auto: desligado";
 
         bool podeSoltar = s.Estado == EstadoJogo.Preparando || s.Estado == EstadoJogo.Intervalo;
         botaoSoltar.interactable = podeSoltar;
