@@ -471,7 +471,27 @@ public static class ConstrutorUI
             "• P pausa, F acelera (1×, 2×, 3×), Esc abre o menu. Os 100 de vida da Torre são a sua margem de erro.",
             13, TextAnchor.UpperLeft, Topo, new Vector2(0f, -50f), new Vector2(420f, 250f), Marrom, negrito: false);
         m.botaoFecharComoJogar = BotaoTexto(quadro, "Fechar", "Fechar", new Vector2(0f, -150f));
+
+        m.painelConfirmarZerar = CriarConfirmarZerar(t, out m.botaoCancelarZerar, out m.botaoConfirmarZerar);
         return m;
+    }
+
+    // "Zerar progresso" apaga para sempre (recorde, vitórias e dicas vistas); perguntar
+    // antes dá uma saída para quem clicou sem querer (controle e liberdade do usuário).
+    static GameObject CriarConfirmarZerar(Transform pai, out Button cancelar, out Button confirmar)
+    {
+        var escuro = Imagem(pai, "ConfirmarZerar", null, Centro, Vector2.zero, Vector2.zero);
+        Esticar(escuro.rectTransform);
+        escuro.color = new Color(0.17f, 0.11f, 0.08f, 0.55f);
+        var quadro = Imagem(escuro.transform, "Quadro", Sprite("painel"), Centro, Vector2.zero, new Vector2(260f, 260f), true).transform;
+        Texto(quadro, "Titulo", "Zerar progresso?", 19, TextAnchor.MiddleCenter, Topo, new Vector2(0f, -16f), new Vector2(230f, 28f), Marrom);
+        Texto(quadro, "Aviso", "Apaga o recorde, as vitórias e as dicas vistas. Não dá para desfazer.",
+            13, TextAnchor.MiddleCenter, Centro, new Vector2(0f, 24f), new Vector2(220f, 70f), Marrom, negrito: false);
+        cancelar = BotaoTexto(quadro, "Cancelar", "Cancelar", new Vector2(0f, -60f));
+        confirmar = BotaoTexto(quadro, "Confirmar", "Zerar mesmo assim", new Vector2(0f, -106f));
+        ((Image)confirmar.targetGraphic).color = new Color(1f, 0.72f, 0.62f); // destrutivo: a mesma cor do "Vender"
+        escuro.gameObject.SetActive(false);
+        return escuro.gameObject;
     }
 
     public static Button BotaoTexto(Transform pai, string nome, string texto, Vector2 posicao)
