@@ -156,25 +156,6 @@ def bola_sombreada(t, cx, cy, rx, ry, cor, sombra=None, luz=True):
         t.colar(brilho, corpo)
 
 
-def olhos(t, cx, cy, sep, r, bravo=True, cor_iris=(30, 22, 18, 255), olhar=(0.15, 0.25)):
-    """Dois olhos grandes com sobrancelha brava (o "emburrado" do estilo)."""
-    for lado in (-1, 1):
-        ox = cx + lado * sep
-        t.elipse(ox, cy, r + 1.0, r * 1.08 + 1.0, CONTORNO)
-        t.elipse(ox, cy, r, r * 1.08, BRANCO)
-        px = ox - lado * r * olhar[0]
-        py = cy + r * olhar[1]
-        t.elipse(px, py, r * 0.55, r * 0.6, cor_iris)
-        t.elipse(px - r * 0.18, py - r * 0.25, r * 0.2, r * 0.2, BRANCO)
-        if bravo:
-            # Ponta de dentro mais baixa que a de fora = cara de bravo.
-            x_fora, x_dentro = ox + lado * r * 1.1, ox - lado * r * 0.85
-            y_fora, y_dentro = cy - r * 1.45, cy - r * 0.78
-            esp = max(1.6, r * 0.42)
-            t.poligono([(x_fora, y_fora - esp * 0.5), (x_dentro, y_dentro - esp * 0.5),
-                        (x_dentro, y_dentro + esp * 0.6), (x_fora, y_fora + esp * 0.4)], CONTORNO)
-
-
 def bochechas(t, cx, cy, sep, r, cor=(255, 128, 140, 120)):
     for lado in (-1, 1):
         t.elipse(cx + lado * sep, cy, r, r * 0.6, cor)
@@ -519,9 +500,8 @@ def flor(tipo):
     return t.final()
 
 
-LARANJA = hexc("#E8803C")       # pelagem da raposa da Torre
+LARANJA = hexc("#E8803C")       # bandeira e detalhes da Torre
 LARANJA_SOMBRA = hexc("#C66A2E")
-FOCINHO = hexc("#FFF3DC")
 
 
 def torre():
@@ -544,11 +524,12 @@ def torre():
     t.linha([(32, 70), (136, 70)], hexc("#9C3A31"), 3)
     t.retangulo(64, 82, 104, 114, CONTORNO, raio=4)  # janela com uma raposa espiando
     t.retangulo(67, 85, 101, 111, hexc("#3B2A20"), raio=3)
-    for lado in (-1, 1):  # orelhas triangulares, só a ponta aparecendo por cima da janela
-        t.poligono([(84 + lado * 7, 92), (84 + lado * 13, 80), (84 + lado * 3, 88)], LARANJA_SOMBRA)
-    t.elipse(84, 102, 12, 10, LARANJA)
-    olhos(t, 84, 99, 4.4, 2.6)
-    t.elipse(84, 106, 4.4, 3, FOCINHO)
+    rosto = abrir_arte(os.path.join(FONTES, "raposa_torre.png"))
+    largura = 28  # unidades 1×: orelhas passam por cima da janela, focinho fica dentro
+    w = round(largura * S)
+    h = round(rosto.height * w / rosto.width)
+    t.img.alpha_composite(rosto.resize((w, h), Image.LANCZOS), (round(84 * S - w / 2), round(110 * S - h)))
+    t.d = ImageDraw.Draw(t.img)
     t.retangulo(70, 150, 98, 186, hexc("#6B4A2E"), raio=4)  # porta
     t.elipse(92, 168, 2, 2, hexc("#E8C35A"))
     t.elipse(96, 9, 3.4, 3, LARANJA_SOMBRA)  # carinha na bandeira
@@ -688,10 +669,10 @@ def gerar():
     salvar(da_arte("leao.png", 72, 72, 62, 71), "urubu", feitos)
     salvar(sombra(), "sombra", feitos)
     # Porcos (idem: viraram as raposas do Iran; a arte já traz a arma embutida)
-    salvar(da_arte("raposa_estilingueiro.png", 80, 80, 74, 78), "porco_estilingueiro", feitos)
-    salvar(da_arte("raposa_ninja.png", 80, 80, 74, 78), "porco_arpoador", feitos)
-    salvar(da_arte("raposa_bombardeiro.png", 80, 80, 74, 78), "porco_bombardeiro", feitos)
-    salvar(da_arte("raposa_tamboreiro.png", 80, 80, 74, 78), "porco_tamboreiro", feitos)
+    salvar(da_arte("raposa_estilingueiro.png", 80, 80, 74, 78), "raposa_estilingueiro", feitos)
+    salvar(da_arte("raposa_ninja.png", 80, 80, 74, 78), "raposa_arpoador", feitos)
+    salvar(da_arte("raposa_bombardeiro.png", 80, 80, 74, 78), "raposa_bombardeiro", feitos)
+    salvar(da_arte("raposa_tamboreiro.png", 80, 80, 74, 78), "raposa_tamboreiro", feitos)
     for tipo in ("estilingue", "arpao", "canhao"):
         salvar(arma(tipo), "arma_" + tipo, feitos)
     salvar(tambor(), "arma_tambor", feitos)

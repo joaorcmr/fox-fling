@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Revoada::TipoPassaro
   dados:
     especie: 5
-    nome: Patinho
+    nome: Arara-azul filhote
     vida: 1
     velocidade: 3
     raio: 0.3

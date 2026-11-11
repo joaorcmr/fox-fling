@@ -3078,11 +3078,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 535581932}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 18, y: 12}
-  m_SizeDelta: {x: 260, y: 20}
-  m_Pivot: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 12}
+  m_SizeDelta: {x: 200, y: 20}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &569759458
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3110,7 +3110,7 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 10
     m_MaxSize: 40
-    m_Alignment: 3
+    m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -4651,7 +4651,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "<size=14><b><color=#4F7F35>Fases e mapas</color></b></size>\n\u2022 A cada 10 ondas o mapa muda e os p\xE1ssaros v\xEAm por outro caminho.\n\u2022 Na troca, todos os porcos voltam para a carteira pelo valor inteiro: monte a defesa de novo.\n\n<size=14><b><color=#4F7F35>Porcos</color></b></size>\n\u2022 Clique num porco para melhorar (U), mudar a mira ou vender (Delete, devolve 70%).\n\u2022 O arp\xE3o atravessa a fila; a bomba pega bandos e a coura\xE7a do urubu.\n\u2022 No c\xEDrculo do Tamboreiro, os porcos atiram mais r\xE1pido.\n\n<size=14><b><color=#4F7F35>Atalhos</color></b></size>\n\u2022 P pausa \xB7 F acelera (1\xD7, 2\xD7, 3\xD7)\n\u2022 Esc abre o menu \xB7 clique direito cancela"
+  m_Text: "<size=14><b><color=#4F7F35>Fases e mapas</color></b></size>\n\u2022 A cada 10 ondas o mapa muda e os p\xE1ssaros v\xEAm por outro caminho.\n\u2022 Na troca, todas as raposas voltam para a carteira pelo valor inteiro: monte a defesa de novo.\n\n<size=14><b><color=#4F7F35>Raposas</color></b></size>\n\u2022 Clique numa raposa para melhorar (U), mudar a mira ou vender (Delete, devolve 70%).\n\u2022 O arp\xE3o atravessa a fila; a bomba pega bandos e a coura\xE7a do le\xE3o.\n\u2022 No c\xEDrculo do Tamboreiro, os raposas atiram mais r\xE1pido.\n\n<size=14><b><color=#4F7F35>Atalhos</color></b></size>\n\u2022 P pausa \xB7 F acelera (1\xD7, 2\xD7, 3\xD7)\n\u2022 Esc abre o menu \xB7 clique direito cancela"
 --- !u!222 &827627903
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6310,7 +6310,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Defenda a Torre dos Porcos
+  m_Text: Defenda a Torre das Raposas
 --- !u!222 &1240848862
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -9275,7 +9275,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "<size=14><b><color=#4F7F35>Objetivo</color></b></size>\n\u2022 Proteja a Torre dos Porcos por 30 ondas.\n\u2022 Cada p\xE1ssaro que chega na Torre tira vida. Com 0, ela cai.\n\u2022 Chefes (tubar\xE3o-rei) nas ondas 10, 20 e 30.\n\n<size=14><b><color=#4F7F35>Ondas</color></b></size>\n\u2022 Nenhuma onda come\xE7a sozinha: aperte Soltar a onda (ou Espa\xE7o).\n\u2022 A pr\xE9via, na barra, mostra quem vem na pr\xF3xima.\n\n<size=14><b><color=#4F7F35>Loja e moedas</color></b></size>\n\u2022 P\xE1ssaros estourados e ondas vencidas d\xE3o moedas.\n\u2022 S\xF3 d\xE1 para comprar entre ondas.\n\u2022 Porco: clique no cart\xE3o (ou 1 a 4) e depois no mapa.\n\u2022 Reparo (cora\xE7\xE3o): +20 de vida na Torre; fica mais caro a cada uso.\n\u2022 Cofrinho: cada p\xE1ssaro passa a render mais moedas."
+  m_Text: "<size=14><b><color=#4F7F35>Objetivo</color></b></size>\n\u2022 Proteja a Torre das Raposas por 30 ondas.\n\u2022 Cada inimigo que chega na Torre tira vida. Com 0, ela cai.\n\u2022 Chefes (tubar\xE3ozinho) nas ondas 10, 20 e 30.\n\n<size=14><b><color=#4F7F35>Ondas</color></b></size>\n\u2022 Nenhuma onda come\xE7a sozinha: aperte Soltar a onda (ou Espa\xE7o).\n\u2022 A pr\xE9via, na barra, mostra quem vem na pr\xF3xima.\n\n<size=14><b><color=#4F7F35>Loja e moedas</color></b></size>\n\u2022 P\xE1ssaros estourados e ondas vencidas d\xE3o moedas.\n\u2022 S\xF3 d\xE1 para comprar entre ondas.\n\u2022 Raposa: clique no cart\xE3o (ou 1 a 4) e depois no mapa.\n\u2022 Reparo (cora\xE7\xE3o): +20 de vida na Torre; fica mais caro a cada uso.\n\u2022 Cofrinho: cada inimigo passa a render mais moedas."
 --- !u!222 &1965086564
 CanvasRenderer:
   m_ObjectHideFlags: 0

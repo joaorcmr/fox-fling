@@ -14,11 +14,11 @@ public static class CatalogoDicas
     {
         switch (id)
         {
-            case Inicio: return "Clique num porco da loja e depois no mapa para colocá-lo. Depois, solte a onda.";
+            case Inicio: return "Clique numa raposa da loja e depois no mapa para colocá-la. Depois, solte a onda.";
             case Arpao: return "O arpão atravessa os pássaros em fila: no fim de uma reta ele rende mais.";
-            case Cofrinho: return "O Cofrinho faz cada pássaro render mais. Vale a pena agora?";
+            case Cofrinho: return "O Cofrinho faz cada inimigo render mais. Vale a pena agora?";
             case Couraca: return "Couraça: pedrinha e arpão só tiram metade. Bomba e Ponta de Ferro tiram tudo.";
-            case Tambor: return "Porcos dentro do círculo do Tamboreiro atiram mais rápido. Agrupe!";
+            case Tambor: return "Raposas dentro do círculo do Tamboreiro atiram mais rápido. Agrupe!";
             default: return "";
         }
     }

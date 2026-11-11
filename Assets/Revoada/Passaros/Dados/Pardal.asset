@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Revoada::TipoPassaro
   dados:
     especie: 0
-    nome: Pardal
+    nome: Aranha
     vida: 1
     velocidade: 2.5
     raio: 0.35

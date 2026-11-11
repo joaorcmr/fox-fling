@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Revoada::TipoPassaro
   dados:
     especie: 6
-    nome: Urubu
+    nome: "Le\xE3o"
     vida: 28
     velocidade: 1.4
     raio: 0.45

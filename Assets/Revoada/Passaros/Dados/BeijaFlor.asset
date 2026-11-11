@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Revoada::TipoPassaro
   dados:
     especie: 2
-    nome: Beija-flor
+    nome: Tigre
     vida: 2
     velocidade: 5
     raio: 0.35

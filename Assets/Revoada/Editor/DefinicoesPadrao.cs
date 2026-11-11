@@ -16,14 +16,14 @@ public static class DefinicoesPadrao
             // Moedas: o dobro do ponto de partida do design (os robôs mostraram que,
             // com 1 moeda por pardal, o Cofrinho nunca se pagava). Chefe: 90 de vida
             // base (250 era mais do que qualquer defesa da onda 10 aguenta).
-            P(Pardal, "Pardal", vida: 1, vel: 2.5f, dano: 1, moedas: 2, raio: 0.35f),
-            P(Sabia, "Sabiá", vida: 3, vel: 2.8f, dano: 2, moedas: 4, raio: 0.35f),
-            P(BeijaFlor, "Beija-flor", vida: 2, vel: 5f, dano: 2, moedas: 6, raio: 0.35f),
-            P(Arara, "Arara-azul", vida: 10, vel: 2f, dano: 4, moedas: 12, raio: 0.45f),
-            Com(P(Pata, "Pata", vida: 8, vel: 1.8f, dano: 3, moedas: 8, raio: 0.45f), p => { p.filho = Patinho; p.quantidadeFilhos = 4; }),
-            P(Patinho, "Patinho", vida: 1, vel: 3f, dano: 1, moedas: 2, raio: 0.3f),
-            Com(P(Urubu, "Urubu", vida: 28, vel: 1.4f, dano: 6, moedas: 24, raio: 0.45f), p => p.couraca = true),
-            Com(P(Gaviao, "Tubarão-rei", vida: 90, vel: 0.9f, dano: 30, moedas: 200, raio: 0.8f), p => p.chefe = true),
+            P(Pardal, "Aranha", vida: 1, vel: 2.5f, dano: 1, moedas: 2, raio: 0.35f),
+            P(Sabia, "Touro", vida: 3, vel: 2.8f, dano: 2, moedas: 4, raio: 0.35f),
+            P(BeijaFlor, "Tigre", vida: 2, vel: 5f, dano: 2, moedas: 6, raio: 0.35f),
+            P(Arara, "Jacaré", vida: 10, vel: 2f, dano: 4, moedas: 12, raio: 0.45f),
+            Com(P(Pata, "Arara-azul", vida: 8, vel: 1.8f, dano: 3, moedas: 8, raio: 0.45f), p => { p.filho = Patinho; p.quantidadeFilhos = 4; }),
+            P(Patinho, "Arara-azul filhote", vida: 1, vel: 3f, dano: 1, moedas: 2, raio: 0.3f),
+            Com(P(Urubu, "Leão", vida: 28, vel: 1.4f, dano: 6, moedas: 24, raio: 0.45f), p => p.couraca = true),
+            Com(P(Gaviao, "Tubarãozinho", vida: 90, vel: 0.9f, dano: 30, moedas: 200, raio: 0.8f), p => p.chefe = true),
         };
     }
 

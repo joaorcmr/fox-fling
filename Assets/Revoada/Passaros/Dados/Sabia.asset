@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Revoada::TipoPassaro
   dados:
     especie: 1
-    nome: "Sabi\xE1"
+    nome: Touro
     vida: 3
     velocidade: 2.8
     raio: 0.35

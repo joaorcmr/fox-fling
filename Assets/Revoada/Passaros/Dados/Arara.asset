@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Revoada::TipoPassaro
   dados:
     especie: 3
-    nome: Arara-azul
+    nome: "Jacar\xE9"
     vida: 10
     velocidade: 2
     raio: 0.45

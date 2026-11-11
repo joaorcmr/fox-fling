@@ -36,10 +36,10 @@ public static class ConstrutorDados
     // Sprites de cada porco: corpo, arma, tiro e os acessórios das especializações.
     static readonly Dictionary<EspeciePorco, string[]> VisualPorco = new Dictionary<EspeciePorco, string[]>
     {
-        { EspeciePorco.Estilingueiro, new[] { "porco_estilingueiro", "arma_estilingue", "pedrinha", "acc_rajada", "acc_mira" } },
-        { EspeciePorco.Arpoador, new[] { "porco_arpoador", "arma_arpao", "arpao", "acc_gigante", "acc_ligeiro" } },
-        { EspeciePorco.Bombardeiro, new[] { "porco_bombardeiro", "arma_canhao", "bomba", "acc_chuva", "acc_estrume" } },
-        { EspeciePorco.Tamboreiro, new[] { "porco_tamboreiro", "arma_tambor", null, "acc_fanfarra", "acc_moedas" } },
+        { EspeciePorco.Estilingueiro, new[] { "raposa_estilingueiro", "arma_estilingue", "pedrinha", "acc_rajada", "acc_mira" } },
+        { EspeciePorco.Arpoador, new[] { "raposa_arpoador", "arma_arpao", "arpao", "acc_gigante", "acc_ligeiro" } },
+        { EspeciePorco.Bombardeiro, new[] { "raposa_bombardeiro", "arma_canhao", "bomba", "acc_chuva", "acc_estrume" } },
+        { EspeciePorco.Tamboreiro, new[] { "raposa_tamboreiro", "arma_tambor", null, "acc_fanfarra", "acc_moedas" } },
     };
 
     public static void GarantirDados(bool sobrescrever)

@@ -125,10 +125,10 @@ public class TrocaDeFase : MonoBehaviour
         titulo.text = $"Fase {fase} de {s.TotalFases}";
         lugar.text = $"{d.nome}, {Turno(d.turno)}";
         string porcos = porcosRecolhidos == 0
-            ? "• Você não tinha porcos no mapa: as moedas ficam como estavam."
+            ? "• Você não tinha raposas no mapa: as moedas ficam como estavam."
             : porcosRecolhidos == 1
-                ? $"• Seu porco voltou para a carteira: <b>+{moedasRecolhidas} moedas</b>."
-                : $"• Seus {porcosRecolhidos} porcos voltaram para a carteira: <b>+{moedasRecolhidas} moedas</b>.";
+                ? $"• Sua raposa voltou para a carteira: <b>+{moedasRecolhidas} moedas</b>."
+                : $"• Suas {porcosRecolhidos} raposas voltaram para a carteira: <b>+{moedasRecolhidas} moedas</b>.";
         detalhes.text =
             "• Os pássaros vêm por um <b>caminho novo</b>: siga as setas.\n" +
             porcos + "\n" +

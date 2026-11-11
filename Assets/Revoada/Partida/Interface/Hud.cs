@@ -27,7 +27,7 @@ public class Hud : MonoBehaviour
     public Text textoVelocidade;
     public Button botaoMenu;
 
-    [Header("Loja (some quando um porco está selecionado)")]
+    [Header("Loja (some quando uma raposa está selecionada)")]
     public GameObject grupoLoja;
     public CartaoPorcoLoja[] cartoes;
     public CartaoReparo cartaoReparo;
@@ -141,9 +141,15 @@ public class Hud : MonoBehaviour
         bool podeSoltar = s.Estado == EstadoJogo.Preparando || s.Estado == EstadoJogo.Intervalo;
         botaoSoltar.interactable = podeSoltar;
         textoSoltar.text = podeSoltar ? "Soltar a onda" : s.Estado == EstadoJogo.EmOnda ? "Onda em andamento" : "Fim de jogo";
-        float amplitude = podeSoltar ? (chamarSoltar ? 0.08f : 0.035f) : 0f;
-        float pulso = amplitude * Mathf.Abs(Mathf.Sin(Time.unscaledTime * 3.5f));
-        botaoSoltar.transform.localScale = Vector3.one * (1f + pulso);
+        // Só o botão crescendo um pouco (0,035) era sutil demais pra quem não
+        // está de olho nele. Agora também BRILHA (o tint vai de branco a um
+        // dourado bem mais claro que o verde do botão) — cor chama mais
+        // atenção no canto do olho do que só o tamanho mudando.
+        float pulso01 = podeSoltar ? Mathf.Abs(Mathf.Sin(Time.unscaledTime * (chamarSoltar ? 4.5f : 2.8f))) : 0f;
+        float amplitudeEscala = podeSoltar ? (chamarSoltar ? 0.11f : 0.07f) : 0f;
+        botaoSoltar.transform.localScale = Vector3.one * (1f + amplitudeEscala * pulso01);
+        if (botaoSoltar.image != null)
+            botaoSoltar.image.color = podeSoltar ? Color.Lerp(Color.white, new Color(1.5f, 1.3f, 0.55f), pulso01) : Color.white;
 
         if (textoAviso.text.Length > 0 && Time.unscaledTime > fimAviso) textoAviso.text = "";
     }

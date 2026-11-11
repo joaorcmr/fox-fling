@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Revoada::TipoPassaro
   dados:
     especie: 4
-    nome: Pata
+    nome: Arara-azul
     vida: 8
     velocidade: 1.8
     raio: 0.45

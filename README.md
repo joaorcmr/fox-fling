@@ -1,13 +1,13 @@
 # Fox Tower
 
-Tower defense 2D com visão de cima, feito em **Unity 6**. Bandos de pássaros voam por uma trilha até a
-**Torre dos Porcos**. Você compra **porcos verdes** com **moedas**, que caem dos pássaros estourados, e
-decide a toda hora: gastar em mais defesa agora ou no **Cofrinho**, que faz cada pássaro render mais
-depois?
+Tower defense 2D com visão de cima, feito em **Unity 6**. Bandos de pássaros (hoje aranhas, touros,
+tigres e outros bichos — ver [Os pássaros](#os-pássaros)) avançam por uma trilha até a **Torre das
+Raposas**. Você compra **raposas** com **moedas**, que caem dos pássaros estourados, e decide a toda
+hora: gastar em mais defesa agora ou no **Cofrinho**, que faz cada inimigo render mais depois?
 
 - **Disciplina:** Jogos Digitais, Insper
 - **Resolução:** 600×480
-- **Arte dos pássaros e dos porcos (agora raposas):** Iran. O resto da arte (cenário, interface, tiros) e todos os sons são gerados por código (`Tools/`).
+- **Arte dos pássaros e das raposas:** Iran. O resto da arte (cenário, interface, tiros) e todos os sons são gerados por código (`Tools/`).
 - Design e plano: `docs/superpowers/specs/2026-11-07-revoada-design.md` e `docs/superpowers/plans/2026-11-07-revoada.md`
 
 ## Como jogar
@@ -16,9 +16,9 @@ A tela **Como jogar**, dentro do jogo, tem as mesmas regras divididas nestes sei
 extenso.
 
 **Objetivo**
-- Proteja a Torre dos Porcos por 30 ondas.
-- Cada pássaro que chega na Torre tira vida. Com 0, ela cai.
-- Chefes (tubarão-rei) nas ondas 10, 20 e 30.
+- Proteja a Torre das Raposas por 30 ondas.
+- Cada inimigo que chega na Torre tira vida. Com 0, ela cai.
+- Chefes (tubarãozinho) nas ondas 10, 20 e 30.
 
 **Ondas**
 - Nenhuma onda começa sozinha: aperte **▶ Soltar a onda** (ou **Espaço**).
@@ -27,46 +27,46 @@ extenso.
 **Loja e moedas**
 - Pássaros estourados e ondas vencidas dão moedas.
 - Só dá para comprar entre ondas.
-- Porco: clique no cartão (ou **1** a **4**) e depois no mapa. Verde = pode, vermelho = não pode.
+- Raposa: clique no cartão (ou **1** a **4**) e depois no mapa. Verde = pode, vermelho = não pode.
 - Reparo (ícone **♥+**): cura uma parte da vida da Torre; fica mais caro a cada uso.
-- Cofrinho: cada pássaro passa a render mais moedas.
+- Cofrinho: cada inimigo passa a render mais moedas.
 
 **Fases e mapas**
 - A cada 10 ondas o mapa muda e os pássaros vêm por outro caminho.
-- Na troca, todos os porcos voltam para a carteira pelo valor inteiro: monte a defesa de novo.
+- Na troca, todas as raposas voltam para a carteira pelo valor inteiro: monte a defesa de novo.
 
-**Porcos**
-- Clique num porco para melhorar (**U**), mudar a mira ou vender (**Delete**, devolve 70% do que custou).
-- O arpão atravessa a fila; a bomba pega bandos e a couraça do urubu.
-- No círculo do Tamboreiro, os porcos atiram mais rápido.
+**Raposas**
+- Clique numa raposa para melhorar (**U**), mudar a mira ou vender (**Delete**, devolve 70% do que custou).
+- O arpão atravessa a fila; a bomba pega bandos e a couraça do leão.
+- No círculo do Tamboreiro, as raposas atiram mais rápido.
 
 **Atalhos**
 - **P** pausa · **F** acelera (1×, 2×, 3×)
 - **Esc** abre o menu · clique direito cancela
 
-### Os porcos
+### As raposas
 
-| Porco | Custo | O que faz | Especializações (no nível 4) |
+| Raposa | Custo | O que faz | Especializações (no nível 4) |
 |---|---|---|---|
 | **Estilingueiro** | 120 | Pedrinha rápida, barato: segura o começo | Rajada (3 pedrinhas em leque) · Mira Certeira (longe e forte) |
 | **Arpoador** | 220 | O arpão **atravessa** a fila: rende no fim das retas longas | Arpão Gigante (atravessa 20) · Arpão Ligeiro (muito rápido) |
 | **Bombardeiro** | 350 | Bomba de lama em **área**; dano cheio na couraça | Chuva de Lama (o dobro de bombas) · Barril de Estrume (empurra para trás) |
-| **Tamboreiro** | 300 | Não ataca: porcos no círculo dele atiram mais rápido (**agrupar**) | Fanfarra (aura maior) · Tambor das Moedas (+50% de moedas na aura) |
+| **Tamboreiro** | 300 | Não ataca: raposas no círculo dele atiram mais rápido (**agrupar**) | Fanfarra (aura maior) · Tambor das Moedas (+50% de moedas na aura) |
 
-Cada porco tem 2 upgrades em sequência e, no nível 3, a escolha de uma especialização. Vender devolve 70%
+Cada raposa tem 2 upgrades em sequência e, no nível 3, a escolha de uma especialização. Vender devolve 70%
 do que foi gasto nele. As auras de Tamboreiros diferentes **não se somam**: vale a maior.
 
 ### Os pássaros
 
 | Pássaro | Vida | Velocidade | Dano na Torre | Moedas | Especial |
 |---|---|---|---|---|---|
-| Pardal | 1 | 2,5 | 1 | 2 | vem em bando |
-| Sabiá | 3 | 2,8 | 2 | 4 | |
-| Beija-flor | 2 | 5,0 | 2 | 6 | muito rápido |
-| Arara-azul | 10 | 2,0 | 4 | 12 | |
-| Pata | 8 | 1,8 | 3 | 8 | ao estourar, solta 4 patinhos |
-| Urubu | 28 | 1,4 | 6 | 24 | **couraça**: pedrinha e arpão tiram só metade |
-| Tubarão-rei (chefe) | 90 · 337 · 1.568 | 0,9 | 30 | 200 | ondas 10, 20 e 30; no máximo 30% mais lento |
+| Aranha | 1 | 2,5 | 1 | 2 | vem em bando |
+| Touro | 3 | 2,8 | 2 | 4 | |
+| Tigre | 2 | 5,0 | 2 | 6 | muito rápido |
+| Jacaré | 10 | 2,0 | 4 | 12 | |
+| Arara-azul | 8 | 1,8 | 3 | 8 | ao estourar, solta 4 filhotes |
+| Leão | 28 | 1,4 | 6 | 24 | **couraça**: pedrinha e arpão tiram só metade |
+| Tubarãozinho (chefe) | 90 · 337 · 1.568 | 0,9 | 30 | 200 | ondas 10, 20 e 30; no máximo 30% mais lento |
 
 A partir da onda 11, os pássaros ganham **7% de vida por onda** (onda 20 = ×1,7; onda 30 = ×2,4), e as ondas
 da fase 3 (21 a 30) vêm com **mais 21%** por cima (onda 30 = ×2,9).
@@ -78,7 +78,7 @@ turno do dia: a Fazenda de dia (fase 1), o Pomar à tarde (fase 2) e a Floresta 
 acontece ao fim da 10ª e da 20ª onda, e como nenhuma onda começa sozinha, você vê o mapa novo e se prepara
 no seu tempo antes de soltar a próxima.
 
-O mapa novo tem outro caminho, então nenhum lugar antigo serve mais: todos os porcos saem do mapa e o que foi
+O mapa novo tem outro caminho, então nenhum lugar antigo serve mais: todas as raposas saem do mapa e o que foi
 gasto em cada um — compra, upgrades e especialização — volta inteiro para a carteira. O jogador monta a
 defesa de novo no mapa novo sem perder o que já tinha investido.
 
@@ -98,11 +98,11 @@ ver [Estrutura](#estrutura)) chamadas pelos componentes do Unity a cada passo. R
 |---|---|
 | **Ciclo do jogo**: `FixedUpdate` avança a simulação no passo fixo (`Time.fixedDeltaTime` = 1/60 s, gravado no TimeManager); pausa e 1×/2×/3× são o `Time.timeScale` | `Partida/Jogo.cs`, `Partida/RelogioPartida.cs` |
 | **Cenas** (Menu e Jogo), Build Settings, `SceneManager` e o escurecer entre telas (`DontDestroyOnLoad`) | `Menu/Menu.unity`, `Partida/Jogo.unity`, `Compartilhado/Navegacao/` |
-| **Prefabs** (pássaro, porco, tiro, texto, efeitos) e **pool** de objetos | `Prefabs/` de cada assunto, `Compartilhado/Pool.cs` |
+| **Prefabs** (pássaro, raposa, tiro, texto, efeitos) e **pool** de objetos | `Prefabs/` de cada assunto, `Compartilhado/Pool.cs` |
 | **ScriptableObjects** com os números do jogo, editáveis no Inspector (`[CreateAssetMenu]`) | `Dados/` de cada assunto (a classe e os `.asset`) |
 | **SpriteRenderer**, **Sorting Group** e o eixo de ordenação da câmera (Y) para a visão de cima | `Editor/ConstrutorPrefabs.cs`, `Editor/ConstrutorCenas.cs` |
 | **LineRenderer**: a trilha de terra, com textura repetida | `Mapa/Visual/VisualMapa.cs` |
-| **Gizmos** na Scene view (trilha, obstáculos, alcance do porco selecionado) | `VisualMapa.OnDrawGizmos`, `VisualPorco.OnDrawGizmosSelected` |
+| **Gizmos** na Scene view (trilha, obstáculos, alcance da raposa selecionada) | `VisualMapa.OnDrawGizmos`, `VisualPorco.OnDrawGizmosSelected` |
 | **ParticleSystem** (penas na cor de cada pássaro, poeira, brilho) com `Emit` | `Compartilhado/Efeitos/Efeitos.cs` |
 | **AudioSource** (vozes de efeito, música e ambiente em loop, volume) | `Sons/Sons.cs`, `Sons/SonsDaPartida.cs` |
 | **uGUI**: Canvas e CanvasScaler 600×480, Button, Slider, CanvasGroup, Image Filled, eventos de ponteiro | `Interface/` de cada assunto, `Editor/ConstrutorUI.cs` |
@@ -112,7 +112,7 @@ ver [Estrutura](#estrutura)) chamadas pelos componentes do Unity a cada passo. R
 | **Unity Test Framework**: 139 testes EditMode (incluindo os robôs de balanceamento) e 14 testes PlayMode, que carregam a cena Jogo (ou o Menu) de verdade (pausa, escurecer entre cenas, fim de jogo, menu principal, troca de fase, pássaro novo anunciado) | `Testes/`, `TestesPlay/` |
 | **Build WebGL** (`BuildPipeline`) com uma página própria (`WebGLTemplate`) em vez da página em branco padrão do Unity | `ConstrutorRevoada.BuildWebGL`, `Assets/WebGLTemplates/FoxTower` |
 
-Durante o Play, selecione um pássaro ou um porco na Hierarchy: o Inspector mostra o estado dele ao vivo
+Durante o Play, selecione um pássaro ou uma raposa na Hierarchy: o Inspector mostra o estado dele ao vivo
 (vida, distância na trilha, nível, alcance).
 
 ## Padrões de projeto (issue #17)
@@ -125,15 +125,15 @@ onde cada um mora, para quem está estudando o assunto.
 |---|---|
 | **State** | `EstadoJogo` (`Partida/Regras/EstadoJogo.cs`): um enum fechado — `Preparando`, `EmOnda`, `Intervalo`, `Vitoria`, `Derrota` — e os métodos de `Simulacao` só deixam agir ou transicionar de acordo com o estado atual (por exemplo, `Comprar`/`ComprarCofrinho`/`ComprarReparo` recusam com `Resultado.OndaEmAndamento` fora de `Preparando`/`Intervalo`). É a variante "state como enum" do padrão: mais simples que uma classe por estado, e suficiente porque os estados do Fox Tower não têm comportamento próprio além de travar comandos. |
 | **Observer** | Os eventos em C# da `Simulacao` (`PassaroEstourou`, `TorreAtingida`, `OndaComecou`, `FimDeJogo`, `FaseComecou`...) — 21 ao todo. A simulação nunca conhece quem está ouvindo: `GerenteVisuais`, `SonsDaPartida`, `Hud` e `TelaFim` se inscrevem e reagem, cada um à sua parte, sem a `Simulacao` saber que a camada Unity existe (por isso ela compila sozinha no assembly `Revoada.Nucleo`). |
-| **Flyweight** | `DadosPorco`/`DadosPassaro` (um `.asset` por espécie, carregado por `CatalogoTipos`/`DadosJogo.porcos`) é o objeto compartilhado: todo `Porco` da mesma espécie guarda a mesma referência em `Porco.Dados` (`Porcos/Regras/Porco.cs:7`) em vez de copiar nome, custo, raio e os 3 níveis de melhoria para cada unidade colocada no mapa. Só o que muda de porco para porco (posição, vida/nível atual, recarga, mira) fica na instância. |
-| **Prototype** | `Atributos.Copia()` (`Porcos/Regras/DadosPorco.cs:47`, um `MemberwiseClone`). Em vez de montar um `Atributos` novo campo a campo, o jogo clona o do nível/melhoria (o "protótipo"): `Porco` nasce com `dados.nivel1.Copia()`, melhorar clona o próximo nível (`Simulacao.Porcos.cs:75`) e o tiro clona os atributos do porco na hora de atirar para aplicar bônus de aura sem alterar o original (`Simulacao.Combate.cs:39`). |
+| **Flyweight** | `DadosPorco`/`DadosPassaro` (um `.asset` por espécie, carregado por `CatalogoTipos`/`DadosJogo.porcos`) é o objeto compartilhado: todo `Porco` da mesma espécie guarda a mesma referência em `Porco.Dados` (`Porcos/Regras/Porco.cs:7`) em vez de copiar nome, custo, raio e os 3 níveis de melhoria para cada unidade colocada no mapa. Só o que muda de raposa para raposa (posição, vida/nível atual, recarga, mira) fica na instância. |
+| **Prototype** | `Atributos.Copia()` (`Porcos/Regras/DadosPorco.cs:47`, um `MemberwiseClone`). Em vez de montar um `Atributos` novo campo a campo, o jogo clona o do nível/melhoria (o "protótipo"): `Porco` nasce com `dados.nivel1.Copia()`, melhorar clona o próximo nível (`Simulacao.Porcos.cs:75`) e o tiro clona os atributos da raposa na hora de atirar para aplicar bônus de aura sem alterar o original (`Simulacao.Combate.cs:39`). |
 | **Singleton** | `Sons.Instancia` (`Sons/Sons.cs`): um só `Awake` grava a referência estática, e quem quer tocar um som só verifica `Sons.Instancia != null` (ela pode não existir ainda no primeiro quadro do Menu). `Jogo.Atual` segue a mesma ideia para achar a partida em andamento a partir de qualquer lugar (os robôs de balanceamento e os testes PlayMode usam os dois). |
-| **Game Loop** | `Jogo.FixedUpdate() => Sim.Passo()` (`Partida/Jogo.cs`): um passo de tempo fixo (1/60 s) sempre na mesma ordem (nascimentos → pássaros andam → porcos atiram → tiros voam → limpeza → fim de onda), independente da taxa de quadros da tela — por isso os robôs jogam partidas inteiras sem um único `Update` do Unity. |
+| **Game Loop** | `Jogo.FixedUpdate() => Sim.Passo()` (`Partida/Jogo.cs`): um passo de tempo fixo (1/60 s) sempre na mesma ordem (nascimentos → pássaros andam → raposas atiram → tiros voam → limpeza → fim de onda), independente da taxa de quadros da tela — por isso os robôs jogam partidas inteiras sem um único `Update` do Unity. |
 | **Update Method** | Cada visual atualiza a si mesmo a cada quadro: `VisualPorco.Atualizar()`, `VisualPassaro`, `Hud.Update()`, `GerenteVisuais.Update()` (interpola entre o último passo fixo e o atual). Quem builda a lista de "quem existe" é o `GerenteVisuais`, ouvindo os eventos da simulação (Observer); cada objeto só cuida do próprio desenho. |
-| **Component** | O próprio `GameObject` do Unity: um porco é `VisualPorco` + `SpriteRenderer` (corpo, arma, acessório) + `CirculoAlcance` + `Transform`, montados por `ConstrutorPrefabs` em vez de uma classe `Porco3D` monolítica. Trocar o comportamento (um porco novo, uma aura diferente) é compor outro conjunto de componentes, não herdar de outra classe. |
+| **Component** | O próprio `GameObject` do Unity: uma raposa é `VisualPorco` + `SpriteRenderer` (corpo, arma, acessório) + `CirculoAlcance` + `Transform`, montados por `ConstrutorPrefabs` em vez de uma classe `Porco3D` monolítica. Trocar o comportamento (uma raposa nova, uma aura diferente) é compor outro conjunto de componentes, não herdar de outra classe. |
 | **Entity Component System** | O Fox Tower usa uma variante leve, não o ECS/DOTS do Unity: as "entidades" são dados puros sem comportamento próprio (`Porco`, `Passaro`, `Projetil`, todas em `Regras/`, só campos), e quem processa todo mundo de uma vez são os métodos "sistema" dos arquivos parciais de `Simulacao` (`Simulacao.Passaros.cs` move todos os pássaros, `Simulacao.Combate.cs` decide quem atira em quem, `Simulacao.Ondas.cs` cuida do cronômetro de onda) — cada um iterando a lista certa a cada `Passo()`. Um ECS de verdade (arrays contíguos, jobs paralelos) ganharia desempenho que um tower defense de ~600×480 com algumas dezenas de pássaros não precisa, e complicaria demais os robôs de balanceamento e os testes determinísticos; por isso o projeto fica com "dados sem comportamento + sistemas que iteram listas", que já entrega a mesma separação (dado ≠ lógica) sem o custo. |
 
-`Assets/Revoada/Testes/PadroesTests.cs` confere o Flyweight (dois porcos da mesma espécie compartilham o mesmo
+`Assets/Revoada/Testes/PadroesTests.cs` confere o Flyweight (duas raposas da mesma espécie compartilham o mesmo
 `DadosPorco`) e o Prototype (`Copia()` devolve um objeto separado, com os mesmos valores).
 
 ## Balanceamento: robôs que jogam o jogo
@@ -146,13 +146,13 @@ mesma ordem de construção e só mudam o que fazem com o Cofrinho:
 |---|---|---|
 | Parado | não compra nada | perde na onda 5 |
 | Só Estilingue | só Estilingueiros e os upgrades deles | perde na onda 24 |
-| Defesa pura | porcos e upgrades, **nunca** o Cofrinho | perde na onda 22 |
+| Defesa pura | raposas e upgrades, **nunca** o Cofrinho | perde na onda 22 |
 | Ganancioso | guarda tudo para o Cofrinho | perde na onda 8 |
 | **Equilibrado** | mistura defesa e Cofrinho (compra quando ele se paga em até 6 ondas) | **vence** a onda 30 com 40 de vida |
 
-A virada do jogo são as ondas 16 e 19, com urubus de couraça: quem só tem pedrinha, ou não investiu em moedas,
+A virada do jogo são as ondas 16 e 19, com leões de couraça: quem só tem pedrinha, ou não investiu em moedas,
 cai ali ou logo depois. A troca de mapa a cada 10 ondas (ver [as 3 fases](#as-3-fases-mapas-diferentes-turnos-diferentes))
-também pesa: todos os porcos voltam para a carteira (pelo valor inteiro) e o robô precisa recompor a defesa do
+também pesa: todas as raposas voltam para a carteira (pelo valor inteiro) e o robô precisa recompor a defesa do
 zero no mapa novo antes de voltar a pensar no Cofrinho, por isso a fase 3 vem com pássaros 21% mais fortes —
 sem esse extra, até o Defesa pura vencia a onda 30. Se alguém mexer num número e quebrar esse equilíbrio, os
 testes avisam. As metas estão com pouca folga, então depois de mexer em qualquer número rode os robôs (ou os
@@ -161,7 +161,7 @@ testes) antes de jogar.
 ## Mexendo nos números
 
 - **No Inspector:** a pasta `Dados/` de cada assunto tem os assets: um para cada pássaro (`Passaros/Dados`) e
-  cada porco, com os upgrades (`Porcos/Dados`), as ondas (`Ondas/Dados/Ondas.asset`), a economia
+  cada raposa, com os upgrades (`Porcos/Dados`), as ondas (`Ondas/Dados/Ondas.asset`), a economia
   (`Moedas/Dados/Economia.asset`, inclui o custo do reparo da Torre) e os 3 mapas das fases (`Mapa/Dados`,
   mais `Mapa/Dados/Fases.asset`). Mude e dê Play.
 - **Menu Fox Tower:**
@@ -177,20 +177,21 @@ testes) antes de jogar.
 ## Guia de estilo
 
 Bichos redondos e emburrados, de frente, com contorno marrom-escuro (`#2B1D14`) e sombreado em dois tons.
-Paleta: grama `#79BC57`, terra `#CDA46E`, creme `#FFF6E0`, marrom `#6B4A2E`, verde dos porcos `#8CCB5E`,
+Paleta: grama `#79BC57`, terra `#CDA46E`, creme `#FFF6E0`, marrom `#6B4A2E`, laranja da raposa `#E8803C`,
 ouro `#F2C14E` e vermelho `#C8443A`. A interface usa painéis creme com borda marrom, botões verdes e texto
-creme contornado.
+creme contornado. Os pássaros e as raposas em si são a arte do Iran (ver [Onde está o Unity](#onde-está-o-unity)),
+num estilo parecido (bichos redondos, de frente, olhos grandes), não desenhada por código.
 
 ## Estrutura
 
-As pastas têm o nome do que o jogo **é** (pássaros, porcos, ondas, moedas, Torre), e não do tipo de arquivo
+As pastas têm o nome do que o jogo **é** (pássaros, raposas, ondas, moedas, Torre), e não do tipo de arquivo
 (*Screaming Architecture*): quem abre `Assets/Revoada` vê de cara que é um tower defense de pássaros contra
-porcos, e tudo sobre um assunto (regra, números, desenho, tela) fica junto.
+raposas, e tudo sobre um assunto (regra, números, desenho, tela) fica junto.
 
 ```
 Assets/Revoada/
 ├── Passaros/      o pássaro na simulação, os tipos de pássaro, o desenho e a barra do chefe
-├── Porcos/        o porco, onde pode ficar, upgrades e auras; a loja, o painel e o porco fantasma
+├── Porcos/        a raposa, onde pode ficar, upgrades e auras; a loja, o painel e a raposa fantasma
 ├── Combate/       tiros, mira e golpes (lentidão, empurrão, explosão)
 ├── Ondas/         o gerador de ondas, as 30 ondas e a prévia da próxima
 ├── Moedas/        a economia e o Cofrinho
@@ -230,10 +231,10 @@ Na partida, cada responsabilidade é uma classe, e o `Jogo` só as junta:
 | `Simulacao` | as regras do jogo, sem Unity |
 | `Jogo` | monta a partida e chama o `Passo()` no `FixedUpdate` |
 | `RelogioPartida` | pausa e velocidade (`Time.timeScale`) |
-| `Selecao` | o que o jogador tem na mão (um porco da loja ou um porco selecionado) |
+| `Selecao` | o que o jogador tem na mão (uma raposa da loja ou uma raposa selecionada) |
 | `Controles` | lê teclado e mouse e transforma em comandos |
-| `FantasmaColocacao` | desenha o porco que está sendo colocado |
-| `GerenteVisuais` | mantém um GameObject para cada pássaro, porco e tiro |
+| `FantasmaColocacao` | desenha a raposa que está sendo colocada |
+| `GerenteVisuais` | mantém um GameObject para cada pássaro, raposa e tiro |
 | `VisualTorre` | a Torre tremendo quando apanha |
 | `SonsDaPartida` | os sons do que acontece no mapa |
 | `FimDePartida` | guarda o resultado no Progresso (a tela de fim só mostra) |

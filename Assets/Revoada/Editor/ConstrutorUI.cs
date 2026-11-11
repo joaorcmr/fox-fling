@@ -176,7 +176,7 @@ public static class ConstrutorUI
         hud.botaoReparo = hud.cartaoReparo.botao;
         hud.cartaoCofrinho = CriarCofrinho(loja, jogo, PosicaoCartao(porcos.Length + 1));
         hud.cartaoCofrinho.balao = balao;
-        hud.previa = CriarPrevia(loja, jogo, new Vector2(8f, PosicaoCartao(porcos.Length + 2).y - 30f));
+        hud.previa = CriarPrevia(loja, jogo, new Vector2(8f, PosicaoCartao(porcos.Length + 2).y - 4f));
         hud.painelPorco = CriarPainelPorco(barra, jogo, new Vector2(8f, -98f));
 
         // Sem Auto: o jogador decide toda vez quando a próxima onda começa.
@@ -378,18 +378,10 @@ public static class ConstrutorUI
         c.grupo = grupo;
         c.custo = preco;
         c.multiplicador = Selo(fundo.transform, "×1,25", new Color(1f, 0.9f, 0.45f));
-        // Logo embaixo do cartão, em quantas ondas o próximo nível se paga.
-        // Um fundo próprio (do mesmo tom da prévia) faz o texto parecer parte
-        // da interface, e não uma legenda solta flutuando sobre o mapa; a
-        // caixa tem folga (32, não só as 2 linhas justas) e fica um pouco
-        // afastada do cartão de baixo (a prévia da onda) para a descida de
-        // uma letra como o "g" de "paga" não encostar nela.
-        var retornoFundo = Imagem(pai, "Retorno", Sprite("painel"), TopoEsq,
-            new Vector2(posicao.x - 4f, posicao.y - TamanhoCartao.y - 2f), new Vector2(TamanhoCartao.x + 8f, 32f), true);
-        retornoFundo.color = new Color(0.93f, 0.86f, 0.7f);
-        retornoFundo.raycastTarget = false;
-        c.retorno = Texto(retornoFundo.transform, "Texto", "se paga em ~3 ondas", 12, TextAnchor.MiddleCenter, Centro,
-            Vector2.zero, new Vector2(TamanhoCartao.x, 30f), Marrom, negrito: false);
+        // "Em quantas ondas se paga" (antes um cartão solto embaixo deste)
+        // agora é só mais uma frase no balão que já aparece ao passar o
+        // mouse aqui (ver CartaoCofrinho.MostrarBalao): um cartão a menos
+        // disputando espaço com a prévia da onda, logo abaixo.
         return c;
     }
 
@@ -401,7 +393,7 @@ public static class ConstrutorUI
         p.jogo = jogo;
         // Fonte menor e caixa mais larga: "Próxima: onda 20" não pode quebrar
         // linha (o texto some pra cima, cortado pelo cartão).
-        p.titulo = Texto(fundo.transform, "Titulo", "Próxima: onda 1", 12, TextAnchor.MiddleLeft, TopoEsq,
+        p.titulo = Texto(fundo.transform, "Titulo", "Próxima: onda 1", 12, TextAnchor.MiddleCenter, TopoEsq,
             new Vector2(6f, -5f), new Vector2(128f, 16f), Marrom);
         p.icones = new Image[4];
         p.quantidades = new Text[4];
@@ -436,7 +428,7 @@ public static class ConstrutorUI
         p.icone.preserveAspect = true;
         p.icone.raycastTarget = false;
         // "Estilingueiro" é o nome mais comprido: a caixa vai até a borda e o × fica na linha das bolinhas.
-        p.nome = Texto(r, "Nome", "Porco", 14, TextAnchor.MiddleLeft, TopoEsq, new Vector2(38f, 0f), new Vector2(98f, 18f), Marrom);
+        p.nome = Texto(r, "Nome", "Raposa", 14, TextAnchor.MiddleLeft, TopoEsq, new Vector2(38f, 0f), new Vector2(98f, 18f), Marrom);
         p.nome.horizontalOverflow = HorizontalWrapMode.Overflow;
         p.pontoCheio = Sprite("ponto_nivel");
         p.pontoVazio = Sprite("ponto_nivel_vazio");
@@ -493,8 +485,8 @@ public static class ConstrutorUI
         var b = fundo.gameObject.AddComponent<BalaoLoja>();
         b.caixa = fundo.rectTransform;
         b.caixa.pivot = new Vector2(1f, 0.5f); // a altura acompanha o centro do cartão
-        b.titulo = Texto(fundo.transform, "Titulo", "", 13, TextAnchor.UpperLeft, TopoEsq, new Vector2(8f, -6f), new Vector2(160f, 16f), Marrom);
-        b.texto = Texto(fundo.transform, "Texto", "", 12, TextAnchor.UpperLeft, TopoEsq, new Vector2(8f, -23f), new Vector2(160f, 34f), Marrom, negrito: false);
+        b.titulo = Texto(fundo.transform, "Titulo", "", 13, TextAnchor.UpperCenter, TopoEsq, new Vector2(8f, -6f), new Vector2(160f, 16f), Marrom);
+        b.texto = Texto(fundo.transform, "Texto", "", 12, TextAnchor.UpperCenter, TopoEsq, new Vector2(8f, -23f), new Vector2(160f, 34f), Marrom, negrito: false);
         return b;
     }
 
@@ -517,7 +509,7 @@ public static class ConstrutorUI
         var b = caixa.gameObject.AddComponent<BarraChefe>();
         b.grupo = caixa.gameObject.AddComponent<CanvasGroup>();
         b.grupo.blocksRaycasts = false;
-        b.nome = Texto(caixa, "Nome", "Tubarão-rei", 13, TextAnchor.MiddleLeft, TopoEsq, Vector2.zero, new Vector2(300f, 14f), Creme, contorno: true);
+        b.nome = Texto(caixa, "Nome", "Tubarãozinho", 13, TextAnchor.MiddleLeft, TopoEsq, Vector2.zero, new Vector2(300f, 14f), Creme, contorno: true);
         var fundo = Imagem(caixa, "Fundo", Sprite("barra"), TopoEsq, new Vector2(0f, -16f), new Vector2(300f, 12f));
         fundo.color = new Color(0.17f, 0.11f, 0.08f, 0.9f);
         fundo.raycastTarget = false;
@@ -573,7 +565,7 @@ public static class ConstrutorUI
         var quadroJogar = Imagem(t, "QuadroJogar", Sprite("painel"), Centro, new Vector2(0f, -73f), new Vector2(460f, 212f), true);
         quadroJogar.raycastTarget = false;
         m.cartaoJogar = quadroJogar.rectTransform;
-        Texto(t, "Subtitulo", "Defenda a Torre dos Porcos", 16, TextAnchor.MiddleCenter, Topo, new Vector2(0f, -238f),
+        Texto(t, "Subtitulo", "Defenda a Torre das Raposas", 16, TextAnchor.MiddleCenter, Topo, new Vector2(0f, -238f),
             new Vector2(400f, 22f), Marrom);
 
         m.botaoJogar = Botao(t, "Jogar", null, Centro, new Vector2(0f, -58f), new Vector2(200f, 54f));
@@ -587,7 +579,7 @@ public static class ConstrutorUI
         m.cartaoAjustes = quadroAjustes.rectTransform;
         ControleDeVolume(t, "Música", "musica", Baixo, new Vector2(-100f, 44f), Marrom);
         ControleDeVolume(t, "Efeitos", "efeitos", Baixo, new Vector2(100f, 44f), Marrom);
-        Texto(t, "Creditos", "Insper", 12, TextAnchor.MiddleLeft, BaixoEsq, new Vector2(18f, 12f), new Vector2(260f, 20f), Marrom);
+        Texto(t, "Creditos", "Insper", 12, TextAnchor.MiddleCenter, Baixo, new Vector2(0f, 12f), new Vector2(200f, 20f), Marrom);
         m.botaoZerar = Botao(t, "Zerar", null, BaixoDir, new Vector2(-18f, 12f), new Vector2(124f, 24f));
         Texto(m.botaoZerar.transform, "Texto", "Zerar progresso", 12, TextAnchor.MiddleCenter, Centro, Vector2.zero, new Vector2(124f, 24f), Creme, contorno: true);
 
@@ -619,18 +611,18 @@ public static class ConstrutorUI
     {
         var e = d.economia;
         return Topico("Objetivo") +
-            $"• Proteja a Torre dos Porcos por {d.ondas.Count} ondas.\n" +
-            "• Cada pássaro que chega na Torre tira vida. Com 0, ela cai.\n" +
-            $"• Chefes (tubarão-rei) nas ondas {OndasDeChefe(d)}.\n\n" +
+            $"• Proteja a Torre das Raposas por {d.ondas.Count} ondas.\n" +
+            "• Cada inimigo que chega na Torre tira vida. Com 0, ela cai.\n" +
+            $"• Chefes (tubarãozinho) nas ondas {OndasDeChefe(d)}.\n\n" +
             Topico("Ondas") +
             "• Nenhuma onda começa sozinha: aperte Soltar a onda (ou Espaço).\n" +
             "• A prévia, na barra, mostra quem vem na próxima.\n\n" +
             Topico("Loja e moedas") +
             "• Pássaros estourados e ondas vencidas dão moedas.\n" +
             "• Só dá para comprar entre ondas.\n" +
-            "• Porco: clique no cartão (ou 1 a 4) e depois no mapa.\n" +
+            "• Raposa: clique no cartão (ou 1 a 4) e depois no mapa.\n" +
             $"• Reparo (coração): +{e.curaPorReparo} de vida na Torre; fica mais caro a cada uso.\n" +
-            "• Cofrinho: cada pássaro passa a render mais moedas.";
+            "• Cofrinho: cada inimigo passa a render mais moedas.";
     }
 
     // "10, 20 e 30": as ondas que trazem um pássaro chefe.
@@ -650,11 +642,11 @@ public static class ConstrutorUI
         string devolve = e.fracaoTrocaDeFase >= 0.999f ? "pelo valor inteiro" : $"com {Formato.Porcento(e.fracaoTrocaDeFase)} do que custaram";
         return Topico("Fases e mapas") +
             $"• A cada {ondasPorFase} ondas o mapa muda e os pássaros vêm por outro caminho.\n" +
-            $"• Na troca, todos os porcos voltam para a carteira {devolve}: monte a defesa de novo.\n\n" +
-            Topico("Porcos") +
-            $"• Clique num porco para melhorar (U), mudar a mira ou vender (Delete, devolve {Formato.Porcento(e.fracaoVenda)}).\n" +
-            "• O arpão atravessa a fila; a bomba pega bandos e a couraça do urubu.\n" +
-            "• No círculo do Tamboreiro, os porcos atiram mais rápido.\n\n" +
+            $"• Na troca, todas as raposas voltam para a carteira {devolve}: monte a defesa de novo.\n\n" +
+            Topico("Raposas") +
+            $"• Clique numa raposa para melhorar (U), mudar a mira ou vender (Delete, devolve {Formato.Porcento(e.fracaoVenda)}).\n" +
+            "• O arpão atravessa a fila; a bomba pega bandos e a couraça do leão.\n" +
+            "• No círculo do Tamboreiro, as raposas atiram mais rápido.\n\n" +
             Topico("Atalhos") +
             "• P pausa · F acelera (1×, 2×, 3×)\n" +
             "• Esc abre o menu · clique direito cancela";

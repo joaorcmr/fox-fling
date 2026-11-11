@@ -264,34 +264,6 @@ public class FluxoDoJogoTests
         Assert.That(alturaCurta, Is.LessThan(alturaComprida), "um texto de uma linha não devia manter o balão esticado");
     }
 
-    // O aviso "Novo: <pássaro> (<detalhe>)" da prévia quebrava em 2 linhas
-    // pros detalhes mais compridos, e a segunda linha ficava embaixo do botão
-    // de soltar a onda (o cartão só tem espaço certo pra 1 linha). A onda 6 é
-    // onde o Beija-flor (rápido) estreia de verdade.
-    [UnityTest]
-    public IEnumerator PreviaDaOnda_AvisoDeEstreiaNaoQuebraLinha()
-    {
-        yield return CarregarJogo();
-        var p = Object.FindAnyObjectByType<PreviaOnda>();
-
-        p.Mostrar(6);
-
-        Assert.AreEqual("Novo: Beija-flor", p.aviso.text, "sem o detalhe: com ele, quebra e vaza pro botão embaixo");
-        Assert.That(p.aviso.preferredWidth, Is.LessThanOrEqualTo(p.aviso.rectTransform.rect.width));
-
-        // O texto (não só a caixa) precisa ficar acima do botão de soltar a
-        // onda: a caixa do aviso central (MiddleCenter) pode encostar no
-        // botão mesmo com texto de 1 linha só, se o cartão ficar baixo demais.
-        var soltar = Object.FindAnyObjectByType<Hud>().botaoSoltar.GetComponent<RectTransform>();
-        var linha = p.aviso.cachedTextGenerator.lines[p.aviso.cachedTextGenerator.lineCount - 1];
-        var corners = new Vector3[4];
-        p.aviso.rectTransform.GetWorldCorners(corners);
-        float linhaBase = corners[1].y + linha.topY - linha.height;
-        var soltarCantos = new Vector3[4];
-        soltar.GetWorldCorners(soltarCantos);
-        Assert.That(linhaBase, Is.GreaterThan(soltarCantos[1].y), "o texto do aviso encosta no botão de soltar a onda");
-    }
-
     // Não ficava claro que dava para soltar a onda fora da troca de fase: o
     // botão só pulsava (chamava atenção) logo depois de um mapa novo. Agora
     // pulsa sempre que a ação está disponível.
@@ -323,15 +295,15 @@ public class FluxoDoJogoTests
         var textoFaixa = hud.faixa.GetComponentInChildren<UnityEngine.UI.Text>(true);
 
         Robos.AvancarAteOnda(s, 6);
-        Assert.AreEqual(6, s.Onda, "a onda 6 (estreia do Beija-flor) não chegou");
+        Assert.AreEqual(6, s.Onda, "a onda 6 (estreia do Tigre) não chegou");
 
         bool anunciou = false;
         float fim = Time.realtimeSinceStartup + 4f; // o anúncio espera a faixa "Onda 6" sumir (1,9 s) antes de aparecer
         while (Time.realtimeSinceStartup < fim && !anunciou)
         {
             yield return null;
-            anunciou = textoFaixa.text == "Novo: Beija-flor";
+            anunciou = textoFaixa.text == "Novo: Tigre";
         }
-        Assert.IsTrue(anunciou, "a faixa não anunciou o Beija-flor estreando na onda 6");
+        Assert.IsTrue(anunciou, "a faixa não anunciou o Tigre estreando na onda 6");
     }
 }

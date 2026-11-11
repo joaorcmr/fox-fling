@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Revoada::TipoPassaro
   dados:
     especie: 7
-    nome: "Tubar\xE3o-rei"
+    nome: "Tubar\xE3ozinho"
     vida: 90
     velocidade: 0.9
     raio: 0.8

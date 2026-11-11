@@ -14,7 +14,6 @@ public class CartaoCofrinho : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     public Button botao;
     public Text multiplicador;   // o selo no canto: quanto cada pássaro passa a render
     public Text custo;           // o preço embaixo do ícone
-    public Text retorno;         // embaixo do cartão, em duas linhas: em quantas ondas se paga
     public CanvasGroup grupo;
     public BalaoLoja balao;
 
@@ -35,7 +34,6 @@ public class CartaoCofrinho : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         {
             multiplicador.text = $"×{Num(s.Economia.Multiplicador)}";
             custo.text = "máx.";
-            retorno.text = "Cofrinho completo!";
             botao.interactable = false;
             grupo.alpha = 1f;
             return;
@@ -44,28 +42,35 @@ public class CartaoCofrinho : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         bool emOnda = s.Estado == EstadoJogo.EmOnda;
         multiplicador.text = $"×{Num(proximo.multiplicador)}";
         custo.text = proximo.custo.ToString();
-        int? ondas = s.OndasParaPagarCofrinho();
-        retorno.text = emOnda
-            ? "só entre ondas"
-            : ondas.HasValue
-                ? $"se paga em ~{ondas} onda{(ondas == 1 ? "" : "s")}"
-                : "não se paga mais";
         // Clicável sempre, como os porcos: em onda o clique avisa "Espere a onda terminar".
         botao.interactable = true;
         grupo.alpha = emOnda ? 0.3f : s.Moedas >= proximo.custo ? 1f : 0.45f;
     }
 
+    // "Em quantas ondas se paga" já foi um cartão à parte, embaixo deste: dois
+    // cartões cor-de-creme colados um no outro, com só uma friesta fina entre
+    // eles, pareciam cortados ou um só desenho errado. Juntar a informação no
+    // balão (que já abre ao passar o mouse aqui) resolve isso removendo o
+    // cartão solto, em vez de ajustar a distância de novo.
     void MostrarBalao()
     {
         if (balao == null) return;
-        var e = jogo.Sim.Economia;
+        var s = jogo.Sim;
+        var e = s.Economia;
         var proximo = e.ProximoCofrinho;
         if (proximo == null)
-            balao.Mostrar("Cofrinho (máximo)", $"Cada pássaro já rende ×{Num(e.Multiplicador)}.", (RectTransform)transform);
-        else
-            balao.Mostrar($"Cofrinho · {proximo.custo}",
-                $"Cada pássaro passa a render ×{Num(proximo.multiplicador)} (agora ×{Num(e.Multiplicador)}).",
-                (RectTransform)transform);
+        {
+            balao.Mostrar("Cofrinho (máximo)", $"Cada inimigo já rende ×{Num(e.Multiplicador)}.", (RectTransform)transform);
+            return;
+        }
+        string retorno = s.Estado == EstadoJogo.EmOnda
+            ? " Só dá para comprar entre ondas."
+            : s.OndasParaPagarCofrinho() is int ondas
+                ? $" Se paga em ~{ondas} onda{(ondas == 1 ? "" : "s")}."
+                : " Não se paga mais a tempo.";
+        balao.Mostrar($"Cofrinho · {proximo.custo}",
+            $"Cada inimigo passa a render ×{Num(proximo.multiplicador)} (agora ×{Num(e.Multiplicador)}).{retorno}",
+            (RectTransform)transform);
     }
 
     public void OnPointerEnter(PointerEventData e)
